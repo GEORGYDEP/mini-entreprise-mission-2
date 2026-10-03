@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mission 2 – Équipe ton entreprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,700&family=Fredoka:wght@600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#0a0618; --bg-0:#120827; --bg-1:#1a1033;
+  --pink:#ff3d8b; --magenta:#e935c5; --violet:#9d4edd; --indigo:#6366f1; --cyan:#22d3ee; --sky:#38bdf8;
+  --lime:#a3e635; --emerald:#34d399; --orange:#fb923c; --yellow:#fbbf24;
+  --white:#fff; --text:rgba(255,255,255,.92); --soft:rgba(255,255,255,.7); --dim:rgba(255,255,255,.5);
+  --border:rgba(255,255,255,.13); --border-soft:rgba(255,255,255,.08);
+  --glass:rgba(255,255,255,.055); --glass-hover:rgba(255,255,255,.09); --glass-strong:rgba(18,8,39,.72);
+  --grad:linear-gradient(120deg,var(--pink),var(--magenta) 35%,var(--violet) 70%,var(--indigo));
+  --brand:#e935c5; --on-brand:#fff;
+  --paper:#fff; --paper-ink:#1D1F33; --paper-line:#D5D8E6;
+  --r:18px; --r-lg:26px;
+  --ui:'Outfit','Segoe UI',Arial,sans-serif; --serif:'Fraunces',Georgia,serif; --mono:'Space Mono',Consolas,monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{font-family:var(--ui); background:var(--bg-deep); color:var(--text); min-height:100vh; font-size:18px; line-height:1.5; overflow-x:hidden}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--cyan); outline-offset:3px}
+[hidden]{display:none !important}
+
+/* ═══ Fond festif : blobs animés + grain ═══ */
+.mesh{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+.blob{position:absolute; border-radius:50%; filter:blur(90px); opacity:.5; mix-blend-mode:screen}
+.b1{width:520px;height:520px;background:var(--pink);top:-80px;left:-120px;animation:d1 22s ease-in-out infinite}
+.b2{width:460px;height:460px;background:var(--violet);top:10%;right:-100px;animation:d2 26s ease-in-out infinite}
+.b3{width:540px;height:540px;background:var(--cyan);top:40%;left:20%;opacity:.3;animation:d3 30s ease-in-out infinite}
+.b4{width:420px;height:420px;background:var(--orange);bottom:5%;right:15%;opacity:.33;animation:d4 24s ease-in-out infinite}
+.b5{width:380px;height:380px;background:var(--magenta);bottom:-120px;left:30%;animation:d5 28s ease-in-out infinite}
+@keyframes d1{50%{transform:translate(80px,120px) scale(1.15)}} @keyframes d2{50%{transform:translate(-100px,150px) scale(1.1)}}
+@keyframes d3{50%{transform:translate(120px,-80px) scale(1.2)}} @keyframes d4{50%{transform:translate(-90px,-120px) scale(1.1)}}
+@keyframes d5{50%{transform:translate(110px,-60px) scale(1.15)}}
+body::after{content:''; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.06; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
+
+/* ═══ Bandeau événement ═══ */
+.banner{position:relative; z-index:10; color:#fff; text-align:center; padding:10px 20px; font-size:15px; font-weight:600; letter-spacing:.02em;
+  background:linear-gradient(90deg,var(--pink),var(--magenta) 25%,var(--violet) 50%,var(--indigo) 75%,var(--cyan)); background-size:200% 100%;
+  animation:bshift 10s linear infinite; box-shadow:0 4px 30px rgba(233,53,197,.3)}
+.pulse{display:inline-block; width:8px; height:8px; background:#fff; border-radius:50%; margin-right:10px; vertical-align:middle; animation:pd 1.3s ease-in-out infinite}
+@keyframes pd{50%{transform:scale(1.2); box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+@keyframes bshift{to{background-position:200% 0}}
+
+/* ═══ Barre du haut ═══ */
+.top{position:sticky; top:0; z-index:20; background:rgba(10,6,24,.72); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid var(--border-soft)}
+.top-in{max-width:1280px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; gap:16px}
+.logo{width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--pink),var(--magenta) 40%,var(--violet)); display:grid; place-items:center;
+  font-family:var(--serif); font-weight:700; color:#fff; font-size:16px; box-shadow:0 0 20px rgba(233,53,197,.5); flex:none}
+.top h1{font-family:var(--serif); font-weight:600; font-size:20px; line-height:1.1}
+.top h1 small{display:block; font-family:var(--ui); font-size:14px; font-weight:500; color:var(--soft)}
+.right{margin-left:auto; display:flex; align-items:center; gap:14px}
+.who{font-size:14px; color:var(--soft); text-align:right; line-height:1.25}
+.who b{display:block; color:var(--text); font-size:15px}
+.who button{background:none; border:0; color:var(--dim); text-decoration:underline; cursor:pointer; font-size:13px}
+.xp-pill{font-family:var(--mono); font-weight:700; padding:7px 16px; border-radius:999px; color:#fff; background:var(--glass); border:1px solid var(--border); white-space:nowrap}
+.xp-pill span{background:linear-gradient(90deg,var(--yellow),var(--orange)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent}
+.lvl{font-size:13px; color:var(--soft); text-align:right; line-height:1.2}
+.lvl b{display:block; color:var(--text); font-size:14px}
+.steps{max-width:1280px; margin:0 auto; padding:0 24px 12px; display:grid; grid-template-columns:repeat(8,1fr); gap:6px}
+.seg{height:7px; border-radius:6px; background:rgba(255,255,255,.1); position:relative}
+.seg.done{background:var(--grad)}
+.seg.now{background:linear-gradient(90deg,var(--yellow),var(--orange)); box-shadow:0 0 14px rgba(251,191,36,.6)}
+.seg span{position:absolute; top:11px; left:0; font-size:12px; color:var(--yellow); white-space:nowrap; display:none}
+.seg.now span{display:block}
+
+/* ═══ Mise en page ═══ */
+.wrap{position:relative; z-index:2}
+.layout{max-width:1280px; margin:0 auto; padding:38px 24px 70px; display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:32px; align-items:start}
+.layout.full{grid-template-columns:minmax(0,1fr); max-width:1100px}
+main{min-width:0}
+.glass{background:var(--glass); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1px solid var(--border); border-radius:var(--r-lg)}
+.card{padding:28px}
+.chip-label{display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--text); background:var(--glass); border:1px solid var(--border); padding:6px 16px; border-radius:999px; margin-bottom:14px}
+.led{width:7px; height:7px; border-radius:50%; background:var(--lime); box-shadow:0 0 10px var(--lime)}
+h2.title{font-family:var(--serif); font-weight:600; font-size:clamp(30px,3.6vw,42px); line-height:1.1; letter-spacing:-.01em; color:#fff; margin-bottom:10px}
+.grad{background:linear-gradient(120deg,var(--pink),var(--magenta) 30%,var(--violet) 60%,var(--cyan)); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-style:italic; font-weight:500; animation:gs 8s ease-in-out infinite}
+@keyframes gs{50%{background-position:100% 50%}}
+p.lead{color:var(--soft); font-size:19px; margin-bottom:22px; max-width:64ch}
+.coach{display:flex; gap:14px; align-items:flex-start; padding:14px 18px; margin-bottom:24px; max-width:760px; border-radius:var(--r)}
+.coach .av{flex:none; width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--yellow),var(--orange)); display:grid; place-items:center; font-size:22px; box-shadow:0 0 18px rgba(251,146,60,.45)}
+.coach b{color:var(--yellow)}
+h3.sub{font-family:var(--serif); font-weight:600; font-size:22px; margin:26px 0 12px; color:#fff}
+.sector-h{display:flex; align-items:center; gap:12px; margin:28px 0 14px}
+.sector-h .rule{flex:1; height:1px; background:var(--border)}
+
+/* ═══ Cartes de choix ═══ */
+.grid{display:grid; gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.choice{--g1:var(--pink); --g2:var(--violet); position:relative; text-align:left; width:100%; color:var(--text); background:var(--glass);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1px solid var(--border); border-radius:22px; padding:18px 20px; cursor:pointer;
+  transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .2s}
+.choice::before{content:''; position:absolute; inset:-1px; border-radius:22px; padding:2px; background:linear-gradient(135deg,var(--g1),var(--g2));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:0; transition:opacity .3s; pointer-events:none}
+.choice:hover{transform:translateY(-4px); background:var(--glass-hover)}
+.choice:hover::before{opacity:.6}
+.choice.on{background:color-mix(in srgb,var(--g1) 14%,transparent); box-shadow:0 16px 44px color-mix(in srgb,var(--g1) 30%,transparent)}
+.choice.on::before{opacity:1}
+.choice.on::after{content:"✓"; position:absolute; top:12px; right:14px; width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--g1),var(--g2)); color:#fff; display:grid; place-items:center; font-weight:800; font-size:16px}
+.choice.off{opacity:.4}
+.choice.full{opacity:.45; cursor:not-allowed}
+.choice.full:hover{transform:none}
+.sec-primaire{--g1:var(--lime); --g2:var(--emerald)}
+.sec-secondaire{--g1:var(--cyan); --g2:var(--sky)}
+.sec-tertiaire{--g1:var(--pink); --g2:var(--magenta)}
+.choice .ico{width:62px; height:62px; border-radius:18px; display:grid; place-items:center; font-size:30px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 10px 26px color-mix(in srgb,var(--g1) 30%,transparent); transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.choice:hover .ico{transform:scale(1.1) rotate(-6deg)}
+.choice h4{font-family:var(--serif); font-weight:600; font-size:21px; margin:12px 0 6px; padding-right:32px; color:#fff}
+.choice p{color:var(--soft); font-size:16px}
+.choice .meta{margin-top:12px; font-size:15px}
+.choice .meta div{margin-top:3px}
+.choice .meta b{color:var(--g1); font-weight:600}
+.tag{display:inline-block; font-size:13px; font-weight:600; padding:4px 12px; border-radius:999px; background:rgba(0,0,0,.28); color:#fff; border:1px solid var(--border); margin-top:12px}
+.tag.full{background:rgba(255,61,139,.2); border-color:var(--pink)}
+.counter{font-family:var(--mono); font-weight:700; color:var(--yellow)}
+
+/* ═══ Formulaires ═══ */
+label.f{display:block; font-weight:600; margin-bottom:6px}
+.inp{width:100%; background:rgba(10,6,24,.55); color:#fff; border:1px solid var(--border); border-radius:14px; padding:13px 16px; font-size:18px}
+.inp:focus{border-color:var(--magenta); outline:none; box-shadow:0 0 0 4px rgba(233,53,197,.2)}
+.inp::placeholder{color:var(--dim)}
+select.inp option{background:var(--bg-1); color:#fff}
+.row{display:grid; gap:16px; grid-template-columns:repeat(2,minmax(0,1fr)); margin-bottom:16px}
+.row3{grid-template-columns:2fr 1fr 1fr}
+.chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+.chip{background:var(--glass); color:var(--text); border:1px solid var(--border); border-radius:999px; padding:8px 18px; cursor:pointer; font-size:16px; transition:all .2s}
+.chip:hover{background:var(--glass-hover); transform:translateY(-2px)}
+.chip.on{background:var(--grad); border-color:transparent; color:#fff}
+.help{font-size:15px; color:var(--soft); margin-top:6px}
+.err{color:#ffb4c8; font-size:16px; margin-top:10px}
+
+/* ═══ Boutons ═══ */
+.nav{display:flex; justify-content:space-between; align-items:center; gap:14px; margin-top:30px; flex-wrap:wrap}
+.btn{border:0; border-radius:14px; padding:14px 28px; font-weight:700; font-size:18px; cursor:pointer; transition:transform .25s, box-shadow .25s}
+.btn-main{background:var(--grad); color:#fff; box-shadow:0 10px 30px rgba(233,53,197,.35)}
+.btn-main:hover{transform:translateY(-2px); box-shadow:0 14px 36px rgba(233,53,197,.5)}
+.btn-main:disabled{background:rgba(255,255,255,.1); color:var(--dim); box-shadow:none; cursor:not-allowed; transform:none}
+.btn-ghost{background:var(--glass); color:var(--text); border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--glass-hover)}
+.btn-gold{background:linear-gradient(90deg,var(--yellow),var(--orange)); color:#1a1033}
+.hint{color:var(--soft); font-size:15px}
+.busy{opacity:.7; pointer-events:none}
+
+/* ═══ Défi bonus ═══ */
+.bonus{margin-top:26px; border:2px dashed var(--yellow); border-radius:var(--r); padding:18px 20px; background:rgba(251,191,36,.06)}
+.bonus h4{color:var(--yellow); font-size:18px; margin-bottom:4px}
+.bonus p{color:var(--soft); font-size:16px; margin-bottom:12px}
+.bonus.won{border-style:solid; border-color:var(--emerald); background:rgba(52,211,153,.08)}
+.bonus.won h4{color:var(--emerald)}
+
+/* ═══ Enseigne ═══ */
+aside{position:sticky; top:128px}
+.sign{overflow:hidden}
+.sign-face{min-height:175px; background:var(--brand); color:var(--on-brand); padding:22px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; transition:background .4s; position:relative}
+.sign-face::after{content:''; position:absolute; inset:0; background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.25),transparent 60%); pointer-events:none}
+.sign-face.empty{background:linear-gradient(135deg,rgba(255,61,139,.25),rgba(157,78,221,.25)); color:var(--soft)}
+.sign-face .emb{width:60px; height:60px; border-radius:50%; background:var(--on-brand); color:var(--brand); display:grid; place-items:center; font-size:28px; margin-bottom:10px}
+.sign-face .nm{font-size:30px; line-height:1.1; font-weight:800; word-break:break-word}
+.sign-face .sl{font-size:15px; margin-top:6px; opacity:.9}
+.sign-body{padding:18px 20px}
+.sign-body h3{font-size:15px; color:var(--soft); font-weight:600; margin-bottom:8px}
+.srow{display:flex; gap:10px; padding:8px 0; border-top:1px solid var(--border-soft); font-size:15px}
+.srow:first-of-type{border-top:0}
+.srow .k{width:100px; flex:none; color:var(--dim)}
+.srow .v{flex:1; min-width:0}
+.srow .v.todo{color:var(--dim); font-style:italic}
+.srow .v.mono{font-family:var(--mono); font-size:14px}
+.pbar{height:8px; background:rgba(255,255,255,.1); border-radius:6px; margin-top:12px; overflow:hidden}
+.pbar i{display:block; height:100%; background:var(--grad); transition:width .4s}
+
+/* ═══ Styles de logo ═══ */
+.f-moderne{font-family:var(--ui); font-weight:800}
+.f-elegant{font-family:'Playfair Display',Georgia,serif; font-style:italic; font-weight:700}
+.f-fun{font-family:'Fredoka','Comic Sans MS',sans-serif; font-weight:600}
+.f-street{font-family:'Bebas Neue',Impact,sans-serif; font-weight:400; letter-spacing:1.5px}
+.swatches{display:flex; flex-wrap:wrap; gap:14px; padding-bottom:26px}
+.sw{width:60px; height:60px; border-radius:50%; border:3px solid transparent; cursor:pointer; position:relative; transition:transform .25s}
+.sw:hover{transform:scale(1.08)}
+.sw.on{border-color:#fff; box-shadow:0 0 0 4px var(--bg-deep) inset, 0 0 22px rgba(255,255,255,.35)}
+.sw span{position:absolute; bottom:-22px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--soft); white-space:nowrap}
+.stylebtn{font-size:28px; text-align:center; padding:20px 10px}
+.stylebtn small{display:block; font-family:var(--ui); font-size:14px; color:var(--soft); font-style:normal; letter-spacing:0; font-weight:500; margin-top:4px}
+
+/* ═══ Carte d'identité ═══ */
+.idcard{max-width:720px; margin:6px auto 0; background:linear-gradient(135deg,#F8F9FF,#ECEAFB); color:var(--paper-ink); border-radius:22px; padding:26px 28px 26px 34px; box-shadow:0 24px 60px rgba(0,0,0,.5), 0 0 60px rgba(233,53,197,.25); position:relative; overflow:hidden}
+.idcard::before{content:""; position:absolute; inset:0 auto 0 0; width:12px; background:var(--brand)}
+.idcard .hd{display:flex; align-items:center; gap:16px; border-bottom:2px solid var(--paper-line); padding-bottom:14px; margin-bottom:12px}
+.idcard .emb{width:62px; height:62px; border-radius:14px; background:var(--brand); color:var(--on-brand); display:grid; place-items:center; font-size:30px; flex:none}
+.idcard .hd h3{font-size:26px; line-height:1.1}
+.idcard .hd p{color:#5B5F7A; font-size:15px; margin-top:2px}
+.idgrid{display:grid; grid-template-columns:190px 1fr; gap:8px 16px; font-size:17px}
+.idgrid .k{color:#5B5F7A}
+.num{font-family:var(--mono); font-weight:700; font-size:18px; letter-spacing:.5px; background:#FFF3C4; border-radius:6px; padding:1px 8px; display:inline-block}
+.stamp{position:absolute; right:22px; bottom:18px; transform:rotate(-12deg); border:3px solid #2E9E5B; color:#2E9E5B; font-weight:800; padding:4px 12px; border-radius:8px; font-size:16px; opacity:0}
+.stamp.show{animation:stamp .5s .9s forwards}
+@keyframes stamp{from{opacity:0; transform:rotate(-12deg) scale(2)} to{opacity:.9; transform:rotate(-12deg) scale(1)}}
+.fict{font-size:12px; color:#7A7E98; margin-top:12px}
+
+/* ═══ Document ═══ */
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+.tab{background:var(--glass); color:var(--soft); border:1px solid var(--border); border-radius:999px; padding:8px 18px; cursor:pointer; font-size:15px}
+.tab.on{background:#fff; color:var(--bg-deep); font-weight:700}
+.paper{background:var(--paper); color:var(--paper-ink); border-radius:8px; padding:40px 44px; box-shadow:0 24px 70px rgba(0,0,0,.55); font-size:16px; line-height:1.45; max-width:840px}
+.paper p{margin-bottom:10px}
+.paper .dh{display:flex; justify-content:space-between; gap:24px; align-items:flex-start}
+.paper .from{display:flex; gap:14px; align-items:flex-start}
+.paper .from .emb{width:54px; height:54px; border-radius:12px; background:var(--brand); color:var(--on-brand); display:grid; place-items:center; font-size:26px; flex:none}
+.paper .from .co{font-size:22px; line-height:1.15}
+.paper .from p{margin:4px 0 0; font-size:14px; color:#4A4E68}
+.paper .from .ids{font-family:var(--mono); font-size:12.5px}
+.paper .to{border:1px solid var(--paper-line); border-radius:8px; padding:12px 16px; min-width:240px; font-size:15px}
+.paper .to .lbl{font-size:12px; color:#6B6F88; margin-bottom:2px}
+.paper .place{text-align:right; margin:26px 0 8px; font-size:15px}
+.paper h3.doc{font-size:24px; margin:4px 0 2px; letter-spacing:.5px}
+.paper .ref{font-family:var(--mono); font-size:14px; color:#4A4E68; margin-bottom:18px}
+.paper table{width:100%; border-collapse:collapse; margin:14px 0}
+.paper th{background:#F0F2FA; text-align:left; font-size:14px; padding:9px 10px; border-bottom:2px solid var(--paper-ink)}
+.paper td{padding:9px 10px; border-bottom:1px solid var(--paper-line)}
+.paper td.q{width:130px}
+.paper input.qin{width:100px; border:2px dashed #8A8FB0; border-radius:6px; padding:6px 8px; font-family:var(--mono); font-size:16px; text-align:right; color:var(--paper-ink); background:#FFFBEA}
+.paper input.qin:focus{border-style:solid; border-color:var(--paper-ink); outline:none}
+.paper input.qin.ok{border-style:solid; border-color:#2E9E5B; background:#EFFAF3}
+.paper select.din{border:2px dashed #8A8FB0; border-radius:6px; padding:6px 8px; background:#FFFBEA; color:var(--paper-ink); font-size:15px}
+.paper .sig{margin-top:26px; display:flex; justify-content:flex-end}
+.paper .sig div{text-align:center; min-width:260px}
+.paper .sig input{width:100%; border:0; border-bottom:2px dashed #8A8FB0; font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:24px; text-align:center; padding:4px; background:#FFFBEA; color:#2A2F7A}
+.paper .sig input:focus{outline:none; border-bottom-style:solid}
+.paper .sig .signed{font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:24px; color:#2A2F7A}
+.paper .sig small{display:block; color:#6B6F88; font-size:13px; margin-top:4px}
+.paper .foot{margin-top:30px; border-top:1px solid var(--paper-line); padding-top:8px; font-size:11.5px; color:#8A8FA8; text-align:center}
+.checklist{list-style:none; margin-top:18px; display:grid; gap:6px}
+.checklist li{font-size:16px; color:var(--soft)}
+.checklist li.ok{color:var(--emerald)}
+.checklist li::before{content:"○ "}
+.checklist li.ok::before{content:"✓ "}
+
+/* ═══ Héros (connexion, fermeture, fin) ═══ */
+.hero{position:relative; text-align:center; padding:40px 0 20px}
+.confetti-layer{position:absolute; inset:-40px 0 0; overflow:hidden; pointer-events:none; z-index:0}
+.confetti-layer span{position:absolute; display:block; opacity:0; animation:cfall linear infinite}
+.confetti-layer span:nth-child(1){left:5%;width:8px;height:14px;background:var(--pink);animation-duration:13s}
+.confetti-layer span:nth-child(2){left:13%;width:10px;height:5px;background:var(--cyan);animation-duration:15s;animation-delay:2.5s;border-radius:50%}
+.confetti-layer span:nth-child(3){left:22%;width:7px;height:7px;background:var(--yellow);animation-duration:11s;animation-delay:4s;border-radius:50%}
+.confetti-layer span:nth-child(4){left:31%;width:5px;height:15px;background:var(--violet);animation-duration:14s;animation-delay:1s}
+.confetti-layer span:nth-child(5){left:40%;width:9px;height:9px;background:var(--lime);animation-duration:16s;animation-delay:3s;border-radius:50%}
+.confetti-layer span:nth-child(6){left:49%;width:12px;height:6px;background:var(--magenta);animation-duration:12s;animation-delay:5.5s}
+.confetti-layer span:nth-child(7){left:58%;width:6px;height:12px;background:var(--orange);animation-duration:14s;animation-delay:2s}
+.confetti-layer span:nth-child(8){left:67%;width:8px;height:8px;background:var(--cyan);animation-duration:11s;animation-delay:6s;border-radius:50%}
+.confetti-layer span:nth-child(9){left:76%;width:5px;height:14px;background:var(--pink);animation-duration:15s}
+.confetti-layer span:nth-child(10){left:85%;width:10px;height:6px;background:var(--yellow);animation-duration:13s;animation-delay:3.5s}
+.confetti-layer span:nth-child(11){left:93%;width:8px;height:8px;background:var(--emerald);animation-duration:16s;animation-delay:2s;border-radius:50%}
+@keyframes cfall{0%{transform:translateY(-60px) rotate(0);opacity:0} 10%{opacity:.9} 90%{opacity:.9} 100%{transform:translateY(720px) rotate(720deg);opacity:0}}
+.hero > *:not(.confetti-layer){position:relative; z-index:1}
+.badge-school{display:inline-flex; align-items:center; gap:12px; padding:8px 22px 8px 10px; border-radius:999px; margin-bottom:28px}
+.hero h2{font-family:var(--serif); font-weight:600; font-size:clamp(40px,6vw,68px); line-height:1.03; letter-spacing:-.02em; color:#fff; margin-bottom:22px}
+.hero .sub{color:var(--soft); font-size:clamp(17px,1.6vw,20px); max-width:640px; margin:0 auto 28px; line-height:1.55}
+.hero-meta{display:inline-flex; flex-wrap:wrap; justify-content:center; gap:10px}
+.meta-chip{display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:999px; font-size:15px; font-weight:500}
+.login{max-width:560px; margin:36px auto 0; text-align:left}
+.road{list-style:none; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:26px}
+.road li{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:var(--r)}
+.road li .n{font-family:var(--mono); font-weight:700; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.1); color:var(--soft); flex:none}
+.road li.now{border-color:rgba(251,191,36,.6); box-shadow:0 0 30px rgba(251,191,36,.15)}
+.road li.now .n{background:linear-gradient(135deg,var(--yellow),var(--orange)); color:#1a1033}
+.road li .t{flex:1; text-align:left}
+.road li .t small{display:block; color:var(--dim); font-size:13px}
+.spin{display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,.25); border-top-color:#fff; border-radius:50%; animation:sp .8s linear infinite; vertical-align:middle; margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ═══ Fin ═══ */
+.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:22px 0}
+.stat{padding:18px; text-align:center}
+.stat b{display:block; font-family:var(--mono); font-size:32px; background:linear-gradient(90deg,var(--yellow),var(--orange)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent}
+.stat span{color:var(--soft); font-size:15px}
+.badges{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px}
+.badge{padding:14px; text-align:center; border-radius:var(--r)}
+.badge .i{font-size:30px}
+.badge b{display:block; font-size:15px; margin-top:4px}
+.badge.lockd{opacity:.35}
+.words{display:grid; gap:10px}
+.word{background:rgba(255,255,255,.05); border-left:5px solid var(--magenta); border-radius:12px; padding:12px 16px}
+.word b{font-size:18px; color:#fff}
+.word span{display:block; color:var(--soft); font-size:16px}
+.status{border-radius:var(--r); padding:14px 18px; margin-top:18px; font-size:16px}
+.status.ok{background:rgba(52,211,153,.12); border:1px solid var(--emerald)}
+.status.wait{background:rgba(56,189,248,.1); border:1px solid var(--sky)}
+.status.err{background:rgba(255,61,139,.12); border:1px solid var(--pink)}
+.next{margin-top:22px; padding:18px 22px; display:flex; gap:16px; align-items:center; border-radius:var(--r-lg)}
+.next .ic{font-size:40px}
+
+/* ═══ Toasts, modale, confettis ponctuels ═══ */
+#toasts{position:fixed; right:22px; bottom:22px; z-index:50; display:grid; gap:10px; pointer-events:none}
+.toast{pointer-events:none; background:var(--glass-strong); backdrop-filter:blur(18px); border:1px solid rgba(251,191,36,.6); border-radius:var(--r); padding:12px 18px; min-width:270px; box-shadow:0 12px 30px rgba(0,0,0,.45); animation:tin .35s ease-out}
+.toast b{font-family:var(--mono); font-size:20px; color:var(--yellow)}
+.toast .wd{color:var(--soft); font-size:15px}
+.toast.word{border-color:rgba(233,53,197,.7)}
+.toast.word b{font-family:var(--serif); color:#ff8fd0}
+@keyframes tin{from{transform:translateY(20px); opacity:0} to{transform:none; opacity:1}}
+.modal{position:fixed; inset:0; z-index:70; background:rgba(5,3,14,.8); display:grid; place-items:center; padding:20px}
+.modal .box{padding:24px; max-width:780px; width:100%; max-height:86vh; overflow:auto; background:var(--bg-1)}
+.modal pre{background:rgba(0,0,0,.35); padding:14px; border-radius:12px; font-family:var(--mono); font-size:12.5px; white-space:pre-wrap; word-break:break-word; color:#E6DDFF; margin:12px 0}
+.confetti{position:fixed; top:-20px; width:10px; height:16px; z-index:65; pointer-events:none; animation:fall2 linear forwards}
+@keyframes fall2{to{transform:translateY(110vh) rotate(720deg)}}
+.fly{position:fixed; z-index:60; font-size:44px; pointer-events:none; animation:fly 1.4s cubic-bezier(.5,0,.6,1) forwards}
+@keyframes fly{to{transform:translate(70vw,-60vh) scale(.4) rotate(20deg); opacity:0}}
+
+
+/* ═══ Briefing ═══ */
+.brief{max-width:900px; margin:0 auto}
+.goals{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin:22px 0}
+.goal{padding:18px 20px; border-radius:var(--r)}
+.goal .gi{font-size:30px}
+.goal b{display:block; font-family:var(--serif); font-size:20px; color:#fff; margin:6px 0 4px}
+.goal p{color:var(--soft); font-size:16px}
+.warn{display:flex; gap:14px; align-items:center; padding:18px 20px; border-radius:var(--r); border:1px solid rgba(251,191,36,.55); background:rgba(251,191,36,.08)}
+.warn .wi{font-size:34px}
+.warn b{color:var(--yellow)}
+.today{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+/* ═══ Stratégies ═══ */
+.strat{text-align:left}
+.strat .big{font-size:40px}
+.strat .ex{margin-top:10px; padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.25); font-size:15px; color:var(--text)}
+.strat .ex b{color:var(--g1)}
+.st-petit{--g1:var(--lime); --g2:var(--emerald)}
+.st-milieu{--g1:var(--sky); --g2:var(--indigo)}
+.st-haut{--g1:var(--yellow); --g2:var(--orange)}
+.gauge{display:flex; gap:4px; margin-top:10px}
+.gauge i{flex:1; height:8px; border-radius:4px; background:rgba(255,255,255,.12)}
+.gauge i.on{background:linear-gradient(90deg,var(--g1),var(--g2))}
+.glab{display:flex; justify-content:space-between; font-size:13px; color:var(--dim); margin-top:4px}
+/* ═══ Logo ═══ */
+.logo-prev{display:flex; align-items:center; gap:18px; padding:20px; border-radius:var(--r); background:rgba(255,255,255,.95); color:#1D1F33; margin-bottom:22px}
+.lg-mark{width:74px; height:74px; border-radius:50%; display:grid; place-items:center; font-size:36px; flex:none; box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.lg-name{font-size:34px; line-height:1.05}
+.lg-sl{font-size:15px; color:#555a76; margin-top:4px}
+.sym{width:64px; height:64px; border-radius:16px; font-size:32px; display:grid; place-items:center; background:var(--glass); border:2px solid var(--border); cursor:pointer; transition:transform .2s}
+.sym:hover{transform:translateY(-3px)}
+.sym.on{border-color:#fff; background:rgba(255,255,255,.18); box-shadow:0 0 20px rgba(255,255,255,.3)}
+.sw.small{width:46px; height:46px}
+/* ═══ Vitrine ═══ */
+.front{width:100%; height:auto; display:block}
+.front-wrap{border-radius:var(--r-lg); overflow:hidden; background:linear-gradient(180deg,#1b1340,#2a1a4d)}
+.opt-row{display:flex; flex-wrap:wrap; gap:10px}
+.opt{padding:10px 18px; border-radius:14px; background:var(--glass); border:1px solid var(--border); color:var(--text); cursor:pointer; font-size:16px; display:flex; align-items:center; gap:8px}
+.opt:hover{background:var(--glass-hover)}
+.opt.on{background:var(--grad); border-color:transparent; color:#fff}
+.opt .dot{width:18px; height:18px; border-radius:50%; border:1px solid rgba(255,255,255,.4)}
+.boutique-grid{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:22px; align-items:start}
+.boutique-grid .front-wrap{position:sticky; top:130px}
+/* ═══ Argent ═══ */
+.money{display:flex; align-items:center; gap:14px; padding:16px 20px; border-radius:var(--r); margin-top:16px}
+.money .mi{font-size:32px}
+.money b{font-family:var(--mono); font-size:22px; color:var(--emerald)}
+.cost{display:inline-block; margin-top:10px; font-family:var(--mono); font-weight:700; font-size:15px; padding:4px 10px; border-radius:8px; background:rgba(255,61,139,.18); color:#ffb4c8}
+.pro, .con{display:block; font-size:15px; margin-top:6px}
+.pro{color:#b5f5c8} .con{color:#ffc4d4}
+/* ═══ Patrimoine ═══ */
+.patri{max-width:720px; margin:22px auto 0; background:#fff; color:#1D1F33; border-radius:18px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.patri h4{background:var(--brand); color:var(--on-brand); padding:12px 20px; font-size:18px}
+.pcols{display:grid; grid-template-columns:1fr 1fr}
+.pcol{padding:14px 20px}
+.pcol + .pcol{border-left:2px solid #E3E5EF}
+.pcol h5{font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:#6B6F88; margin-bottom:8px}
+.pl{display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px dashed #E3E5EF; font-size:16px}
+.pl span:last-child{font-family:var(--mono); font-weight:700; white-space:nowrap}
+.pl.neg span:last-child{color:#C0392B}
+.ptot{display:flex; justify-content:space-between; padding:10px 20px; background:#F4F2FB; font-weight:700; font-size:17px}
+.ptot span:last-child{font-family:var(--mono)}
+/* ═══ Carte de visite ═══ */
+.biz{width:100%; max-width:440px; aspect-ratio:85/55; background:#fff; color:#1D1F33; border-radius:14px; box-shadow:0 18px 40px rgba(0,0,0,.45); display:grid; grid-template-columns:34% 66%; overflow:hidden}
+.biz .l{background:var(--brand); display:grid; place-items:center; align-content:center; gap:8px; padding:10px}
+.biz .l .lg-mark{width:64px; height:64px; font-size:30px}
+.biz .r{padding:16px 18px; display:flex; flex-direction:column; justify-content:center; gap:2px; font-size:13px; color:#4A4E68}
+.biz .r .bn{font-size:22px; color:#1D1F33; line-height:1.1}
+.biz .r .bs{font-size:12px; margin-bottom:8px}
+.biz .r .who2{font-weight:700; color:#1D1F33; font-size:14px}
+.duo{display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:22px; align-items:center; margin-top:18px}
+/* ═══ Déclaration ═══ */
+.decl{max-width:760px; background:#fff; color:#1D1F33; border-radius:10px; padding:32px 36px; box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.decl h3{font-family:var(--serif); font-size:26px; margin-bottom:4px}
+.decl .sub2{color:#6B6F88; margin-bottom:16px}
+.decl ul{list-style:none; display:grid; gap:6px; margin:10px 0 18px}
+.decl li{display:flex; gap:10px; border-bottom:1px dashed #E3E5EF; padding:6px 0; font-size:16px}
+.decl li b{min-width:190px; color:#4A4E68; font-weight:600}
+.engage{display:flex; gap:12px; align-items:flex-start; background:#FFF8E1; border:2px solid #F5C451; border-radius:10px; padding:14px 16px; cursor:pointer; font-size:16px}
+.engage input{width:24px; height:24px; margin-top:2px; accent-color:#E935C5}
+.decl .sigl{margin-top:22px; display:flex; justify-content:flex-end}
+.decl .sigl div{text-align:center; min-width:280px}
+.decl .sigl input{width:100%; border:0; border-bottom:2px dashed #8A8FB0; font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:26px; text-align:center; padding:4px; background:#FFFBEA; color:#2A2F7A}
+.decl .sigl input:focus{outline:none; border-bottom-style:solid}
+.decl .sigl small{display:block; color:#6B6F88; font-size:13px; margin-top:4px}
+.decl .signed{font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:26px; color:#2A2F7A}
+.chk{list-style:none; display:grid; gap:4px; margin-top:12px}
+.chk li{font-size:14px; color:var(--dim)}
+.chk li.ok{color:var(--emerald)}
+.chk li::before{content:"○ "} .chk li.ok::before{content:"✓ "}
+@media (max-width:1000px){ .boutique-grid,.duo{grid-template-columns:1fr} .goals{grid-template-columns:1fr} }
+@media (max-width:640px){ .pcols{grid-template-columns:1fr} .pcol + .pcol{border-left:0; border-top:2px solid #E3E5EF} .decl li{flex-direction:column; gap:0} }
+
+
+/* ═══ Mission 2 ═══ */
+.dash{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:20px; align-items:start}
+.dash .front-wrap{padding:12px}
+.need{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:18px 0}
+.need > div{padding:18px; border-radius:var(--r); text-align:center}
+.need .ni{font-size:40px}
+.need b{display:block; font-family:var(--serif); font-size:19px; color:#fff; margin:6px 0 4px}
+.need p{color:var(--soft); font-size:15px}
+.need .done{border-color:rgba(52,211,153,.6); box-shadow:0 0 24px rgba(52,211,153,.18)}
+.rules{display:grid; gap:10px; margin:14px 0}
+.rule{display:flex; gap:14px; align-items:center; padding:14px 18px; border-radius:var(--r)}
+.rule .ri{font-size:28px}
+.bankpill{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-weight:700; padding:7px 16px; border-radius:999px; background:rgba(52,211,153,.12); border:1px solid rgba(52,211,153,.45); color:#9ff0c9}
+.achat-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:6px}
+.offres{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; align-items:stretch}
+.offre{background:#fff; color:#1D1F33; border-radius:14px; padding:18px 18px 16px; box-shadow:0 18px 44px rgba(0,0,0,.45); display:flex; flex-direction:column; gap:8px; position:relative; border:3px solid transparent; cursor:pointer; text-align:left; transition:transform .25s}
+.offre:hover{transform:translateY(-4px)}
+.offre.on{border-color:#E935C5; box-shadow:0 0 0 4px rgba(233,53,197,.35), 0 18px 44px rgba(0,0,0,.45)}
+.offre.on::after{content:"✓ Mon choix"; position:absolute; top:-12px; right:12px; background:var(--grad); color:#fff; font-weight:700; font-size:13px; padding:4px 12px; border-radius:999px}
+.offre .oh{border-bottom:2px solid #E3E5EF; padding-bottom:8px}
+.offre .oh b{font-size:18px}
+.offre .oh small{display:block; color:#6B6F88; font-size:12px; line-height:1.35}
+.offre .ot{font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#6B6F88; font-weight:700}
+.offre .art{font-weight:700; font-size:16px}
+.offre .det{font-size:13.5px; color:#4A4E68}
+.offre .lines{font-size:14px; border-top:1px dashed #E3E5EF; padding-top:6px}
+.offre .ln{display:flex; justify-content:space-between; gap:8px; padding:2px 0}
+.offre .ln span:last-child{font-family:var(--mono); font-weight:700; white-space:nowrap}
+.offre .ln.neg span:last-child{color:#1E8E4E}
+.offre .tot{display:flex; justify-content:space-between; background:#F4F2FB; border-radius:8px; padding:8px 10px; font-weight:800}
+.offre .tot span:last-child{font-family:var(--mono)}
+.offre .cond{font-size:13px; color:#4A4E68; display:grid; gap:2px}
+.offre .cond b{color:#1D1F33}
+.offre .atout{align-self:flex-start; font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; background:#F1E9FF; color:#6B2FB3}
+.offre .valid{font-size:11.5px; color:#8A8FA8}
+.compare{margin-top:18px; padding:16px 18px; border-radius:var(--r)}
+table.cmp{width:100%; border-collapse:collapse; font-size:15px}
+table.cmp th, table.cmp td{padding:8px 10px; border-bottom:1px solid var(--border-soft); text-align:left}
+table.cmp th{color:var(--dim); font-size:12px; letter-spacing:.06em; text-transform:uppercase}
+table.cmp td.best{color:var(--emerald); font-weight:700}
+.after{margin-top:16px; padding:14px 18px; border-radius:var(--r); display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.after b{font-family:var(--mono)}
+.after .warnx{color:#ffc4d4}
+.paper.bc .note{font-size:13px; color:#6B6F88}
+.verif{display:grid; gap:8px; margin-top:16px}
+.verif label{display:flex; gap:12px; align-items:center; padding:12px 16px; border-radius:14px; background:var(--glass); border:1px solid var(--border); cursor:pointer; font-size:16px}
+.verif input{width:22px; height:22px; accent-color:#E935C5}
+.sigrow{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:14px}
+.sigrow input{flex:1; min-width:240px; background:#FFFBEA; color:#2A2F7A; border:0; border-bottom:2px dashed #8A8FB0; border-radius:10px 10px 0 0; font-family:'Playfair Display',Georgia,serif; font-style:italic; font-size:24px; padding:6px 12px}
+.sigrow input:focus{outline:none; border-bottom-style:solid}
+/* téléphone */
+.phone{width:290px; margin:0 auto; background:#0d0b18; border-radius:36px; padding:16px 14px 24px; border:3px solid #3b3552; box-shadow:0 24px 60px rgba(0,0,0,.55), inset 0 0 0 2px #1d1a2e; position:relative}
+.phone::before{content:''; display:block; width:90px; height:20px; border-radius:12px; background:#1d1a2e; margin:0 auto 14px}
+.phone .clock{text-align:center; font-family:var(--mono); font-size:38px; color:#fff}
+.phone .date{text-align:center; color:var(--dim); font-size:13px; margin-bottom:16px}
+.notif{background:rgba(255,255,255,.95); color:#1D1F33; border-radius:16px; padding:12px 14px; font-size:14px; animation:pop .6s cubic-bezier(.34,1.56,.64,1) both}
+.notif + .notif{margin-top:10px; animation-delay:1.2s}
+.notif .nh{display:flex; justify-content:space-between; font-size:12px; color:#6B6F88; margin-bottom:4px}
+.notif b{display:block; margin-bottom:2px}
+@keyframes pop{from{opacity:0; transform:translateY(-14px) scale(.9)} to{opacity:1; transform:none}}
+.buzz{animation:buzz .5s 2}
+@keyframes buzz{25%{transform:translateX(-3px) rotate(-1deg)} 75%{transform:translateX(3px) rotate(1deg)}}
+.duo2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:22px; align-items:center}
+/* livraison */
+.road2{position:relative; height:120px; border-radius:var(--r); overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid var(--border); margin-bottom:18px}
+.road2::after{content:''; position:absolute; left:0; right:0; bottom:26px; border-top:4px dashed rgba(255,255,255,.25)}
+.truck{position:absolute; bottom:30px; font-size:62px; animation:drive 2.6s cubic-bezier(.2,.8,.3,1) both}
+@keyframes drive{from{left:-90px} to{left:calc(100% - 210px)}}
+.house{position:absolute; right:24px; bottom:28px; font-size:58px}
+/* paiement */
+.terminal{width:280px; margin:0 auto; background:linear-gradient(160deg,#2b2f3a,#16181f); border-radius:28px; padding:18px; box-shadow:0 24px 60px rgba(0,0,0,.55); border:2px solid #444a5a}
+.terminal .scr{background:#cfe9d6; color:#0f2a18; border-radius:12px; padding:16px; font-family:var(--mono); text-align:center; min-height:120px; display:flex; flex-direction:column; justify-content:center; gap:6px}
+.terminal .scr .amt{font-size:28px; font-weight:700}
+.terminal .keys{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px}
+.terminal .keys span{background:#3a3f4d; color:#fff; border-radius:8px; text-align:center; padding:8px 0; font-family:var(--mono)}
+.receipt{max-width:300px; margin:0 auto; background:#fff; color:#1D1F33; font-family:var(--mono); font-size:13px; padding:16px 18px; box-shadow:0 18px 40px rgba(0,0,0,.45); border-radius:6px 6px 0 0; position:relative}
+.receipt::after{content:''; position:absolute; left:0; right:0; bottom:-10px; height:10px; background:radial-gradient(circle at 6px 0,transparent 6px,#fff 6px) repeat-x; background-size:12px 10px}
+.receipt .c{text-align:center}
+.receipt hr{border:0; border-top:1px dashed #999; margin:8px 0}
+.receipt .r{display:flex; justify-content:space-between}
+/* patrimoine avant/après */
+.ba{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:14px; align-items:center}
+.ba .arrow{font-size:40px; color:var(--yellow); text-align:center}
+.patri .pl.new{background:#EFFAF3; animation:pop .6s .4s both}
+.patri .pl.chg span:last-child{color:#B45309}
+.explain{margin-top:18px; padding:16px 20px; border-radius:var(--r); border:1px solid rgba(52,211,153,.45); background:rgba(52,211,153,.07)}
+.explain b{color:#9ff0c9}
+.equip{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+.equip span{font-size:14px; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid var(--border)}
+.overlay{position:fixed; inset:0; z-index:80; background:rgba(10,6,24,.86); display:grid; place-items:center; text-align:center}
+.overlay .big{font-size:76px; display:flex; gap:24px; justify-content:center}
+.overlay .big span{animation:hop 1s ease-in-out infinite}
+.overlay .big span:nth-child(2){animation-delay:.2s} .overlay .big span:nth-child(3){animation-delay:.4s}
+@keyframes hop{50%{transform:translateY(-18px)}}
+.overlay p{font-family:var(--serif); font-size:26px; color:#fff; margin-top:18px}
+@media (max-width:1000px){ .dash,.duo2,.ba{grid-template-columns:1fr} .offres{grid-template-columns:1fr} .need{grid-template-columns:1fr} .ba .arrow{transform:rotate(90deg)} }
+
+#print-area{display:none}
+@media print{
+  body{background:#fff}
+  body > *:not(#print-area){display:none !important}
+  body::after{display:none}
+  #print-area{display:block}
+  #print-area .idcard,#print-area .patri,#print-area .biz{box-shadow:none; margin:0 0 10mm}
+  #print-area .front-wrap{background:#fff; max-width:160mm}
+}
+@media (max-width:1000px){
+  .layout{grid-template-columns:1fr}
+  aside{position:static; order:-1}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .road{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .g2,.row,.row3,.stats,.road{grid-template-columns:1fr}
+  .paper{padding:24px 18px}
+  .paper .dh{flex-direction:column}
+  .idgrid{grid-template-columns:1fr}
+  .blob{filter:blur(60px); width:340px !important; height:340px !important}
+  .who{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important}
+  .stamp{opacity:.9}
+}
+</style>
+</head>
+<body>
+<div class="mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div><div class="blob b5"></div></div>
+<div class="banner wrap" role="region" aria-label="Information"><span class="pulse" aria-hidden="true"></span>Économie de l'entreprise · 3P Vente · Mission 2 : équipe ton entreprise</div>
+<header class="top wrap" id="top">
+  <div class="top-in">
+    <div class="logo" aria-hidden="true">SL</div>
+    <h1>Mon entreprise<small id="topSub">Mission 2 : équipe ton entreprise</small></h1>
+    <div class="right">
+      <div class="who" id="who"></div>
+      <div class="lvl" id="lvlBox"><span>Niveau</span><b id="lvlName">Idée en poche</b></div>
+      <div class="xp-pill"><span id="xpPill">0 XP</span></div>
+    </div>
+  </div>
+  <div class="steps" id="steps"></div>
+</header>
+<div class="wrap"><div class="layout" id="layout"><main id="main"></main><aside id="side"></aside></div></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="modal" class="modal" hidden></div>
+<div id="print-area"></div>
+<script>
+// ======================================================================
+//  CONFIGURATION – Mission 2 : équipe ton entreprise
+// ======================================================================
+const CONFIG = {
+  ENDPOINT_URL: "https://script.google.com/macros/s/AKfycbwkApoh4ASdA7c9OOUMZTRjPFXZ-7jWGQ_VUsdJaVwIzYxLxoQw5dJjyjCcmHX_6KATGA/exec",
+  APP_ID: "mini-entreprise-3p",
+  MISSION: "2",
+  VERSION: "1.0",
+  DOMAINE: "istlm.org",
+  CLASSE_DEFAUT: "3P Vente",
+  STORAGE_PREFIX: "mini-entreprise-3p-m2-",
+  NB_ACHATS: 3          // nombre de biens à acheter pour terminer la mission (1, 2 ou 3)
+};
+// ======================================================================
+//  CATALOGUE — 8 entreprises (fictives), 10 achats et 4 fournisseurs chacune
+// ======================================================================
+const TYPES = [
+{ id:"ferme", secteur:"primaire", emoji:"🐄", nom:"La ferme avec son magasin",
+  desc:"Tu élèves des vaches et tu cultives des légumes. Dans le magasin de la ferme, tu vends tes produits frais aux habitants de la région.",
+  achete:"semences, aliments pour animaux, emballages", vend:"légumes de saison, lait, œufs, fromages",
+  noms:["La Ferme du Terril","Les Saveurs du Pré","Ferme des Trois Tilleuls","Le Panier Fermier"],
+  slogans:["Du champ à ton assiette","Le goût du vrai","Frais, local et fait avec amour"],
+  produits:[["Semences de pommes de terre","sac de 25 kg","Pour planter les pommes de terre au printemps"],["Graines de carottes","sachet de 500 g","De quoi semer plusieurs longues rangées"],["Aliment pour vaches laitières","sac de 25 kg","Un mélange de céréales pour tes vaches"],["Foin","botte de 250 kg","La nourriture de base des vaches en hiver"],["Engrais naturel","sac de 25 kg","Pour nourrir la terre de tes champs"],["Boîtes à œufs","lot de 100","Pour vendre les œufs par 6 ou par 10"],["Bouteilles en verre pour le lait","caisse de 24","Des bouteilles consignées de 1 litre"],["Filets à légumes","lot de 100","Pour vendre pommes de terre et oignons"],["Papier pour emballer le fromage","rouleau de 50 m","Garde le fromage frais plus longtemps"],["Bottes en caoutchouc","paire","Indispensables dans la boue de la ferme"]],
+  fournisseurs:[["AgriCoop Hainaut","SC","Chaussée de Mons 210","7800","Ath","Belgique","Coopérative qui fournit tout le nécessaire aux agriculteurs","Prix bas"],["Semences Delvaux","SRL","Avenue de la Faculté 18","5030","Gembloux","Belgique","Spécialiste des graines, des semences et des engrais","Qualité premium"],["Agri Nord Distribution","SAS","Rue du Marché 45","59000","Lille","France","Grossiste agricole du nord de la France","Grand choix"],["Boerderij Groothandel","BV","Industrieweg 7","5461 JK","Veghel","Pays-Bas","Grossiste qui livre les fermes de tout le Benelux","Livraison rapide"]]},
+{ id:"pepiniere", secteur:"primaire", emoji:"🌱", nom:"La pépinière",
+  desc:"Tu fais pousser des plantes, des fleurs et des arbres dans tes serres, puis tu les vends aux particuliers et aux jardiniers.",
+  achete:"graines, bulbes, pots, terreau", vend:"plantes, fleurs, arbustes, arbres fruitiers",
+  noms:["Au Jardin Fleuri","Vert Passion","Graines de Bonheur","Les Serres du Borinage"],
+  slogans:["Faites fleurir vos envies","Des plantes qui ont du caractère","Le vert, c'est notre nature"],
+  produits:[["Terreau universel","sac de 50 litres","La terre idéale pour les pots et les semis"],["Pots en terre cuite","lot de 20","Des pots classiques de 15 cm"],["Graines de fleurs d'été","lot de 50 sachets","Tournesols, cosmos, capucines…"],["Bulbes de tulipes","filet de 50","À planter en automne pour des fleurs au printemps"],["Jeunes plants de fraisiers","plateau de 24","Prêts à grandir et à donner des fraises"],["Engrais pour plantes","bidon de 5 litres","Pour des plantes plus fortes et plus fleuries"],["Tuteurs en bambou","lot de 50","Pour aider les plantes à pousser bien droit"],["Arrosoirs","pièce","Arrosoir en métal de 10 litres"],["Gants de jardinage","paire","Protègent les mains des épines"],["Étiquettes pour plantes","lot de 500","Pour écrire le nom et le prix de chaque plante"]],
+  fournisseurs:[["Horti Wallonie","SRL","Rue des Horticulteurs 9","1300","Wavre","Belgique","Grossiste en fournitures pour jardineries","Livraison rapide"],["Terre & Racines","SA","Kortrijksesteenweg 120","9000","Gand","Belgique","Fabricant de terreaux et d'engrais","Prix bas"],["Bloemen Groothandel","BV","Bloemenweg 25","1431 GB","Aalsmeer","Pays-Bas","Grossiste installé près du plus grand marché aux fleurs d'Europe","Grand choix"],["Jardin Pro","SAS","Avenue de Denain 88","59300","Valenciennes","France","Matériel de jardinage pour les professionnels","Qualité premium"]]},
+{ id:"chocolaterie", secteur:"secondaire", emoji:"🍫", nom:"La chocolaterie artisanale",
+  desc:"Dans ton atelier, tu transformes le cacao, le sucre et le lait en pralines et en tablettes, que tu vends dans ta boutique.",
+  achete:"cacao, sucre, noisettes, emballages", vend:"pralines, tablettes, coffrets cadeaux",
+  noms:["L'Atelier Cacao","Praline & Cie","Douceur Noire","Les Chocolats du Borinage"],
+  slogans:["Le chocolat belge, avec passion","Craquez pour nos pralines","Fait main, fait pour vous"],
+  produits:[["Fèves de cacao","sac de 25 kg","La matière première de tout chocolat"],["Chocolat de couverture noir","bloc de 5 kg","Pour enrober les pralines"],["Sucre de canne","sac de 25 kg","Pour adoucir le chocolat"],["Lait en poudre","sac de 25 kg","Indispensable pour le chocolat au lait"],["Noisettes grillées","sac de 5 kg","Pour le praliné et les tablettes"],["Beurre de cacao","bloc de 5 kg","Rend le chocolat fondant"],["Boîtes à pralines","lot de 100","Boîtes cadeaux de 250 g"],["Papier doré","rouleau de 50 m","Pour emballer les tablettes"],["Moules à pralines","pièce","Moule de 24 pralines"],["Rubans cadeaux","rouleau de 50 m","La touche finale des coffrets"]],
+  fournisseurs:[["Cacao Import","SA","Noorderlaan 55","2030","Anvers","Belgique","Importateur de cacao d'Afrique et d'Amérique du Sud","Grand choix"],["Douceurs & Co","SRL","Rue des Confiseurs 12","4000","Liège","Belgique","Grossiste pour chocolatiers et pâtissiers","Livraison rapide"],["Emballages Prestige","SAS","Rue de l'Épeule 30","59100","Roubaix","France","Spécialiste des ingrédients et emballages haut de gamme","Qualité premium"],["Noten & Suiker","BV","Havenstraat 8","3011 AB","Rotterdam","Pays-Bas","Grossiste en fruits secs, sucre et cacao","Prix bas"]]},
+{ id:"textile", secteur:"secondaire", emoji:"👕", nom:"L'atelier de T-shirts personnalisés",
+  desc:"Tu imprimes des dessins, des prénoms ou des logos sur des T-shirts, des sweats et des casquettes, selon les envies de tes clients.",
+  achete:"T-shirts blancs, sweats, encres, vinyle", vend:"vêtements personnalisés",
+  noms:["Borinage Print","L'Atelier du T-shirt","Street Ink","Mon Style Unique"],
+  slogans:["Ton style, ton message","On imprime tes idées","Unique comme toi"],
+  produits:[["T-shirts blancs en coton","carton de 50","T-shirts vierges à personnaliser"],["Sweats à capuche","carton de 20","Sweats noirs, gris ou blancs"],["Casquettes","carton de 25","Casquettes réglables à imprimer"],["Sacs en tissu","lot de 50","Sacs en coton naturel"],["Encre textile noire","pot de 1 kg","Encre qui résiste au lavage"],["Encres textiles de couleur","lot de 4 pots","Rouge, bleu, jaune et vert"],["Papier transfert","paquet de 100 feuilles","Pour transférer un dessin au fer chaud"],["Vinyle flex","rouleau de 5 m","Pour découper des lettres et des logos"],["Sachets d'emballage","lot de 500","Pour emballer chaque vêtement vendu"],["Étiquettes à ta marque","lot de 1 000","Pour coudre ton logo dans le col"]],
+  fournisseurs:[["Textiles Delcourt","SRL","Rue du Midi 77","7700","Mouscron","Belgique","Grossiste en vêtements vierges","Prix bas"],["PrintSupply","BV","Strijpsestraat 40","5616 GS","Eindhoven","Pays-Bas","Tout le matériel pour imprimer sur textile","Livraison rapide"],["Encres & Couleurs","SAS","Rue de la Soie 14","69001","Lyon","France","Fabricant d'encres et de textiles de qualité","Qualité premium"],["BlankWear","GmbH","Industriestraße 21","50667","Cologne","Allemagne","Grossiste européen en textile","Grand choix"]]},
+{ id:"baskets", secteur:"tertiaire", emoji:"👟", nom:"Le magasin de baskets",
+  desc:"Tu vends des baskets et des accessoires aux jeunes et aux sportifs, et tu les conseilles pour trouver la bonne paire.",
+  achete:"baskets, chaussettes, accessoires", vend:"les mêmes articles, à tes clients",
+  noms:["Sneak'Up","Street Kicks","Pas de Géant","Chaussure à ton Pied"],
+  slogans:["Chaque pas compte","Le style commence par les pieds","Tes pieds vont adorer"],
+  produits:[["Baskets de running","paire","Légères et confortables pour courir"],["Baskets en toile","paire","Le classique qui va avec tout"],["Baskets montantes","paire","Style street, cheville maintenue"],["Baskets pour enfants","paire","Du 28 au 35, avec scratch"],["Claquettes","paire","Pour la piscine ou l'été"],["Chaussettes de sport","lot de 3 paires","Blanches ou noires"],["Semelles confort","paire","Pour marcher toute la journée"],["Spray imperméabilisant","flacon","Protège les baskets de la pluie"],["Kit de nettoyage","kit","Brosse et produit pour baskets blanches"],["Lacets de couleur","lot de 5 paires","Pour personnaliser ses baskets"]],
+  fournisseurs:[["Sport Distribution","SA","Boulevard Industriel 60","1070","Anderlecht","Belgique","Grossiste en articles de sport","Grand choix"],["Shoes Europe","BV","Venrayseweg 100","5928 RH","Venlo","Pays-Bas","Centre de distribution de chaussures","Livraison rapide"],["Pied Léger","SAS","Route de Béthune 25","62300","Lens","France","Fabricant de baskets","Qualité premium"],["Sneaker Großhandel","GmbH","Kölner Straße 15","40211","Düsseldorf","Allemagne","Grossiste qui vend en très grandes quantités","Prix bas"]]},
+{ id:"gaming", secteur:"tertiaire", emoji:"🎮", nom:"La boutique gaming et high-tech",
+  desc:"Tu vends des consoles, des jeux et des accessoires aux joueurs, et tu les aides à choisir le bon matériel.",
+  achete:"consoles, manettes, casques, accessoires", vend:"les mêmes articles, à tes clients",
+  noms:["Level Up Store","Pixel Shop","Game Zone","Joystick Corner"],
+  slogans:["Passe au niveau supérieur","Le jeu commence ici","Game on !"],
+  produits:[["Consoles de jeux","pièce","La console de salon la plus demandée"],["Manettes sans fil","pièce","Compatibles avec la console"],["Casques gaming","pièce","Avec micro pour jouer en ligne"],["Claviers gaming","pièce","Clavier lumineux et résistant"],["Souris gaming","pièce","Précise et rapide"],["Tapis de souris XXL","pièce","Couvre tout le bureau"],["Cartes cadeaux jeux vidéo","lot de 10","Cartes de 25 € à offrir"],["Câbles HDMI","lot de 10","Pour brancher la console à l'écran"],["Chaises gaming","pièce","Confortables pour de longues parties"],["Housses de transport","lot de 10","Pour protéger la console en voyage"]],
+  fournisseurs:[["TechDistri","SA","Leuvensesteenweg 510","1930","Zaventem","Belgique","Grossiste en électronique et jeux vidéo","Livraison rapide"],["Game Import","BV","Minervum 12","4817 ZL","Breda","Pays-Bas","Importateur de consoles et d'accessoires","Grand choix"],["Numérik Grossiste","SAS","Rue de la Belle Borne 8","95700","Roissy-en-France","France","Vente en gros de matériel high-tech","Prix bas"],["ElektroHandel","GmbH","Jülicher Straße 200","52070","Aix-la-Chapelle","Allemagne","Fabricant d'accessoires gaming","Qualité premium"]]},
+{ id:"velos", secteur:"tertiaire", emoji:"🚲", nom:"Le magasin de vélos",
+  desc:"Tu vends des vélos et des accessoires, et tu répares les vélos de tes clients dans ton atelier.",
+  achete:"vélos, casques, pièces détachées", vend:"vélos, accessoires et réparations",
+  noms:["Roue Libre","Le Guidon Malin","Cycl'Hainaut","Vélo Village"],
+  slogans:["En selle !","Roulez plus loin","La liberté sur deux roues"],
+  produits:[["Vélos de ville","pièce","Avec panier et éclairage"],["VTT","pièce","Vélo tout terrain pour les chemins"],["Vélos électriques","pièce","Une batterie pour aller plus loin"],["Vélos pour enfants","pièce","Roues de 16 pouces"],["Casques de vélo","pièce","Pour rouler en sécurité"],["Antivols","pièce","Antivol en U très solide"],["Chambres à air","lot de 10","Pour réparer les crevaisons"],["Pneus","pièce","Pneus pour vélo de ville"],["Kits d'éclairage","kit","Lampes avant et arrière rechargeables"],["Sacoches","pièce","Pour transporter ses affaires"]],
+  fournisseurs:[["Cycles Benelux","SA","Kempische Steenweg 300","3500","Hasselt","Belgique","Grossiste en vélos et accessoires","Grand choix"],["Fietsen Groothandel","BV","Europalaan 50","3526 KS","Utrecht","Pays-Bas","Importateur de vélos électriques","Qualité premium"],["Vélo Pièces","SAS","Rue de la Manufacture 3","42000","Saint-Étienne","France","Spécialiste des pièces détachées","Prix bas"],["RadTeile","GmbH","Landsberger Straße 150","80339","Munich","Allemagne","Fabricant d'accessoires pour vélos","Livraison rapide"]]},
+{ id:"animalerie", secteur:"tertiaire", emoji:"🐶", nom:"L'animalerie",
+  desc:"Tu vends de la nourriture, des jouets et des accessoires pour les chiens, les chats, les poissons et les rongeurs, et tu conseilles leurs propriétaires.",
+  achete:"croquettes, litière, accessoires", vend:"les mêmes articles, à tes clients",
+  noms:["Patte & Moustache","Wouf & Miaou","Le Paradis des Animaux","Compagnons Store"],
+  slogans:["Ils le méritent bien","Pour le bonheur de vos compagnons","Tout pour vos animaux"],
+  produits:[["Croquettes pour chiens","sac de 12 kg","Pour chiens adultes"],["Croquettes pour chats","sac de 10 kg","Pour chats adultes"],["Litière pour chats","sac de 20 litres","Absorbe les odeurs"],["Paniers pour chiens","pièce","Coussin doux et lavable"],["Arbres à chat","pièce","Pour grimper et griffer"],["Laisses","pièce","Laisse solide de 2 mètres"],["Jouets pour chiens","lot de 10","Balles et cordes à mâcher"],["Aquariums","pièce","Aquarium de 60 litres avec filtre"],["Nourriture pour poissons","lot de 20 boîtes","Flocons pour poissons d'eau douce"],["Cages pour rongeurs","pièce","Pour lapins nains et cobayes"]],
+  fournisseurs:[["Animal Distribution","SA","Avenue de l'Industrie 40","6040","Jumet","Belgique","Grossiste en produits pour animaux","Grand choix"],["PetFood Europe","BV","Ringbaan-Oost 102","5013 CD","Tilburg","Pays-Bas","Fabricant de croquettes","Prix bas"],["Croq'Pro","SAS","Rue Jules Verne 12","80000","Amiens","France","Spécialiste des accessoires pour animaux","Qualité premium"],["Tierbedarf Rhein","GmbH","Rheinweg 44","53113","Bonn","Allemagne","Grossiste qui livre toute l'Europe","Livraison rapide"]]}
+];
+
+// ======================================================================
+//  COMPLÉMENTS PAR ENTREPRISE : stratégies, symboles du logo, vitrine
+// ======================================================================
+const EXTRAS = {
+  ferme:{ symboles:["🐄","🌾","🥕","🧀","🥚","🌻"], vitrine:["🥕","🥚","🧀","🥛"],
+    strat:["Des légumes et du lait à petits prix, pour les familles qui veulent économiser.","Des produits frais et de qualité, à des prix corrects.","Des produits bio et des fromages affinés : plus chers, mais d'exception."] },
+  pepiniere:{ symboles:["🌱","🌷","🌻","🌳","🍓","🌵"], vitrine:["🌷","🌻","🌵","🌳"],
+    strat:["Des plantes et des fleurs pas chères, vendues en grande quantité.","Un grand choix de plantes en bonne santé, à prix raisonnables.","Des plantes rares et des conseils de spécialiste, à prix élevés."] },
+  chocolaterie:{ symboles:["🍫","🍬","🎁","💝","🌰","👑"], vitrine:["🍫","🍬","🎁","💝"],
+    strat:["Des tablettes simples à petit prix, pour tous les jours.","De bonnes pralines, pour se faire plaisir sans se ruiner.","Des pralines de luxe dans des coffrets élégants, pour les grandes occasions."] },
+  textile:{ symboles:["👕","🎨","✂️","⚡","🔥","⭐"], vitrine:["👕","🧢","🎨","👕"],
+    strat:["Des T-shirts imprimés à petits prix, prêts en un jour.","Des vêtements de bonne qualité, personnalisés avec soin.","Des pièces uniques en coton bio, avec des dessins faits sur mesure."] },
+  baskets:{ symboles:["👟","⚡","🏃","⭐","🔥","👑"], vitrine:["👟","🧦","👟","🎒"],
+    strat:["Des baskets à petits prix pour tout le monde (environ 30 € la paire).","Des baskets confortables et tendance (environ 70 € la paire).","Des baskets haut de gamme et des éditions limitées (plus de 150 € la paire)."] },
+  gaming:{ symboles:["🎮","🕹️","🎧","👾","⚡","🏆"], vitrine:["🎮","🎧","🕹️","👾"],
+    strat:["Des accessoires pas chers et des jeux d'occasion.","Le bon matériel au bon prix, avec de bons conseils.","Du matériel haut de gamme pour les joueurs les plus exigeants."] },
+  velos:{ symboles:["🚲","⚙️","🏁","🌍","⚡","⛰️"], vitrine:["🚲","⛑️","🔧","🚲"],
+    strat:["Des vélos simples et solides, à petits prix.","De bons vélos pour tous les jours, avec un entretien sérieux.","Des vélos électriques et sportifs haut de gamme, avec un service sur mesure."] },
+  animalerie:{ symboles:["🐶","🐱","🐾","🐟","🦴","❤️"], vitrine:["🐶","🐱","🐟","🦴"],
+    strat:["De la nourriture et des accessoires à petits prix.","Des produits de qualité et de bons conseils.","Des produits haut de gamme et des soins pour les animaux les plus choyés."] }
+};
+TYPES.forEach(t => Object.assign(t, EXTRAS[t.id]));
+
+const STRATEGIES = [
+  { id:"petit", nom:"Petits prix", icone:"💰", cls:"st-petit", atout:"Prix bas",
+    texte:"Tu vends pas cher. Beaucoup de clients viennent chez toi, mais tu gagnes peu d'argent sur chaque vente : il faudra vendre beaucoup !",
+    jauge:{prix:1, qualite:1, clients:3} },
+  { id:"milieu", nom:"Bon rapport qualité-prix", icone:"⚖️", cls:"st-milieu", atout:"Grand choix",
+    texte:"Des produits de bonne qualité à des prix raisonnables. C'est l'équilibre : ni les moins chers, ni les plus chers.",
+    jauge:{prix:2, qualite:2, clients:2} },
+  { id:"haut", nom:"Haut de gamme", icone:"💎", cls:"st-haut", atout:"Qualité premium",
+    texte:"Tu vends cher des produits de grande qualité, avec un service aux petits soins. Moins de clients, mais tu gagnes plus sur chaque vente.",
+    jauge:{prix:3, qualite:3, clients:1} }
+];
+const RAISONS = ["Mes futurs clients ont peu d'argent","Je veux vendre beaucoup","Je veux proposer de la qualité","Je veux gagner plus sur chaque vente","Je veux me démarquer des autres magasins","Je veux prendre le temps de conseiller mes clients"];
+
+const COULEURS2 = [["Blanc","#FFFFFF"],["Noir","#1D1F33"],["Doré","#D4A537"],["Crème","#F5EBD8"],["Bleu nuit","#1E2A5A"]];
+const FACADES = [["brique","Brique","Chaleureuse et classique"],["bois","Bois","Nature et artisanale"],["pierre","Pierre","Élégante et ancienne"],["moderne","Moderne","Vitrée et épurée"]];
+const AUVENTS = [["raye","Rayé"],["uni","Uni"],["sans","Sans auvent"]];
+const AMBIANCES = [["chaleureuse","Chaleureuse","#FFD89A","#F4A259"],["lumineuse","Lumineuse","#F4F7FF","#BFD7FF"],["nature","Nature","#D6F2D2","#86CF95"],["prestige","Prestige","#3A2D45","#C9A34E"]];
+const ACCUEILS = ["Bienvenue chez nous !","Entrez, c'est ouvert !","Au plaisir de vous conseiller","Ici, chaque client compte"];
+
+const APPORT = 10000;
+const FRAIS = { seul:150, plusieurs:3000 };   // seul = entreprise individuelle ; plusieurs = société (SRL), avec 1 à 5 personnes
+const euro = (n) => n.toLocaleString("fr-BE") + " €";
+
+// ======================================================================
+//  LES BIENS À ACHETER ET LEURS FOURNISSEURS (identiques pour toute la classe)
+// ======================================================================
+const BIENS = [
+  { id:"mobilier", nom:"Le mobilier", court:"mobilier", icone:"🪑", pourquoi:"Pour accueillir tes clients et travailler confortablement : une table, des chaises et un comptoir.",
+    fournisseurs:[
+      { code:"MBP", nom:"MeubloPrix", forme:"SRL", rue:"Route de Mons 154", cp:"7301", ville:"Hornu", tel:"065 71 22 40", web:"www.meubloprix.be", atout:"Prix bas",
+        article:"Ensemble mobilier en mélaminé blanc", detail:"1 table de travail, 4 chaises empilables, 1 comptoir d'accueil", ref:"ENS-MEL-01", qualite:"Simple et pratique", prix:690, remise:0, livraison:35, delai:10, garantie:1 },
+      { code:"BCO", nom:"Bureau & Co", forme:"SA", rue:"Avenue Wilson 410", cp:"7012", ville:"Jemappes", tel:"065 82 15 90", web:"www.bureauetco.be", atout:"Bon rapport qualité-prix",
+        article:"Ensemble mobilier en bois clair", detail:"1 table en hêtre, 4 chaises rembourrées, 1 comptoir avec rangements", ref:"ENS-BOIS-24", qualite:"Solide et chaleureux", prix:1180, remise:5, livraison:0, delai:5, garantie:2 },
+      { code:"DSG", nom:"Design Intérieur", forme:"SRL", rue:"Boulevard d'Avroy 77", cp:"4000", ville:"Liège", tel:"04 221 33 08", web:"www.design-interieur.be", atout:"Qualité premium",
+        article:"Ensemble mobilier design en chêne massif", detail:"1 table design, 4 chaises en cuir, 1 comptoir éclairé, montage compris", ref:"DSG-CHENE-PRO", qualite:"Haut de gamme, fait pour durer", prix:1890, remise:0, livraison:0, delai:3, garantie:3 } ] },
+  { id:"caisse", nom:"La caisse enregistreuse", court:"caisse enregistreuse", icone:"🧾", pourquoi:"Pour encaisser tes clients, imprimer les tickets de caisse et garder une trace de chaque vente.",
+    fournisseurs:[
+      { code:"CPL", nom:"CaissePlus", forme:"SRL", rue:"Rue de la Station 12", cp:"7080", ville:"Frameries", tel:"065 67 40 11", web:"www.caisseplus.be", atout:"Prix bas",
+        article:"Caisse enregistreuse simple", detail:"Clavier, tiroir-caisse et imprimante de tickets", ref:"CR-100", qualite:"Simple et efficace", prix:290, remise:0, livraison:25, delai:8, garantie:1 },
+      { code:"ENC", nom:"Encaiss'Tech", forme:"SA", rue:"Chaussée de Bruxelles 200", cp:"7000", ville:"Mons", tel:"065 31 77 52", web:"www.encaisstech.be", atout:"Bon rapport qualité-prix",
+        article:"Caisse tactile avec lecteur de codes-barres", detail:"Écran tactile, tiroir-caisse, imprimante et lecteur de codes-barres", ref:"CT-SCAN-2", qualite:"Moderne et rapide", prix:690, remise:5, livraison:0, delai:5, garantie:2 },
+      { code:"BLG", nom:"Belgo Caisse Premium", forme:"SRL", rue:"Avenue Louise 320", cp:"1050", ville:"Bruxelles", tel:"02 640 18 25", web:"www.belgocaisse.be", atout:"Qualité premium",
+        article:"Caisse tactile tout-en-un avec terminal de paiement", detail:"Grand écran tactile, terminal pour cartes bancaires, logiciel de gestion du stock, installation comprise", ref:"PRO-ALL-IN", qualite:"Complète et professionnelle", prix:1290, remise:0, livraison:0, delai:3, garantie:3 } ] },
+  { id:"ordinateur", nom:"L'ordinateur", court:"ordinateur", icone:"💻", pourquoi:"Pour écrire tes documents (bons de commande, factures), envoyer des e-mails et suivre ton argent.",
+    fournisseurs:[
+      { code:"PCD", nom:"PC Discount", forme:"SA", rue:"Rue du Grand Quiévroy 8", cp:"7000", ville:"Mons", tel:"065 33 90 14", web:"www.pcdiscount.be", atout:"Prix bas",
+        article:"Ordinateur portable 15 pouces", detail:"Pour le traitement de texte, les e-mails et internet", ref:"NB-15-ESS", qualite:"Basique mais suffisant", prix:499, remise:0, livraison:20, delai:7, garantie:1 },
+      { code:"INF", nom:"InfoMons", forme:"SRL", rue:"Rue de Nimy 54", cp:"7000", ville:"Mons", tel:"065 35 26 61", web:"www.infomons.be", atout:"Bon rapport qualité-prix",
+        article:"Ordinateur portable performant + logiciel de gestion", detail:"Rapide et léger, avec un logiciel pour faire tes factures", ref:"NB-PRO-GEST", qualite:"Rapide et complet", prix:899, remise:5, livraison:0, delai:4, garantie:2 },
+      { code:"DGX", nom:"Digital Expert", forme:"SRL", rue:"Grand-Place 3", cp:"7500", ville:"Tournai", tel:"069 22 48 70", web:"www.digitalexpert.be", atout:"Qualité premium",
+        article:"Ordinateur tout-en-un 27 pouces + imprimante", detail:"Grand écran, imprimante couleur, installation et formation d'une heure comprises", ref:"AIO-27-PRINT", qualite:"Très haut de gamme", prix:1490, remise:0, livraison:0, delai:3, garantie:3 } ] }
+];
+const METHODES = [
+  { id:"magasin", icone:"🚶", nom:"Aller dans les magasins", texte:"Tu vas voir les produits sur place, tu peux les toucher et poser tes questions au vendeur.",
+    pro:"Tu vois et tu touches le produit", con:"Ça prend du temps et il faut se déplacer dans 3 magasins", duree:"environ 1 journée",
+    anim:["🚶","🚗","🏬"], recit:"Tu as visité 3 magasins. Chaque vendeur t'a remis une offre de prix écrite." },
+  { id:"telephone", icone:"📞", nom:"Téléphoner aux fournisseurs", texte:"Tu appelles 3 fournisseurs pour leur demander leurs prix et leurs conditions.",
+    pro:"C'est rapide et tu peux poser tes questions", con:"Au téléphone, rien n'est écrit : il faut demander une confirmation", duree:"environ 1 heure",
+    anim:["📞","☎️","📱"], recit:"Tu as appelé 3 fournisseurs. Pour être sûr(e), ils t'ont envoyé leur offre de prix par e-mail." },
+  { id:"email", icone:"✉️", nom:"Envoyer des e-mails", texte:"Tu écris à 3 fournisseurs pour leur demander une offre de prix.",
+    pro:"Tout est écrit : c'est une preuve", con:"Il faut attendre leur réponse (1 ou 2 jours)", duree:"1 à 2 jours d'attente",
+    anim:["✉️","📨","📬"], recit:"Tu as envoyé une demande de prix à 3 fournisseurs. Ils t'ont répondu avec leur offre de prix." },
+  { id:"internet", icone:"🌐", nom:"Comparer sur internet", texte:"Tu compares les prix sur le site d'un fournisseur et sur au moins 2 autres sites.",
+    pro:"C'est rapide et tu vois beaucoup de produits", con:"Tu ne vois pas le produit en vrai, attention aux frais de livraison", duree:"environ 30 minutes",
+    anim:["💻","🔎","🛒"], recit:"Tu as comparé 3 sites internet. Tu as enregistré l'offre de prix de chacun." }
+];
+const RAISONS_OFFRE = ["Le prix le plus bas","La meilleure qualité","La livraison la plus rapide","La garantie la plus longue","La livraison gratuite","Ça colle à ma stratégie"];
+const ETAPES_ACHAT = [["bien","Choisir le bien"],["methode","Chercher"],["offres","Comparer"],["commande","Commander"],["notif","Commande prête"],["livraison","Livraison"],["paiement","Paiement"],["patrimoine","Patrimoine"]];
+
+const SECTEURS = { primaire:"Secteur primaire", secondaire:"Secteur secondaire", tertiaire:"Secteur tertiaire" };
+const STYLES = [["moderne","Moderne"],["elegant","Élégant"],["fun","Fun"],["street","Street"]];
+const POLICES = { moderne:"Outfit, Arial, sans-serif", elegant:"'Playfair Display', Georgia, serif", fun:"Fredoka, 'Comic Sans MS', sans-serif", street:"'Bebas Neue', Impact, sans-serif" };
+const MOTS = {
+  fournisseur:{mot:"Fournisseur", def:"L'entreprise qui te vend ce dont tu as besoin pour travailler."},
+  offre:{mot:"Offre de prix", def:"La réponse écrite du fournisseur : son prix et ses conditions."},
+  conditions:{mot:"Conditions de vente", def:"Tout ce qui est prévu en plus du prix : délai, livraison, garantie, paiement."},
+  bc:{mot:"Bon de commande", def:"Le document que l'acheteur envoie au fournisseur pour confirmer ce qu'il achète."},
+  bl:{mot:"Bon de livraison", def:"Le document qui accompagne la marchandise. On le vérifie, puis on le signe à la réception."},
+  remb:{mot:"Paiement à la livraison", def:"On paie au moment où l'on reçoit la marchandise. On dit aussi « contre remboursement »."},
+  invest:{mot:"Investissement", def:"Un achat qui reste dans l'entreprise et sert longtemps : des meubles, une caisse, un ordinateur…"}
+};
+const NIVEAUX = [[0,"Premiers achats"],[300,"Œil de lynx"],[600,"Pro des achats"],[850,"Entreprise équipée"]];
+const BADGES = [["compare","🔎","Comparateur"],["bc","📝","Premier bon de commande"],["bl","📦","Réception validée"],["paye","💳","Premier paiement"],
+  ["mobilier","🪑","Bien installé"],["caisse","🧾","Caisse prête"],["ordinateur","💻","Connecté"],["equipe","🏆","Entreprise équipée"]];
+
+// ======================================================================
+//  ÉTAT
+// ======================================================================
+let MODE = "login";          // login | ferme | bloque | accueil | briefing | achat | fin | consultation
+let SESSION = { email:"" };
+let M1 = null;               // l'entreprise créée en mission 1 (lecture seule)
+const nouvelAchat = () => ({ bien:null, etape:0, methode:null, offres:null, choix:null, raisons:[], bc:null, verifBC:false, signBC:"", envoyeBC:false,
+  notif:null, checks:[false,false,false], signBL:"", accepte:false, paye:false, recu:null, fini:false });
+const fresh = () => ({ v:"m2-1", phase:"accueil", eleve:{email:"", prenom:"", nom:"", classe:CONFIG.CLASSE_DEFAUT},
+  achats:[], i:0, xp:0, done:{}, mots:[], envoi:null, startedAt:null, finishedAt:null, majLocale:0 });
+let S = fresh();
+const cleLocale = () => CONFIG.STORAGE_PREFIX + (S.eleve.email || SESSION.email);
+const save = () => { if (["login","bloque"].includes(MODE)) return; S.majLocale = Date.now(); try { localStorage.setItem(cleLocale(), JSON.stringify(S)); } catch(e) {} };
+const lireLocal = (email) => { try { const r = localStorage.getItem(CONFIG.STORAGE_PREFIX + email); return r ? JSON.parse(r) : null; } catch(e) { return null; } };
+const A = () => S.achats[S.i];           // achat en cours
+
+// ======================================================================
+//  OUTILS
+// ======================================================================
+const $ = (s, r=document) => r.querySelector(s);
+const esc = (t) => String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur = (n) => (Math.round(n * 100) / 100).toLocaleString("fr-BE", {minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits:2}) + " €";
+const emailOk = (e) => new RegExp("^[a-z0-9-]+(\\.[a-z0-9-]+)+@" + CONFIG.DOMAINE.replace(".","\\.") + "$").test(e);
+const wait = (ms) => new Promise(r => setTimeout(r, ms));
+const today = () => new Date();
+const dateFr = (d) => d.toLocaleDateString("fr-BE", {day:"numeric", month:"long", year:"numeric"});
+const jourFr = (d) => d.toLocaleDateString("fr-BE", {weekday:"long", day:"numeric", month:"long"});
+const plusJours = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const lum = (hex) => { if (!hex) return 0; const n = parseInt(hex.slice(1),16); return (0.299*((n>>16)&255) + 0.587*((n>>8)&255) + 0.114*(n&255))/255; };
+const niveau = () => NIVEAUX.filter(n => S.xp >= n[0]).pop()[1];
+const bien = (id) => BIENS.find(b => b.id === id);
+const typeM1 = () => TYPES.find(t => t.id === M1.typeId);
+const strat = () => STRATEGIES.find(s => s.id === M1.strategie);
+const deno = () => M1.denomination || (M1.nom + (M1.direction === "plusieurs" ? " SRL" : ""));
+const forme = () => M1.direction === "plusieurs" ? "Société (SRL)" : "Entreprise individuelle";
+const adresse1 = () => `${M1.rue} ${M1.numero}`;
+const adresse2 = () => `${M1.cp} ${M1.commune}`;
+const fonction = () => M1.direction === "plusieurs" ? (M1.nbAssocies > 1 ? "Gérant(e) et associé(e)" : "Gérant(e)") : "Indépendant(e)";
+function nomDepuisEmail(email){
+  const cap = s => s.split("-").map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join("-");
+  const p = email.split("@")[0].split(".");
+  return { prenom: cap(p[0] || ""), nom: p.slice(1).map(cap).join(" ") };
+}
+function setBrand(hex){
+  const r = document.documentElement.style;
+  if (!hex){ r.removeProperty("--brand"); r.removeProperty("--on-brand"); return; }
+  r.setProperty("--brand", hex); r.setProperty("--on-brand", lum(hex) > .62 ? "#1D1F33" : "#FFFFFF");
+}
+function hash(str){ let h = 2166136261; for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function bceFixe(seed){ const b = "0" + String(4 + seed % 6) + String(hash("bce" + seed)).padStart(8,"0").slice(0,6); const n = b + String(97 - (parseInt(b,10) % 97)).padStart(2,"0"); return `${n.slice(0,4)}.${n.slice(4,7)}.${n.slice(7)}`; }
+
+// ======================================================================
+//  L'ENTREPRISE DE LA MISSION 1 ET L'ARGENT
+// ======================================================================
+function lireM1(dossier){
+  const m = dossier.missions && dossier.missions["1"] || {}, et = m.etatApp || {}, e = dossier.entreprise || {};
+  const iv = e.identiteVisuelle || {}, bq = e.boutique || {}, ad = e.adresse || {}, ar = e.argent || {};
+  return {
+    typeId: e.typeId || et.typeId, strategie: (e.strategie || {}).id || et.strategie, nom: e.nom || et.nom || "", slogan: e.slogan || et.slogan || "",
+    denomination: e.denomination || "", direction: e.direction || et.direction || "seul", nbAssocies: +e.nbAssocies || +et.nbAssocies || 1,
+    couleur: iv.couleurPrincipale || et.couleur || "#8E4EC6", couleur2: iv.couleurAccompagnement || et.couleur2 || "#FFFFFF",
+    style: iv.styleEcriture || et.style || "moderne", symbole: iv.symbole || et.symbole || "",
+    facade: bq.facade || et.facade || "", auvent: bq.auvent || et.auvent || "", ambiance: bq.ambiance || et.ambiance || "", accueil: bq.phraseAccueil || et.accueil || "",
+    rue: ad.rue || et.rue || "", numero: ad.numero || et.numero || "", cp: ad.cp || "", commune: ad.commune || et.commune || "",
+    bce: e.numeroEntreprise || (et.ids || {}).bce || "", iban: e.iban || (et.ids || {}).iban || "", email: e.email || "", dateCreation: e.dateCreation || et.dateCreation || "",
+    apport: ar.argentDeDepart || APPORT, frais: ar.fraisDeCreation != null ? ar.fraisDeCreation : FRAIS[e.direction || "seul"], banqueDepart: ar.argentEnBanque != null ? ar.argentEnBanque : APPORT - FRAIS[e.direction || "seul"]
+  };
+}
+const offreDe = (a) => a && a.offres && a.choix != null ? a.offres[a.choix] : null;
+const achatsPayes = () => S.achats.filter(a => a.paye);
+const enBanque = () => M1.banqueDepart - achatsPayes().reduce((s,a) => s + offreDe(a).total, 0);
+const biensRestants = () => BIENS.filter(b => !S.achats.some(a => a.bien === b.id && a.paye));
+function possessions(){
+  return [{ libelle:"Argent en banque", montant:enBanque(), icone:"💶" }]
+    .concat(achatsPayes().map(a => { const o = offreDe(a), b = bien(a.bien); return { libelle:`${b.nom.replace(/^(Le |La |L')/, "").replace(/^./, c => c.toUpperCase())} (${o.fournisseur.nom})`, montant:o.total, icone:b.icone }; }));
+}
+
+/** Les 3 offres de prix pour un bien (mêmes fournisseurs pour toute la classe). */
+function genererOffres(bienId){
+  const b = bien(bienId), d = today();
+  return b.fournisseurs.map((f, k) => {
+    const remise = Math.round(f.prix * f.remise) / 100, total = f.prix - remise + f.livraison;
+    return { numero:`OP-${f.code}-${String(hash(S.eleve.email + bienId) % 9000 + 1000)}`, date:dateFr(d),
+      fournisseur:{ code:f.code, nom:f.nom, forme:f.forme, rue:f.rue, cp:f.cp, ville:f.ville, tel:f.tel, web:f.web, atout:f.atout, bce:bceFixe(hash(f.code)) },
+      ref:f.ref, article:f.article, detail:f.detail, qualite:f.qualite, quantite:1, prix:f.prix, remisePct:f.remise, remise, livraison:f.livraison, total,
+      delai:f.delai, garantie:f.garantie, paiement:"à la livraison", validite:"30 jours", niveau:["petit","milieu","haut"][k] };
+  });
+}
+
+// ======================================================================
+//  VISUELS DE L'ENTREPRISE (repris de la mission 1)
+// ======================================================================
+function texteSurMarque(){ const f = M1.couleur, c2 = M1.couleur2; return c2 && Math.abs(lum(c2) - lum(f)) > .35 ? c2 : (lum(f) > .62 ? "#1D1F33" : "#FFFFFF"); }
+const couleurNom = () => lum(M1.couleur) <= .62 ? M1.couleur : "#1D1F33";
+function logoMark(size){
+  return `<div class="lg-mark" style="background:${M1.couleur}; box-shadow:0 0 0 4px ${M1.couleur2}, 0 8px 20px rgba(0,0,0,.25); ${size ? `width:${size}px;height:${size}px;font-size:${size/2}px` : ""}">${M1.symbole || typeM1().emoji}</div>`;
+}
+function vitrine(uid){
+  const t = typeM1(), brand = M1.couleur, c2 = M1.couleur2, nom = M1.nom || "…";
+  const fs = Math.max(13, Math.min(30, 250 / (0.56 * Math.max(nom.length, 6))));
+  const amb = AMBIANCES.find(a => a[0] === M1.ambiance) || ["", "", "#4A3F73", "#2E2654"];
+  const facadeFill = { brique:`url(#pb-${uid})`, bois:`url(#pw-${uid})`, pierre:`url(#ps-${uid})`, moderne:`url(#pm-${uid})` }[M1.facade] || "#3a3160";
+  const porte = M1.facade === "moderne" ? "#1d2230" : "#3b2a20";
+  const produits = t.vitrine.map((e,i) => `<text x="${78 + i*46}" y="206" font-size="26" text-anchor="middle">${e}</text>`).join("");
+  const fillA = M1.auvent === "raye" ? `url(#pst-${uid})` : brand;
+  const auvent = !M1.auvent || M1.auvent === "sans" ? "" : `<polygon points="36,94 254,94 262,118 28,118" fill="${fillA}" stroke="rgba(0,0,0,.25)"/>` + Array.from({length:10}, (_,i) => `<circle cx="${50 + i*21}" cy="118" r="10.5" fill="${fillA}"/>`).join("");
+  const equip = achatsPayes().map(a => bien(a.bien).icone);
+  return `<svg class="front" viewBox="0 0 400 300" role="img" aria-label="Vitrine de ${esc(nom)}">
+    <defs>
+      <pattern id="pb-${uid}" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#A0503A"/><path d="M0 .5H24M0 6.5H24M12 0V6M.5 6V12M23.5 6V12" stroke="#7B3726"/></pattern>
+      <pattern id="pw-${uid}" width="16" height="40" patternUnits="userSpaceOnUse"><rect width="16" height="40" fill="#8B5A2B"/><path d="M15.5 0V40" stroke="#5E3B1A"/><path d="M4 8q3 6 0 12" stroke="#7a4d24" fill="none"/></pattern>
+      <pattern id="ps-${uid}" width="40" height="24" patternUnits="userSpaceOnUse"><rect width="40" height="24" fill="#A8A29E"/><path d="M0 .5H40M0 12.5H40M20 0V12M.5 12V24M39.5 12V24" stroke="#86807B"/></pattern>
+      <pattern id="pm-${uid}" width="50" height="60" patternUnits="userSpaceOnUse"><rect width="50" height="60" fill="#2F3440"/><path d="M49.5 0V60M0 59.5H50" stroke="#3E4452"/></pattern>
+      <pattern id="pst-${uid}" width="28" height="30" patternUnits="userSpaceOnUse"><rect width="14" height="30" fill="${brand}"/><rect x="14" width="14" height="30" fill="#FFFFFF"/></pattern>
+      <linearGradient id="amb-${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${amb[2]}"/><stop offset="1" stop-color="${amb[3]}"/></linearGradient>
+    </defs>
+    <rect x="14" y="6" width="372" height="10" rx="3" fill="#2B2340"/><rect x="20" y="14" width="360" height="250" fill="${facadeFill}"/>
+    <rect x="40" y="26" width="320" height="56" rx="9" fill="${brand}" stroke="rgba(0,0,0,.25)"/>
+    <circle cx="72" cy="54" r="19" fill="${c2}"/><text x="72" y="61" font-size="20" text-anchor="middle">${M1.symbole || t.emoji}</text>
+    <text x="218" y="${54 + fs*0.35}" font-size="${fs.toFixed(1)}" text-anchor="middle" fill="${texteSurMarque()}" style="font-family:${POLICES[M1.style]}; font-weight:${M1.style === "street" ? 400 : 700}; ${M1.style === "elegant" ? "font-style:italic;" : ""}">${esc(nom)}</text>
+    <rect x="44" y="116" width="202" height="124" fill="url(#amb-${uid})" stroke="#1b1b1b" stroke-width="${M1.facade === "moderne" ? 2 : 5}"/>
+    <path d="M56 208H236" stroke="rgba(0,0,0,.25)" stroke-width="3"/>${produits}
+    ${equip.map((e,i) => `<text x="${70 + i*30}" y="168" font-size="22" text-anchor="middle">${e}</text>`).join("")}
+    <polygon points="60,122 96,122 70,234 44,234" fill="rgba(255,255,255,.18)"/>${auvent}
+    <rect x="276" y="108" width="80" height="156" fill="${porte}" stroke="#141414" stroke-width="3"/><rect x="286" y="120" width="60" height="84" fill="url(#amb-${uid})" opacity=".85"/>
+    <rect x="294" y="130" width="44" height="15" rx="3" fill="#fff"/><text x="316" y="141" font-size="9" text-anchor="middle" fill="#1D1F33" style="font-family:Outfit,Arial;font-weight:700">${equip.length === 3 ? "OUVERT" : "BIENTÔT"}</text>
+    <circle cx="344" cy="190" r="4" fill="#E8C66A"/>
+    ${M1.numero ? `<rect x="362" y="118" width="26" height="20" rx="4" fill="#1E2A5A"/><text x="375" y="132" font-size="11" text-anchor="middle" fill="#fff" style="font-family:Outfit,Arial;font-weight:700">${esc(M1.numero)}</text>` : ""}
+    <rect x="0" y="262" width="400" height="38" fill="#3b3552"/><rect x="0" y="262" width="400" height="3" fill="#57507a"/>
+    ${M1.accueil ? `<rect x="84" y="244" width="172" height="34" rx="5" fill="#1f2a24" stroke="#8b6b3a" stroke-width="3"/><text x="170" y="266" font-size="11" text-anchor="middle" fill="#fff" style="font-family:Fredoka,'Comic Sans MS',sans-serif">${esc(M1.accueil)}</text>` : ""}
+    <text x="30" y="258" font-size="22">🌿</text></svg>`;
+}
+function idcard(){ const t = typeM1(), st = strat();
+  return `<div class="idcard" style="margin:0">
+      <div class="hd"><div class="emb">${M1.symbole || t.emoji}</div><div><h3 class="f-${M1.style}">${esc(deno())}</h3><p>${esc(M1.slogan)}</p></div></div>
+      <div class="idgrid">
+        <div class="k">Activité</div><div>${t.emoji} ${esc(t.nom)}</div>
+        <div class="k">Stratégie</div><div>${st ? st.icone + " " + esc(st.nom) : "–"}</div>
+        <div class="k">Forme</div><div>${esc(forme())}</div>
+        <div class="k">Siège social</div><div>${esc(adresse1())}, ${esc(adresse2())}</div>
+        <div class="k">N° d'entreprise</div><div><span class="num">${esc(M1.bce)}</span></div>
+        <div class="k">N° de TVA</div><div><span class="num">BE ${esc(M1.bce)}</span></div>
+        <div class="k">Compte (IBAN)</div><div><span class="num">${esc(M1.iban)}</span></div>
+      </div><div class="fict">Entreprise et numéros fictifs – projet scolaire, Institut Saint-Luc de Frameries.</div></div>`; }
+/** Le patrimoine, avec les lignes nouvelles ou modifiées mises en évidence. */
+function patrimoineHTML(titre, poss, marque){
+  const total = poss.reduce((s,p) => s + p.montant, 0);
+  return `<div class="patri" style="margin:0"><h4>${titre}</h4><div class="pcols">
+      <div class="pcol"><h5>Ce que ton entreprise possède</h5>${poss.map(p => `<div class="pl ${marque && marque.nouveau === p.libelle ? "new" : ""} ${marque && marque.change === p.libelle ? "chg" : ""}"><span>${p.icone} ${esc(p.libelle)}</span><span>${eur(p.montant)}</span></div>`).join("")}</div>
+      <div class="pcol"><h5>D'où vient l'argent</h5><div class="pl"><span>Argent de départ (apport)</span><span>${eur(M1.apport)}</span></div>
+        <div class="pl neg"><span>Déjà dépensé : frais de création</span><span>− ${eur(M1.frais)}</span></div></div></div>
+    <div class="ptot"><span>Valeur de ton entreprise</span><span>${eur(total)}</span></div></div>`;
+}
+
+// ======================================================================
+//  COMMUNICATION AVEC LE GOOGLE SHEET
+// ======================================================================
+function jsonp(params, timeout = 40000){
+  return new Promise((resolve, reject) => {
+    const cb = "cbJ" + Date.now() + Math.floor(Math.random()*1e6);
+    const s = document.createElement("script");
+    let fini = false;
+    // Une réponse qui arrive en retard ne provoque plus d'erreur : la fonction reste définie (vide) un moment.
+    const fin = () => { fini = true; clearTimeout(t); s.remove(); window[cb] = function(){}; setTimeout(() => { try { delete window[cb]; } catch(e) {} }, 120000); };
+    const t = setTimeout(() => { if (!fini){ fin(); reject(new Error("timeout")); } }, timeout);
+    window[cb] = (d) => { if (fini) return; fin(); resolve(d); };
+    s.onerror = () => { if (!fini){ fin(); reject(new Error("reseau")); } };
+    s.src = CONFIG.ENDPOINT_URL + "?" + new URLSearchParams(Object.assign({}, params, {callback:cb, _:Date.now()})).toString();
+    document.body.appendChild(s);
+  });
+}
+function envoyer(statut){
+  const data = payload(statut);
+  S.lastPayload = data;
+  return fetch(CONFIG.ENDPOINT_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(data) }).catch(() => null);
+}
+const connexion = () => jsonp({action:"connexion", email:SESSION.email, mission:CONFIG.MISSION});
+
+/** Paquet détaillé envoyé au Google Sheet. */
+function payload(statut){
+  const poss = possessions(), a = A();
+  const fourn = (o) => ({ nom:o.fournisseur.nom, forme:o.fournisseur.forme, denomination:`${o.fournisseur.nom} ${o.fournisseur.forme}`, adresse:`${o.fournisseur.rue}, ${o.fournisseur.cp} ${o.fournisseur.ville}`,
+    numeroEntreprise:o.fournisseur.bce, numeroTVA:"BE " + o.fournisseur.bce, telephone:o.fournisseur.tel, site:o.fournisseur.web, atout:o.fournisseur.atout });
+  const offreD = (o) => ({ numero:o.numero, fournisseur:fourn(o), reference:o.ref, article:o.article, detail:o.detail, niveau:o.niveau, prix:o.prix, remisePourcent:o.remisePct, remise:o.remise,
+    fraisLivraison:o.livraison, totalAPayer:o.total, delaiJours:o.delai, garantieAns:o.garantie, paiement:o.paiement });
+  const patrimoine = { possede: poss.map(p => ({ libelle:p.libelle, montant:p.montant })),
+    origine:[{ libelle:"Argent de départ (apport)", montant:M1.apport }, { libelle:"Déjà dépensé : frais de création", montant:-M1.frais }],
+    valeur: poss.reduce((s,p) => s + p.montant, 0), argentEnBanque: enBanque() };
+  return {
+    app:CONFIG.APP_ID, version:CONFIG.VERSION, mission:+CONFIG.MISSION, statut, envoyeLe:new Date().toISOString(),
+    eleve:{ email:S.eleve.email, prenom:S.eleve.prenom, nom:S.eleve.nom, classe:S.eleve.classe },
+    etape:{ phase:S.phase, achat:S.i + 1, etape: a ? ETAPES_ACHAT[Math.min(a.etape, 7)][0] : "", achatsTermines:S.achats.filter(x => x.fini).length, achatsRequis:CONFIG.NB_ACHATS },
+    entreprise:{ typeId:M1.typeId,
+      equipements: achatsPayes().map(x => { const o = offreDe(x); return { bien:bien(x.bien).nom, fournisseur:`${o.fournisseur.nom} ${o.fournisseur.forme}`, article:o.article, valeur:o.total }; }),
+      patrimoine },
+    achats: S.achats.map((x, k) => { const o = offreDe(x);
+      return { numero:k + 1, bien: x.bien ? { id:x.bien, nom:bien(x.bien).nom } : null,
+        methode: x.methode ? { id:x.methode, nom:METHODES.find(m => m.id === x.methode).nom } : null,
+        offresRecues: (x.offres || []).map(offreD), offreChoisie: o ? offreD(o) : null, raisonsDuChoix:x.raisons,
+        bonDeCommande: x.bc ? { numero:x.bc.numero, date:x.bc.date, montant:o.total, verifie:x.verifBC, signature:x.signBC, envoyeParEmail:x.envoyeBC } : null,
+        notification: x.notif ? { canal:"SMS et e-mail", recuLe:x.notif.date, livraisonPrevue:x.notif.livraison } : null,
+        bonDeLivraison: x.bl ? { numero:x.bl.numero, date:x.bl.date, verifications:{ bonArticle:x.checks[0], bonneQuantite:x.checks[1], colisBonEtat:x.checks[2] }, signature:x.signBL, accepte:x.accepte } : null,
+        paiement: x.paye ? { montant:o.total, mode:"carte bancaire, à la livraison", date:x.recu.date, accepte:true } : null,
+        termine:x.fini };
+    }),
+    patrimoine,
+    recompenses:{ xp:S.xp, niveau:niveau(), badges:BADGES.filter(b => S.done["b_" + b[0]]).map(b => b[2]), motsDePro:S.mots.map(m => MOTS[m].mot) },
+    xp:S.xp, dureeMinutes: S.startedAt ? Math.round((Date.now() - S.startedAt)/60000) : null,
+    etatApp: Object.assign({}, S, { lastPayload:undefined, envoi:undefined })
+  };
+}
+function restaurer(etat){
+  const s = fresh();
+  if (etat && etat.v === "m2-1") Object.keys(s).forEach(k => { if (etat[k] !== undefined && etat[k] !== null) s[k] = etat[k]; });
+  return s;
+}
+
+// ======================================================================
+//  RÉCOMPENSES
+// ======================================================================
+function toast(html, cls=""){
+  const box = $("#toasts"), t = document.createElement("div"); t.className = "toast " + cls; t.innerHTML = html;
+  box.appendChild(t); while (box.children.length > 3) box.firstChild.remove(); setTimeout(() => t.remove(), 3500);
+}
+function gagner(cle, pts){ if (S.done[cle]) return; S.done[cle] = true; S.xp += pts; toast(`<b>+${pts} XP</b>`); }
+function badge(id){
+  const b = BADGES.find(x => x[0] === id); if (!b || S.done["b_" + id]) return;
+  S.done["b_" + id] = true; setTimeout(() => toast(`<div>${b[1]} Badge débloqué : ${esc(b[2])}</div>`), 400);
+}
+function unlockMot(id){
+  if (!id || S.mots.includes(id)) return;
+  S.mots.push(id);
+  setTimeout(() => toast(`<b>Nouveau mot de pro</b><div>${esc(MOTS[id].mot)}</div><div class="wd">${esc(MOTS[id].def)}</div>`, "word"), 900);
+}
+function confetti(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cols = ["#ff3d8b","#e935c5","#9d4edd","#22d3ee","#a3e635","#fbbf24","#fb923c", M1 ? M1.couleur : "#fff"];
+  for (let i=0;i<80;i++){
+    const c = document.createElement("div"); c.className = "confetti";
+    c.style.left = Math.random()*100 + "vw"; c.style.background = cols[i % cols.length];
+    c.style.animationDuration = (2 + Math.random()*2) + "s"; c.style.animationDelay = (Math.random()*.6) + "s";
+    if (i % 3 === 0) c.style.borderRadius = "50%";
+    document.body.appendChild(c); setTimeout(() => c.remove(), 4800);
+  }
+}
+const CONFETTI_LAYER = `<div class="confetti-layer" aria-hidden="true">${"<span></span>".repeat(11)}</div>`;
+
+// ======================================================================
+//  ÉCRANS HORS ACHAT
+// ======================================================================
+const R = {};
+let LOGIN = { email:"", busy:false, err:"" };
+const coach = (html) => `<div class="coach glass"><div class="av" aria-hidden="true">💼</div><p><b>Coach Max :</b> ${html}</p></div>`;
+const express = () => S.i > 0;
+
+R.login = () => `<div class="hero">${CONFETTI_LAYER}
+    <div class="badge-school glass"><div class="logo">SL</div><span>Institut Saint-Luc de Frameries</span></div>
+    <h2>Mission 2 :<br><span class="grad">équipe ton entreprise</span></h2>
+    <p class="sub">Ton entreprise existe… mais elle est encore vide ! Compare les fournisseurs, passe commande, reçois ta livraison et paie comme un vrai chef d'entreprise.</p>
+    <div class="hero-meta"><span class="meta-chip glass">🪑 Mobilier</span><span class="meta-chip glass">🧾 Caisse enregistreuse</span><span class="meta-chip glass">💻 Ordinateur</span></div>
+    <div class="login glass card">
+      <label class="f" for="em">Ton adresse e-mail de l'école</label>
+      <input class="inp" id="em" type="text" inputmode="email" autocapitalize="off" value="${esc(LOGIN.email)}" placeholder="prenom.nom@istlm.org" autocomplete="email" spellcheck="false">
+      ${LOGIN.lent ? `<div class="help" style="color:#ffd97a">⏳ Google met un peu de temps à répondre… La première connexion peut prendre jusqu'à 30 secondes. Ne ferme pas la page.</div>` : LOGIN.err ? `<div class="err">${LOGIN.err}</div>` : `<div class="help">La même adresse que pour la mission 1.</div>`}
+      <div class="nav" style="margin-top:20px"><span></span>
+        <button class="btn btn-main ${LOGIN.busy ? "busy" : ""}" data-act="login" ${emailOk(LOGIN.email.trim().toLowerCase()) && !LOGIN.busy ? "" : "disabled"}>${LOGIN.busy ? `<span class="spin"></span>Je retrouve mon entreprise…` : "Retrouver mon entreprise"}</button>
+      </div></div></div>`;
+
+R.ferme = () => `<div class="hero"><div style="font-size:64px;margin-bottom:10px">🔒</div>
+    <h2>La mission est <span class="grad">fermée</span></h2>
+    <p class="sub">${esc(S.eleve.prenom)}, ton professeur n'a pas encore ouvert l'accès (ou la séance est terminée). Ton travail est bien sauvegardé.</p>
+    <div class="nav" style="justify-content:center"><button class="btn btn-main" data-act="retry">Réessayer</button></div></div>`;
+
+R.bloque = () => `<div class="hero"><div style="font-size:64px;margin-bottom:10px">🏗️</div>
+    <h2>Ton entreprise n'est pas <span class="grad">encore créée</span></h2>
+    <p class="sub">Pour équiper ton entreprise, tu dois d'abord terminer la mission 1 : créer ton entreprise et signer ta déclaration de création. Parles-en à ton professeur.</p>
+    <div class="nav" style="justify-content:center"><button class="btn btn-ghost" data-act="logout">Changer de compte</button><button class="btn btn-main" data-act="retry">Réessayer</button></div></div>`;
+
+R.accueil = () => { const t = typeM1(), st = strat();
+  return `<div class="chip-label"><span class="led"></span>Bon retour, ${esc(S.eleve.prenom)} !</div>
+    <h2 class="title">Voici <span class="grad">ton entreprise</span></h2>
+    <p class="lead">Tout ce que tu as décidé lors de la mission 1 est là. Prends une minute pour la retrouver avant de l'équiper.</p>
+    <div class="dash">
+      <div class="front-wrap glass">${vitrine("dash")}</div>
+      <div>
+        <div class="logo-prev">${logoMark()}<div><div class="lg-name f-${M1.style}" style="color:${couleurNom()}">${esc(deno())}</div><div class="lg-sl">${esc(M1.slogan)}</div></div></div>
+        <div class="hero-meta" style="justify-content:flex-start;margin-bottom:16px">
+          <span class="meta-chip glass">${t.emoji} ${esc(t.nom)}</span><span class="meta-chip glass">${esc(SECTEURS[t.secteur])}</span>
+          ${st ? `<span class="meta-chip glass">${st.icone} ${esc(st.nom)}</span>` : ""}<span class="meta-chip glass">${M1.direction === "plusieurs" ? "🏢" : "🙋"} ${esc(forme())}</span></div>
+        ${idcard()}
+      </div>
+    </div>
+    <div style="margin-top:20px">${patrimoineHTML("Le patrimoine de ton entreprise aujourd'hui", possessions())}</div>
+    <div class="nav"><span class="hint">Tu as ${eur(enBanque())} en banque pour équiper ton entreprise.</span><button class="btn btn-main" data-act="brief">Découvrir ma mission →</button></div>`;
+};
+
+R.briefing = () => `<div class="brief">
+    <div class="chip-label"><span class="led"></span>Ta mission du jour</div>
+    <h2 class="title">Équipe <span class="grad">ton entreprise</span></h2>
+    <p class="lead">Une entreprise ne peut pas ouvrir ses portes sans matériel. Pour fonctionner, la tienne a besoin au minimum de ces ${CONFIG.NB_ACHATS === 3 ? "trois biens" : "biens"} :</p>
+    <div class="need">${BIENS.map(b => `<div class="glass"><div class="ni">${b.icone}</div><b>${esc(b.nom)}</b><p>${esc(b.pourquoi)}</p></div>`).join("")}</div>
+    <h3 class="sub">Pour chaque achat, tu vas vivre les étapes d'un vrai acheteur :</h3>
+    <div class="today">${ETAPES_ACHAT.map((e,i) => `<span class="meta-chip glass">${i+1}. ${esc(e[1])}</span>`).join("")}</div>
+    <h3 class="sub">Les règles d'or de l'acheteur</h3>
+    <div class="rules">
+      <div class="rule glass"><div class="ri">🔎</div><div><b>Toujours comparer au moins 3 fournisseurs.</b> Le premier prix trouvé n'est pas toujours le meilleur.</div></div>
+      <div class="rule glass"><div class="ri">📋</div><div><b>Ne pas regarder que le prix.</b> Le délai, la livraison et la garantie comptent aussi.</div></div>
+      <div class="rule glass"><div class="ri">🏦</div><div><b>Ne pas tout dépenser.</b> Ton entreprise devra bientôt acheter ses marchandises : garde de l'argent en banque !</div></div>
+    </div>
+    <div class="nav"><span class="bankpill">🏦 ${eur(enBanque())} en banque</span><button class="btn btn-main" data-act="start">C'est parti !</button></div></div>`;
+
+// ======================================================================
+//  LES ÉTAPES D'UN ACHAT
+// ======================================================================
+function enteteAchat(titre, lead){
+  const a = A(), b = a.bien ? bien(a.bien) : null;
+  return `<div class="achat-head"><div class="chip-label" style="margin:0"><span class="led"></span>Achat ${S.i + 1} sur ${CONFIG.NB_ACHATS}${b ? " · " + b.icone + " " + esc(b.court) : ""}</div><span class="bankpill">🏦 ${eur(enBanque())}</span></div>
+    <h2 class="title" style="margin-top:12px">${titre}</h2>${lead ? `<p class="lead">${lead}</p>` : ""}`;
+}
+function boutons(label, act, ok, retour = true, hint = ""){
+  return `<div class="nav">${retour && A().etape > 0 ? `<button class="btn btn-ghost" data-act="back">Retour</button>` : "<span></span>"}
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><span class="hint" style="visibility:${ok ? "hidden" : "visible"}">${hint}</span>
+    <button class="btn btn-main" data-act="${act}" ${ok ? "" : "disabled"}>${label}</button></div></div>`;
+}
+
+R.bien = () => { const a = A(), rest = biensRestants();
+  return enteteAchat(express() ? "Quel est ton prochain achat ?" : "Que vas-tu acheter <span class='grad'>en premier</span> ?", "")
+    + coach(express() ? "Bravo pour ton premier achat ! Tu connais maintenant les étapes : on recommence pour le bien suivant." : "Ton entreprise est créée… mais elle est vide ! Commence par choisir le premier bien à acheter. L'ordre n'a pas d'importance : tu achèteras les trois.")
+    + `<div class="grid" style="grid-template-columns:repeat(${rest.length},minmax(0,1fr))">${rest.map(b => `<button class="choice ${a.bien === b.id ? "on" : ""}" data-set="bien" data-val="${b.id}">
+        <div class="ico">${b.icone}</div><h4>${esc(b.nom)}</h4><p>${esc(b.pourquoi)}</p></button>`).join("")}</div>`
+    + boutons("Continuer", "next", !!a.bien, false, "Choisis un bien.");
+};
+
+R.methode = () => { const a = A(), b = bien(a.bien);
+  return enteteAchat(`Comment trouver ${b.id === "mobilier" ? "ton" : b.id === "caisse" ? "ta" : "ton"} <span class='grad'>${esc(b.court)}</span> ?`, "Il existe plusieurs façons de chercher un fournisseur. Choisis la tienne.")
+    + coach(express() ? "Souviens-toi : quelle que soit la méthode, compare <b>au moins 3 fournisseurs</b>." : "La règle d'or des acheteurs : <b>toujours comparer au moins 3 fournisseurs</b>. Chaque méthode a ses avantages et ses inconvénients.")
+    + `<div class="grid g2">${METHODES.map(m => `<button class="choice ${a.methode === m.id ? "on" : ""}" data-set="methode" data-val="${m.id}">
+        <div class="ico">${m.icone}</div><h4>${esc(m.nom)}</h4><p>${esc(m.texte)}</p>
+        <span class="pro">✓ ${esc(m.pro)}</span><span class="con">✗ ${esc(m.con)}</span><span class="tag">⏱️ ${esc(m.duree)}</span></button>`).join("")}</div>`
+    + boutons("Lancer ma recherche 🔎", "chercher", !!a.methode, true, "Choisis une méthode.");
+};
+
+function offreHTML(o, k, choisi){
+  return `<button class="offre ${choisi ? "on" : ""}" data-offre="${k}">
+    <div class="oh"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><small>${esc(o.fournisseur.rue)}, ${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br>Tél. ${esc(o.fournisseur.tel)} · ${esc(o.fournisseur.web)}<br>TVA BE ${esc(o.fournisseur.bce)}</small></div>
+    <div class="ot">Offre de prix n° ${esc(o.numero)}</div>
+    <span class="atout">${esc(o.fournisseur.atout)}</span>
+    <div class="art">${esc(o.article)}</div><div class="det">${esc(o.detail)}</div>
+    <div class="lines"><div class="ln"><span>Prix</span><span>${eur(o.prix)}</span></div>
+      ${o.remise ? `<div class="ln neg"><span>Remise de ${o.remisePct} %</span><span>− ${eur(o.remise)}</span></div>` : ""}
+      <div class="ln"><span>Livraison</span><span>${o.livraison ? eur(o.livraison) : "gratuite"}</span></div></div>
+    <div class="tot"><span>Total à payer</span><span>${eur(o.total)}</span></div>
+    <div class="cond"><span><b>Délai :</b> livré en ${o.delai} jours</span><span><b>Garantie :</b> ${o.garantie} an${o.garantie > 1 ? "s" : ""}</span><span><b>Paiement :</b> ${esc(o.paiement)}</span></div>
+    <div class="valid">Prix TVA comprise · offre valable ${esc(o.validite)}</div></button>`;
+}
+R.offres = () => { const a = A(), m = METHODES.find(x => x.id === a.methode), o = offreDe(a), st = strat();
+  const best = (f, min) => { const v = a.offres.map(f); return v.indexOf(min ? Math.min(...v) : Math.max(...v)); };
+  const bT = best(x => x.total, true), bD = best(x => x.delai, true), bG = best(x => x.garantie, false);
+  let conseil = "";
+  if (o){ if (st && st.id === "haut" && o.niveau === "petit") conseil = "Ta stratégie est haut de gamme : du matériel très simple risque de ne pas plaire à tes clients… mais c'est toi qui décides.";
+    else if (st && st.id === "petit" && o.niveau === "haut") conseil = "Ta stratégie, ce sont les petits prix : ce matériel est cher. En as-tu vraiment besoin ? C'est toi qui décides.";
+    else if (st && st.id === o.niveau) conseil = "Bon choix : cette offre colle bien à ta stratégie !"; }
+  const reste = o ? enBanque() - o.total : null, tropCher = o && reste < 0;
+  return enteteAchat("Compare les <span class='grad'>3 offres de prix</span>", esc(m.recit))
+    + coach(express() ? "Compare le total, le délai et la garantie avant de choisir." : "Voici les 3 offres de prix. Ne regarde pas seulement le prix : compare aussi le <b>délai</b>, la <b>livraison</b> et la <b>garantie</b>. Ce sont les conditions de vente.")
+    + `<div class="offres">${a.offres.map((x,k) => offreHTML(x, k, a.choix === k)).join("")}</div>
+    <div class="compare glass"><h3 class="sub" style="margin-top:0">Le tableau pour comparer</h3>
+      <table class="cmp"><thead><tr><th>Fournisseur</th><th>Total à payer</th><th>Délai</th><th>Livraison</th><th>Garantie</th></tr></thead><tbody>
+      ${a.offres.map((x,k) => `<tr><td>${esc(x.fournisseur.nom)}</td><td class="${k === bT ? "best" : ""}">${eur(x.total)}</td><td class="${k === bD ? "best" : ""}">${x.delai} jours</td><td>${x.livraison ? eur(x.livraison) : "gratuite"}</td><td class="${k === bG ? "best" : ""}">${x.garantie} an${x.garantie > 1 ? "s" : ""}</td></tr>`).join("")}
+      </tbody></table><p class="help">En vert : la meilleure valeur de chaque colonne.</p></div>
+    ${o ? `<div class="card glass" style="margin-top:16px"><label class="f">Pourquoi choisis-tu ${esc(o.fournisseur.nom)} ? Une ou deux raisons :</label>
+      <div class="chips">${RAISONS_OFFRE.map(r => `<button class="chip ${a.raisons.includes(r) ? "on" : ""}" data-raison="${esc(r)}">${esc(r)}</button>`).join("")}</div></div>
+      ${conseil ? coach(conseil) : ""}
+      <div class="after glass">🏦 Après cet achat, il te restera <b style="color:${tropCher ? "#ffc4d4" : "#9ff0c9"}">${eur(reste)}</b> en banque.
+        ${tropCher ? `<span class="warnx">Tu n'as pas assez d'argent pour cette offre : choisis-en une autre.</span>` : reste < 2500 ? `<span class="warnx">Attention : garde de l'argent pour acheter tes marchandises !</span>` : ""}</div>` : ""}`
+    + boutons("Je choisis cette offre", "next", o && a.raisons.length >= 1 && !tropCher, true, o ? "Choisis au moins une raison." : "Clique sur l'offre que tu choisis.");
+};
+
+function enteteEntreprise(){
+  return `<div class="from"><div class="emb">${M1.symbole || typeM1().emoji}</div><div><div class="co f-${M1.style}">${esc(deno())}</div>
+    <p>${esc(adresse1())}<br>${esc(adresse2())}<br>${esc(M1.email)}</p><p class="ids">N° d'entreprise ${esc(M1.bce)}<br>TVA BE ${esc(M1.bce)}<br>IBAN ${esc(M1.iban)}</p></div></div>`;
+}
+const blocFournisseur = (o, lbl) => `<div class="to"><div class="lbl">${lbl}</div><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.rue)}<br>${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br><span style="font-family:var(--mono);font-size:12.5px">TVA BE ${esc(o.fournisseur.bce)}</span></div>`;
+function lignesDoc(o){
+  return `<table><thead><tr><th>Référence</th><th>Désignation</th><th>Quantité</th><th>Prix unitaire</th><th>Total</th></tr></thead><tbody>
+    <tr><td style="font-family:var(--mono)">${esc(o.ref)}</td><td>${esc(o.article)}<br><small style="color:#6B6F88">${esc(o.detail)}</small></td><td>1</td><td>${eur(o.prix)}</td><td>${eur(o.prix)}</td></tr>
+    ${o.remise ? `<tr><td></td><td>Remise de ${o.remisePct} %</td><td></td><td></td><td>− ${eur(o.remise)}</td></tr>` : ""}
+    <tr><td></td><td>Livraison</td><td></td><td></td><td>${o.livraison ? eur(o.livraison) : "gratuite"}</td></tr>
+    <tr><td></td><td><b>Total à payer (TVA comprise)</b></td><td></td><td></td><td><b>${eur(o.total)}</b></td></tr></tbody></table>`;
+}
+function bonCommande(a, lecture){ const o = offreDe(a);
+  return `<div class="paper bc">
+    <div class="dh">${enteteEntreprise()}${blocFournisseur(o, "Fournisseur")}</div>
+    <div class="place">${esc(M1.commune)}, le ${esc(a.bc.date)}</div>
+    <h3 class="doc">BON DE COMMANDE</h3><div class="ref">N° ${esc(a.bc.numero)} · Votre offre n° ${esc(o.numero)}</div>
+    ${lignesDoc(o)}
+    <p><b>Conditions :</b> livraison sous ${o.delai} jours · livraison ${o.livraison ? "payante (" + eur(o.livraison) + ")" : "gratuite"} · garantie ${o.garantie} an${o.garantie > 1 ? "s" : ""} · paiement ${esc(o.paiement)}.</p>
+    <div class="sig"><div>${lecture ? `<div class="signed">${esc(a.signBC)}</div>` : `<input data-bind="signBC" value="${esc(a.signBC)}" placeholder="Signe ici (prénom et nom)" maxlength="40" aria-label="Signature du bon de commande">`}
+      <small>Bon pour commande – ${esc(S.eleve.prenom)} ${esc(S.eleve.nom)}, ${esc(fonction().toLowerCase())}</small></div></div>
+    <div class="foot">Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
+}
+R.commande = () => { const a = A();
+  if (!a.bc) a.bc = { numero:`BC-${new Date().getFullYear()}-${String(S.i + 1).padStart(3,"0")}`, date:dateFr(today()) };
+  const ok = a.verifBC && a.signBC.trim().length >= 3;
+  return enteteAchat("Le <span class='grad'>bon de commande</span>", express() ? "Ton bon de commande est prêt. Vérifie-le, signe-le et envoie-le." : "En entreprise, on ne dit pas simplement « je prends » : on envoie un bon de commande. C'est une preuve écrite de ce que tu achètes.")
+    + coach(express() ? "Vérifie bien : le bon fournisseur, le bon article, le bon prix." : "Comme tu débutes, je l'ai rempli pour toi à partir de l'offre que tu as choisie. Ton travail : <b>le vérifier</b> avec l'offre, puis <b>le signer</b>.")
+    + bonCommande(a, false)
+    + `<div class="verif"><label><input type="checkbox" id="vbc" ${a.verifBC ? "checked" : ""}>J'ai vérifié : le bon fournisseur, le bon article, le bon prix et les bonnes conditions.</label></div>`
+    + boutons("Envoyer par e-mail au fournisseur ✉️", "envoyerBC", ok, true, "Coche la vérification et signe le bon de commande.");
+};
+
+R.notif = () => { const a = A(), o = offreDe(a);
+  return enteteAchat("Commande <span class='grad'>envoyée</span> ✔", "Ton bon de commande est parti par e-mail chez " + esc(o.fournisseur.nom) + ". Le fournisseur prépare ta commande…")
+    + `<div class="duo2"><div class="phone buzz"><div class="clock">${new Date().toLocaleTimeString("fr-BE",{hour:"2-digit",minute:"2-digit"})}</div><div class="date">${esc(jourFr(today()))}</div>
+        <div class="notif"><div class="nh"><span>✉️ E-mail</span><span>maintenant</span></div><b>${esc(o.fournisseur.nom)}</b>Nous avons bien reçu votre commande ${esc(a.bc.numero)}. Merci pour votre confiance !</div>
+        <div class="notif"><div class="nh"><span>💬 SMS</span><span>plus tard</span></div><b>${esc(o.fournisseur.nom)}</b>Bonne nouvelle ! Votre commande ${esc(a.bc.numero)} est prête. Livraison prévue le ${esc(a.notif.livraison)}.</div></div>
+      <div>${coach(express() ? "Le fournisseur confirme et annonce la date de livraison." : "Bien joué ! Le fournisseur t'a d'abord confirmé qu'il avait reçu ta commande. Puis il t'a prévenu par SMS : elle est prête et il t'annonce la date de livraison.")}
+        <div class="card glass"><p>📅 Livraison prévue : <b>${esc(a.notif.livraison)}</b></p><p class="help">Délai prévu dans l'offre : ${o.delai} jours.</p></div></div></div>`
+    + boutons("Le jour de la livraison →", "next", true, false);
+};
+
+function bonLivraison(a, lecture){ const o = offreDe(a);
+  return `<div class="paper">
+    <div class="dh"><div class="from"><div class="emb" style="background:#1E2A5A;color:#fff">📦</div><div><div class="co">${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</div>
+      <p>${esc(o.fournisseur.rue)}<br>${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br>Tél. ${esc(o.fournisseur.tel)}</p><p class="ids">TVA BE ${esc(o.fournisseur.bce)}</p></div></div>
+      <div class="to"><div class="lbl">Destinataire</div><b>${esc(deno())}</b><br>${esc(adresse1())}<br>${esc(adresse2())}</div></div>
+    <div class="place">${esc(o.fournisseur.ville)}, le ${esc(a.bl.date)}</div>
+    <h3 class="doc">BON DE LIVRAISON</h3><div class="ref">N° ${esc(a.bl.numero)} · Votre commande n° ${esc(a.bc.numero)} · Nombre de colis : ${a.bl.colis}</div>
+    <table><thead><tr><th>Référence</th><th>Désignation</th><th>Quantité livrée</th></tr></thead><tbody>
+      <tr><td style="font-family:var(--mono)">${esc(o.ref)}</td><td>${esc(o.article)}<br><small style="color:#6B6F88">${esc(o.detail)}</small></td><td>1</td></tr></tbody></table>
+    <p><b>Conditions :</b> paiement ${esc(o.paiement)} – montant à régler : <b>${eur(o.total)}</b>.</p>
+    <div class="sig"><div>${lecture ? `<div class="signed">${esc(a.signBL)}</div>` : `<input data-bind="signBL" value="${esc(a.signBL)}" placeholder="Signe ici (prénom et nom)" maxlength="40" aria-label="Signature du bon de livraison">`}
+      <small>Réception – ${esc(S.eleve.prenom)} ${esc(S.eleve.nom)}</small></div></div>
+    <div class="foot">Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
+}
+R.livraison = () => { const a = A();
+  const ok = a.checks.every(Boolean) && a.signBL.trim().length >= 3;
+  const items = ["C'est bien l'article que j'ai commandé (même référence que sur le bon de commande)", "La quantité est correcte : 1", "Le colis est en bon état (pas abîmé, pas ouvert)"];
+  return enteteAchat("Ding dong ! <span class='grad'>Le livreur est là</span>", express() ? "Vérifie la livraison, puis signe le bon de livraison." : "Le livreur t'apporte ta commande avec un bon de livraison. Avant de signer, vérifie toujours ce que tu reçois !")
+    + `<div class="road2" aria-hidden="true"><div class="truck">🚚</div><div class="house">🏪</div></div>`
+    + coach(express() ? "Compare toujours le bon de livraison avec ton bon de commande." : "Quand tu signes le bon de livraison, tu dis au fournisseur : « J'ai bien tout reçu. » Après, il est trop tard pour se plaindre ! Compare-le avec ton bon de commande.")
+    + `<div class="duo2" style="align-items:start"><div>${bonLivraison(a, false)}</div>
+      <div><div class="card glass"><h3 class="sub" style="margin-top:0">Ma vérification</h3><div class="verif">${items.map((t,k) => `<label><input type="checkbox" data-check="${k}" ${a.checks[k] ? "checked" : ""}>${esc(t)}</label>`).join("")}</div>
+        <p class="help" style="margin-top:12px">Ton bon de commande : ${esc(a.bc.numero)} – ${esc(offreDe(a).article)} – quantité 1.</p></div></div></div>`
+    + boutons("Je signe et j'accepte la livraison ✍️", "accepter", ok, false, "Fais les 3 vérifications et signe le bon de livraison.");
+};
+
+R.paiement = () => { const a = A(), o = offreDe(a);
+  if (a.paye) return enteteAchat("Paiement <span class='grad'>accepté</span> ✔", "Voici ton reçu. Garde-le bien : c'est la preuve que tu as payé.")
+    + `<div class="duo2"><div class="receipt"><div class="c"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.ville)}</div><hr>
+        <div class="r"><span>Date</span><span>${esc(a.recu.date)}</span></div><div class="r"><span>Commande</span><span>${esc(a.bc.numero)}</span></div><div class="r"><span>Livraison</span><span>${esc(a.bl.numero)}</span></div><hr>
+        <div class="r"><b>MONTANT PAYÉ</b><b>${eur(o.total)}</b></div><div class="r"><span>Payé par</span><span>carte bancaire</span></div><hr><div class="c">✔ PAYÉ – Merci et à bientôt !</div></div>
+      <div>${coach("Ton entreprise a payé avec sa carte bancaire : l'argent est sorti de son compte en banque. Allons voir ce que ça change !")}</div></div>`
+    + boutons("Voir mon patrimoine →", "next", true, false);
+  return enteteAchat("Le <span class='grad'>paiement</span>", "Les conditions de vente prévoient un paiement à la livraison : le livreur te demande de payer maintenant.")
+    + `<div class="duo2"><div class="terminal"><div class="scr"><span>${esc(o.fournisseur.nom)}</span><span class="amt">${eur(o.total)}</span><span>Insérez ou approchez la carte</span></div>
+        <div class="keys">${["1","2","3","4","5","6","7","8","9","✖","0","✔"].map(k => `<span>${k}</span>`).join("")}</div></div>
+      <div>${coach(`Tu vas payer <b>${eur(o.total)}</b> avec la carte bancaire de ton entreprise. L'argent sortira de ton compte en banque : il te restera <b>${eur(enBanque() - o.total)}</b>. Es-tu d'accord ?`)}
+        <div class="card glass"><p>💳 Carte de l'entreprise : <b>${esc(deno())}</b></p><p class="help">Compte IBAN ${esc(M1.iban)}</p></div></div></div>`
+    + boutons(`Oui, je paie ${eur(o.total)}`, "payer", true, false);
+};
+
+R.patrimoine = () => { const a = A(), o = offreDe(a), b = bien(a.bien);
+  const apres = possessions(), avant = [{ libelle:"Argent en banque", montant:enBanque() + o.total, icone:"💶" }].concat(apres.slice(1).filter(p => p.libelle !== apres[apres.length - 1].libelle));
+  const nouveau = apres[apres.length - 1].libelle, dernier = S.achats.filter(x => x.paye).length >= CONFIG.NB_ACHATS;
+  return enteteAchat("Ton patrimoine <span class='grad'>a changé</span>", "Compare ton entreprise avant et après cet achat.")
+    + `<div class="ba"><div>${patrimoineHTML("Avant l'achat", avant)}</div><div class="arrow">→</div><div>${patrimoineHTML("Après l'achat", apres, {nouveau, change:"Argent en banque"})}</div></div>
+    <div class="explain">💡 <b>Qu'est-ce qui a changé ?</b> Ton entreprise a <b>moins d'argent en banque</b> (− ${eur(o.total)}), mais elle <b>possède maintenant ${b.id === "mobilier" ? "du mobilier" : b.id === "caisse" ? "une caisse enregistreuse" : "un ordinateur"}</b> qui vaut ${eur(o.total)}.
+      La <b>valeur totale</b> de ton entreprise n'a pas changé : l'argent s'est simplement transformé en objet. C'est un <b>investissement</b> : un achat qui reste dans l'entreprise et qui va servir longtemps.</div>`
+    + boutons(dernier ? "Terminer ma mission 🎉" : `Acheter le bien suivant (${S.i + 2}/${CONFIG.NB_ACHATS}) →`, dernier ? "terminer" : "suivantAchat", true, false);
+};
+
+R.fin = () => {
+  const lecture = MODE === "consultation", e = S.envoi || {};
+  const status = lecture ? `<div class="status ok">🔒 Ta mission 2 est terminée et enregistrée chez ton professeur.</div>`
+    : e.mode === "ok" ? `<div class="status ok">✓ Tes achats sont bien enregistrés chez ton professeur.</div>`
+    : e.mode === "ferme" ? `<div class="status err">L'accès a été fermé avant l'envoi. Demande à ton professeur de rouvrir l'accès, puis clique sur « Réessayer l'envoi ». <button class="btn btn-ghost" data-act="resend" style="margin-left:8px;padding:8px 16px;font-size:15px">Réessayer l'envoi</button></div>`
+    : e.mode === "err" ? `<div class="status err">L'envoi n'a pas pu être confirmé. Vérifie ta connexion puis clique sur « Réessayer l'envoi ». <button class="btn btn-ghost" data-act="resend" style="margin-left:8px;padding:8px 16px;font-size:15px">Réessayer l'envoi</button></div>`
+    : `<div class="status wait"><span class="spin"></span>Enregistrement chez ton professeur en cours…</div>`;
+  const faits = S.achats.filter(x => x.paye), depense = faits.reduce((s,x) => s + offreDe(x).total, 0);
+  const badges = BADGES.map(b => [b, !!S.done["b_" + b[0]]]);
+  return `<div class="hero" style="padding-top:10px">${CONFETTI_LAYER}
+      <div class="chip-label"><span class="led"></span>${lecture ? "Mission 2 terminée" : "Mission 2 accomplie"}</div>
+      <h2>Bravo ${esc(S.eleve.prenom)},<br><span class="grad">${esc(deno())}</span> est équipée !</h2>
+      <p class="sub">${esc(M1.slogan)}</p></div>
+    <div class="stats"><div class="stat glass"><b>${S.xp}</b><span>XP gagnés</span></div><div class="stat glass"><b>${eur(depense)}</b><span>investis dans ton matériel</span></div><div class="stat glass"><b>${eur(enBanque())}</b><span>encore en banque</span></div></div>
+    ${status}
+    <div class="dash" style="margin-top:18px"><div class="front-wrap glass">${vitrine("fin")}</div><div>${patrimoineHTML("Le patrimoine de ton entreprise", possessions())}</div></div>
+    <div class="card glass" style="margin-top:22px"><h3 class="sub" style="margin-top:0">Ton matériel et tes documents</h3>
+      <table class="cmp"><thead><tr><th>Bien</th><th>Fournisseur</th><th>Pourquoi</th><th>Documents</th><th>Prix payé</th></tr></thead><tbody>
+      ${faits.map(x => { const o = offreDe(x), b = bien(x.bien); return `<tr><td>${b.icone} ${esc(b.nom)}</td><td>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</td><td>${esc(x.raisons.join(", "))}</td>
+        <td style="font-family:var(--mono);font-size:13px">${esc(o.numero)}<br>${esc(x.bc.numero)}<br>${esc(x.bl.numero)}</td><td style="font-family:var(--mono)">${eur(o.total)}</td></tr>`; }).join("")}</tbody></table>
+      <div class="nav" style="margin-top:16px"><button class="btn btn-ghost" data-act="print">Imprimer mes bons de commande et de livraison</button></div></div>
+    <div class="card glass" style="margin-top:22px"><h3 class="sub" style="margin-top:0">Tes badges</h3>
+      <div class="badges">${badges.map(([b,on]) => `<div class="badge glass ${on ? "" : "lockd"}"><div class="i">${on ? b[1] : "🔒"}</div><b>${esc(b[2])}</b></div>`).join("")}</div>
+      <h3 class="sub">Ton carnet de mots de pro</h3>
+      <div class="words">${S.mots.map(m => `<div class="word"><b>${esc(MOTS[m].mot)}</b><span>${esc(MOTS[m].def)}</span></div>`).join("")}</div></div>
+    <div class="next glass"><div class="ic">📦</div><div><b>Prochaine mission : remplis tes rayons !</b><br><span class="hint">Ton entreprise est équipée. Il est temps de commander tes marchandises… avec les ${eur(enBanque())} qui restent en banque.</span></div></div>`;
+};
+
+// ======================================================================
+//  CONNEXION
+// ======================================================================
+const ERREURS = {
+  email_invalide:"Cette adresse n'est pas valide. Elle doit ressembler à prenom.nom@istlm.org.",
+  non_inscrit:"Cette adresse n'est pas sur la liste de ta classe. Vérifie l'orthographe ou demande à ton professeur.",
+  reseau:"Impossible de joindre le serveur. Vérifie ta connexion internet puis réessaie.",
+  timeout:"Le serveur Google ne répond pas pour l'instant. Patiente quelques secondes, puis clique à nouveau."
+};
+async function seConnecter(email){
+  LOGIN.busy = true; LOGIN.err = ""; LOGIN.lent = false; render();
+  SESSION.email = email;
+  const lent = setTimeout(() => { if (LOGIN.busy){ LOGIN.lent = true; render(); } }, 6000);
+  let r;
+  try { r = await connexion(); } catch(e) { clearTimeout(lent); LOGIN.busy = false; LOGIN.lent = false; LOGIN.err = e.message === "timeout" ? ERREURS.timeout : ERREURS.reseau; MODE = "login"; render(); return; }
+  clearTimeout(lent); LOGIN.busy = false; LOGIN.lent = false;
+  if (!r || !r.ok){ LOGIN.err = ERREURS[r && r.erreur] || "Connexion refusée. Demande à ton professeur."; MODE = "login"; render(); return; }
+  appliquerConnexion(r, email);
+}
+function appliquerConnexion(r, email){
+  const d = r.dossier, m1 = d && d.missions ? d.missions["1"] : null;
+  S.eleve = Object.assign({email}, nomDepuisEmail(email), {classe:CONFIG.CLASSE_DEFAUT}, (d && d.eleve) || {}, r.eleve || {}); S.eleve.email = email;
+  if (!m1 || m1.statut !== "termine"){ MODE = "bloque"; render(true); return; }
+  M1 = lireM1(d);
+  const m = d.missions[CONFIG.MISSION] || null, serveur = m && m.etatApp ? m.etatApp : null, local = lireLocal(email), eleve = S.eleve;
+  if (r.statut === "termine"){ S = restaurer(serveur); MODE = "consultation"; S.envoi = {mode:"ok"}; }
+  else if (!r.ouvert){ S = restaurer(serveur || local); MODE = "ferme"; }
+  else if (r.statut === "reinitialise"){ S = fresh(); MODE = "accueil"; toast("<div>🔄 Ton professeur a rouvert ta mission 2 : tu peux refaire tes achats.</div>"); }
+  else if (r.statut === "en_cours"){ const t = m.dernier_envoi ? Date.parse(m.dernier_envoi) : 0; S = restaurer(local && local.majLocale > t ? local : serveur); MODE = S.phase || "accueil"; }
+  else { S = restaurer(local && local.phase !== "fin" ? local : null); MODE = S.phase || "accueil"; }
+  S.eleve = eleve;
+  if (!S.startedAt) S.startedAt = Date.now();
+  if (MODE === "achat" && !A()){ S.achats.push(nouvelAchat()); S.i = S.achats.length - 1; }
+  save(); render(true);
+}
+async function verifierOuvert(){
+  try { const r = await jsonp({action:"ping"}, 10000); return !!(r && r.acces && (r.missionsOuvertes || []).indexOf(CONFIG.MISSION) >= 0); }
+  catch(e) { return true; }
+}
+async function controlerEnFond(){ if (!(await verifierOuvert()) && ["achat","accueil","briefing"].includes(MODE)){ MODE = "ferme"; save(); render(true); } }
+
+// ======================================================================
+//  NAVIGATION DANS UN ACHAT
+// ======================================================================
+const etapeKey = () => ETAPES_ACHAT[A().etape][0];
+function avancer(pts){
+  const a = A(), cle = `a${S.i}_${etapeKey()}`;
+  gagner(cle, pts || (express() ? 25 : 40));
+  a.etape = Math.min(a.etape + 1, 7);
+  S.phase = "achat"; save(); render(true);
+  envoyer("en_cours"); controlerEnFond();
+}
+function overlay(emojis, texte, ms){
+  return new Promise(res => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) ms = 400;
+    const o = document.createElement("div"); o.className = "overlay";
+    o.innerHTML = `<div><div class="big">${emojis.map(e => `<span>${e}</span>`).join("")}</div><p>${texte}</p></div>`;
+    document.body.appendChild(o); setTimeout(() => { o.remove(); res(); }, ms);
+  });
+}
+async function chercher(){
+  const a = A(), m = METHODES.find(x => x.id === a.methode);
+  unlockMot("fournisseur");
+  await overlay(m.anim, "Recherche de 3 fournisseurs en cours…", 2200);
+  a.offres = genererOffres(a.bien); a.choix = null; a.raisons = [];
+  badge("compare"); unlockMot("offre"); unlockMot("conditions");
+  avancer();
+}
+async function envoyerBC(){
+  const a = A(), o = offreDe(a);
+  await overlay(["✉️","📨","📬"], `Envoi du bon de commande à ${esc(o.fournisseur.nom)}…`, 1800);
+  a.envoyeBC = true;
+  a.notif = { date:dateFr(today()), livraison:jourFr(plusJours(today(), o.delai)) };
+  badge("bc"); unlockMot("bc");
+  avancer();
+}
+function accepterLivraison(){
+  const a = A(), o = offreDe(a);
+  a.accepte = true; badge("bl"); unlockMot("bl");
+  avancer();
+}
+async function payer(){
+  const a = A();
+  await overlay(["💳","⏳","✅"], "Paiement en cours…", 1800);
+  a.paye = true; a.recu = { date:dateFr(today()) };
+  badge("paye"); badge(a.bien); unlockMot("remb");
+  gagner(`a${S.i}_paiement`, express() ? 25 : 40);
+  save(); render(true); confetti();
+  envoyer("en_cours");
+}
+function suivantAchat(){
+  const a = A(); a.fini = true; unlockMot("invest");
+  gagner(`a${S.i}_patrimoine`, express() ? 25 : 40);
+  S.achats.push(nouvelAchat()); S.i = S.achats.length - 1;
+  save(); render(true); envoyer("en_cours"); controlerEnFond();
+}
+async function terminer(){
+  const a = A(); a.fini = true; unlockMot("invest");
+  gagner(`a${S.i}_patrimoine`, express() ? 25 : 40);
+  if (BIENS.every(b => S.achats.some(x => x.bien === b.id && x.paye))) badge("equipe");
+  gagner("fin", 100);
+  S.phase = "fin"; MODE = "fin"; S.finishedAt = Date.now(); S.envoi = {mode:"wait"};
+  save(); render(true); confetti();
+  await envoyer("termine");
+  await confirmerEnvoi();
+}
+async function confirmerEnvoi(){
+  for (let i = 0; i < 4; i++){
+    await wait(2000 + i*1500);
+    try { const r = await connexion();
+      if (r && r.ok && r.statut === "termine"){ S.envoi = {mode:"ok"}; save(); render(); return; }
+      if (r && r.ok && !r.ouvert){ S.envoi = {mode:"ferme"}; save(); render(); return; } } catch(e) {}
+  }
+  S.envoi = {mode:"err"}; save(); render();
+}
+
+// ======================================================================
+//  AFFICHAGE
+// ======================================================================
+function updateTop(){
+  $("#xpPill").textContent = S.xp + " XP"; $("#lvlName").textContent = niveau();
+  const vis = !["login","bloque"].includes(MODE);
+  $("#lvlBox").style.visibility = vis ? "visible" : "hidden"; $("#xpPill").parentElement.style.visibility = vis ? "visible" : "hidden";
+  $("#who").innerHTML = MODE !== "login" && S.eleve.email ? `<b>${esc(S.eleve.prenom)} ${esc(S.eleve.nom)}</b><button data-act="logout">Changer de compte</button>` : "";
+  const st = $("#steps"), a = MODE === "achat" ? A() : null;
+  st.style.display = a ? "grid" : "none";
+  if (a) st.innerHTML = ETAPES_ACHAT.map((e,i) => { const cls = a.etape > i ? "done" : (a.etape === i ? "now" : "");
+    return `<div class="seg ${cls}" title="${esc(e[1])}"><span>Achat ${S.i + 1}/${CONFIG.NB_ACHATS} · ${i+1}. ${esc(e[1])}</span></div>`; }).join("");
+}
+function renderSide(){
+  const side = $("#side");
+  if (MODE !== "achat" || ["offres","commande","livraison","patrimoine"].includes(etapeKey())){ side.innerHTML = ""; $("#layout").classList.add("full"); return; }
+  $("#layout").classList.remove("full");
+  const a = A(), o = offreDe(a);
+  side.innerHTML = `<div class="sign glass"><div class="front-wrap" style="border-radius:0">${vitrine("side")}</div>
+    <div class="sign-body"><h3>${esc(deno())}</h3>
+      <div class="srow"><div class="k">En banque</div><div class="v" style="font-family:var(--mono);color:#9ff0c9">${eur(enBanque())}</div></div>
+      ${BIENS.map(b => { const fait = S.achats.find(x => x.bien === b.id && x.paye); return `<div class="srow"><div class="k">${b.icone} ${esc(b.court)}</div><div class="v ${fait ? "" : "todo"}">${fait ? "✓ " + esc(offreDe(fait).fournisseur.nom) : (a.bien === b.id ? "en cours…" : "à acheter")}</div></div>`; }).join("")}
+      ${o ? `<div class="srow"><div class="k">Offre choisie</div><div class="v">${esc(o.fournisseur.nom)} · ${eur(o.total)}</div></div>` : ""}
+      <div class="pbar"><i style="width:${Math.round(achatsPayes().length / CONFIG.NB_ACHATS * 100)}%"></i></div><div class="help">${achatsPayes().length} achat${achatsPayes().length > 1 ? "s" : ""} sur ${CONFIG.NB_ACHATS}</div></div></div>`;
+}
+function render(scroll){
+  setBrand(M1 && !["login","bloque"].includes(MODE) ? M1.couleur : null);
+  let key = MODE;
+  if (MODE === "achat") key = etapeKey();
+  if (MODE === "consultation") key = "fin";
+  $("#main").innerHTML = R[key]();
+  $("#topSub").textContent = key === "fin" ? "Mission 2 accomplie" : "Mission 2 : équipe ton entreprise";
+  updateTop(); renderSide();
+  if (MODE === "login"){ const em = $("#em"); if (em && !LOGIN.busy) em.focus(); }
+  if (scroll) window.scrollTo({top:0, behavior:"smooth"});
+}
+function refreshLive(){
+  if (MODE !== "achat") return;
+  const a = A(), k = etapeKey(); let ok = true;
+  if (k === "commande") ok = a.verifBC && a.signBC.trim().length >= 3;
+  if (k === "livraison") ok = a.checks.every(Boolean) && a.signBL.trim().length >= 3;
+  const b = $('[data-act="envoyerBC"],[data-act="accepter"]'); if (b) b.disabled = !ok;
+  const h = $("#main .nav .hint"); if (h) h.style.visibility = ok ? "hidden" : "visible";
+}
+
+// ======================================================================
+//  ÉVÉNEMENTS
+// ======================================================================
+document.addEventListener("input", (e) => {
+  const el = e.target;
+  if (el.id === "em"){ LOGIN.email = el.value; const b = $('[data-act="login"]'); if (b) b.disabled = !emailOk(el.value.trim().toLowerCase()); return; }
+  if (MODE === "achat" && el.dataset.bind){ A()[el.dataset.bind] = el.value; save(); refreshLive(); }
+});
+document.addEventListener("change", (e) => {
+  if (MODE !== "achat") return;
+  if (e.target.id === "vbc"){ A().verifBC = e.target.checked; save(); refreshLive(); }
+  if (e.target.dataset.check !== undefined){ A().checks[+e.target.dataset.check] = e.target.checked; save(); refreshLive(); }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") $("#modal").hidden = true;
+  if (e.key === "Enter" && e.target.id === "em"){ const b = $('[data-act="login"]'); if (b && !b.disabled) b.click(); }
+  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "d" && M1){
+    const m = $("#modal"); m.innerHTML = `<div class="box glass" role="dialog"><h3 style="font-family:var(--serif)">Données de la mission 2 (format envoyé au Google Sheet)</h3><pre>${esc(JSON.stringify(S.lastPayload || payload("apercu"), null, 2))}</pre><button class="btn btn-main" data-act="close">Fermer</button></div>`; m.hidden = false; }
+});
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.act === "login"){ const em = LOGIN.email.trim().toLowerCase(); if (emailOk(em)) seConnecter(em); return; }
+  if (b.dataset.act === "retry"){ seConnecter(S.eleve.email || SESSION.email); return; }
+  if (b.dataset.act === "logout"){ save(); MODE = "login"; LOGIN = {email:"", busy:false, err:""}; S = fresh(); M1 = null; render(true); return; }
+  if (b.dataset.act === "close"){ $("#modal").hidden = true; return; }
+  if (b.dataset.act === "resend"){ S.envoi = {mode:"wait"}; render(); envoyer("termine").then(confirmerEnvoi); return; }
+  if (b.dataset.act === "print"){
+    $("#print-area").innerHTML = S.achats.filter(x => x.paye).map(x => bonCommande(x, true) + bonLivraison(x, true)).join("");
+    window.print(); return; }
+  if (b.dataset.act === "brief"){ MODE = "briefing"; S.phase = "briefing"; save(); render(true); return; }
+  if (b.dataset.act === "start"){ if (!S.achats.length){ S.achats.push(nouvelAchat()); S.i = 0; } MODE = "achat"; S.phase = "achat"; save(); render(true); envoyer("en_cours"); controlerEnFond(); return; }
+  if (MODE !== "achat") return;
+  const a = A();
+  if (b.dataset.set === "bien"){ if (a.bien !== b.dataset.val){ a.bien = b.dataset.val; a.offres = null; a.choix = null; a.raisons = []; } save(); render(); return; }
+  if (b.dataset.set === "methode"){ a.methode = b.dataset.val; save(); render(); return; }
+  if (b.dataset.offre !== undefined){ a.choix = +b.dataset.offre; save(); render(); return; }
+  if (b.dataset.raison){ const r = b.dataset.raison, i = a.raisons.indexOf(r);
+    if (i >= 0) a.raisons.splice(i,1); else if (a.raisons.length < 2) a.raisons.push(r); else { toast("<div>Deux raisons maximum.</div>"); return; }
+    save(); render(); return; }
+  switch (b.dataset.act){
+    case "next": avancer(); break;
+    case "back": if (a.etape > 0 && !a.envoyeBC){ a.etape--; save(); render(true); } break;
+    case "chercher": chercher(); break;
+    case "envoyerBC": envoyerBC(); break;
+    case "accepter": accepterLivraison(); break;
+    case "payer": payer(); break;
+    case "suivantAchat": suivantAchat(); break;
+    case "terminer": terminer(); break;
+  }
+});
+
+// Préparation automatique des documents quand on arrive sur une étape
+const _render = render;
+render = function(scroll){
+  if (MODE === "achat" && A()){
+    const a = A(), k = etapeKey();
+    if (k === "livraison" && !a.bl){ const o = offreDe(a);
+      a.bl = { numero:`BL-${o.fournisseur.code}-${String(hash(S.eleve.email + a.bien) % 90000 + 10000)}`, date:dateFr(today()), colis: a.bien === "mobilier" ? 6 : 1 }; save(); }
+  }
+  _render(scroll);
+};
+render();
+</script>
+</body>
+</html>
