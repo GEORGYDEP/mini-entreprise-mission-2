@@ -1255,9 +1255,16 @@ async function seConnecter(email){
   if (!r || !r.ok){ LOGIN.err = ERREURS[r && r.erreur] || "Connexion refusée. Demande à ton professeur."; MODE = "login"; render(); return; }
   appliquerConnexion(r, email);
 }
+/** Identité de l'élève : les champs vides ne remplacent jamais un nom déjà connu (déduit de l'adresse e-mail). */
+function identite(email, ...sources){
+  const id = Object.assign({email}, nomDepuisEmail(email), {classe:CONFIG.CLASSE_DEFAUT});
+  sources.forEach(s => { if (s) ["prenom","nom","classe"].forEach(k => { if (s[k] && String(s[k]).trim()) id[k] = String(s[k]).trim(); }); });
+  id.email = email;
+  return id;
+}
 function appliquerConnexion(r, email){
   const d = r.dossier, m1 = d && d.missions ? d.missions["1"] : null;
-  S.eleve = Object.assign({email}, nomDepuisEmail(email), {classe:CONFIG.CLASSE_DEFAUT}, (d && d.eleve) || {}, r.eleve || {}); S.eleve.email = email;
+  S.eleve = identite(email, d && d.eleve, r.eleve);
   if (!m1 || m1.statut !== "termine"){ MODE = "bloque"; render(true); return; }
   M1 = lireM1(d);
   const m = d.missions[CONFIG.MISSION] || null, serveur = m && m.etatApp ? m.etatApp : null, local = lireLocal(email), eleve = S.eleve;
