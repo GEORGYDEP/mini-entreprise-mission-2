@@ -504,6 +504,16 @@ table.cmp td.best{color:var(--emerald); font-weight:700}
 .overlay p{font-family:var(--serif); font-size:26px; color:#fff; margin-top:18px}
 @media (max-width:1000px){ .dash,.duo2,.ba{grid-template-columns:1fr} .offres{grid-template-columns:1fr} .need{grid-template-columns:1fr} .ba .arrow{transform:rotate(90deg)} }
 
+
+/* ═══ Patrimoine présenté comme un bilan ═══ */
+.patri .pcol{display:flex; flex-direction:column}
+.patri .psub{font-size:12px; font-weight:700; color:#8A5BD0; margin:8px 0 2px; text-transform:none; letter-spacing:0}
+.patri .pl.vide span{color:#9A9DB4; font-style:italic}
+.patri .ptot2{margin-top:auto; padding-top:8px; display:flex; justify-content:space-between; gap:10px; font-weight:800; font-size:16px; border-top:2px solid #1D1F33}
+.patri .ptot2 span:last-child{font-family:var(--mono); white-space:nowrap}
+.patri .ptot{font-size:15px; gap:12px}
+.patri .ptot span:last-child{white-space:nowrap}
+
 #print-area{display:none}
 @media print{
   body{background:#fff}
@@ -531,6 +541,52 @@ table.cmp td.best{color:var(--emerald); font-weight:700}
   *,*::before,*::after{animation:none !important; transition:none !important}
   .stamp{opacity:.9}
 }
+
+/* ═══ Impression du dossier d'achat (A4, recto verso, aucun document coupé) ═══ */
+@media print{
+  @page{size:A4; margin:9mm}
+  #print-area, #print-area *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  #print-area .dossier{font-size:9pt; color:#1D1F33; font-family:var(--ui)}
+  #print-area .pg{break-after:page; page-break-after:always}
+  #print-area .pg:last-child{break-after:auto; page-break-after:auto}
+  #print-area .blk{break-inside:avoid; page-break-inside:avoid; margin-bottom:4mm}
+  #print-area .dz-head{display:flex; justify-content:space-between; gap:8px; font-size:8.5pt; color:#4A4E68; border-bottom:2px solid #1D1F33; padding-bottom:2mm; margin-bottom:3mm}
+  #print-area .dz-t{font-family:var(--serif); font-size:12pt; margin:0 0 2mm; color:#1D1F33}
+  #print-area .dz-t small{font-family:var(--ui); font-size:8.5pt; font-weight:400; color:#6B6F88}
+  #print-area .dz-offres{display:grid; grid-template-columns:repeat(3,1fr); gap:3mm}
+  #print-area .offre{box-shadow:none; border:1px solid #B9BCCB; padding:2.5mm; gap:1.2mm; font-size:7.8pt; transform:none}
+  #print-area .offre.on{border:2px solid #E935C5}
+  #print-area .offre.on::after{top:-8px; font-size:7.5pt; padding:1px 8px}
+  #print-area .offre .oh b{font-size:9.5pt}
+  #print-area .offre .oh small,#print-area .offre .det,#print-area .offre .cond,#print-area .offre .lines{font-size:7.5pt}
+  #print-area .offre .art{font-size:8.5pt}
+  #print-area .dz-n{font-size:8.5pt; margin-top:2mm}
+  #print-area .paper{box-shadow:none; border:1px solid #B9BCCB; max-width:none; padding:4mm 6mm; font-size:8.5pt; line-height:1.35; page-break-after:auto}
+  #print-area .paper p{margin-bottom:1.5mm}
+  #print-area .paper .from .emb{width:34px; height:34px; font-size:17px}
+  #print-area .paper .from .co{font-size:12pt}
+  #print-area .paper .from p,#print-area .paper .to{font-size:7.8pt}
+  #print-area .paper .from .ids{font-size:7pt}
+  #print-area .paper .place{margin:2mm 0 1mm; font-size:8pt}
+  #print-area .paper h3.doc{font-size:12pt}
+  #print-area .paper .ref{font-size:7.5pt; margin-bottom:2mm}
+  #print-area .paper table{margin:2mm 0}
+  #print-area .paper th,#print-area .paper td{padding:1.2mm 2mm; font-size:8pt}
+  #print-area .paper .sig{margin-top:2mm}
+  #print-area .paper .sig .signed{font-size:15pt}
+  #print-area .paper .foot{margin-top:2mm; padding-top:1mm; font-size:6.5pt}
+  #print-area .dz-checks{font-size:8.5pt; margin-top:1.5mm; display:grid; gap:.5mm}
+  #print-area .dz-duo{display:grid; grid-template-columns:38% 1fr; gap:5mm; align-items:start}
+  #print-area .receipt{box-shadow:none; border:1px solid #B9BCCB; font-size:8pt; max-width:none; margin:0}
+  #print-area .receipt::after{display:none}
+  #print-area .patri{box-shadow:none; border:1px solid #B9BCCB; font-size:8.5pt}
+  #print-area .patri h4{font-size:10pt; padding:2mm 3mm}
+  #print-area .patri .pcol{padding:2mm 3mm}
+  #print-area .patri .pl{padding:1mm 0; font-size:8pt}
+  #print-area .patri .ptot2,#print-area .patri .ptot{font-size:9pt}
+  #print-area .patri .pl.new{animation:none}
+}
+
 </style>
 </head>
 <body>
@@ -808,9 +864,13 @@ const offreDe = (a) => a && a.offres && a.choix != null ? a.offres[a.choix] : nu
 const achatsPayes = () => S.achats.filter(a => a.paye);
 const enBanque = () => M1.banqueDepart - achatsPayes().reduce((s,a) => s + offreDe(a).total, 0);
 const biensRestants = () => BIENS.filter(b => !S.achats.some(a => a.bien === b.id && a.paye));
+const ORDRE_BIENS = ["mobilier","caisse","ordinateur"];
+const libelleAchat = (a) => { const o = offreDe(a), b = bien(a.bien); return `${b.nom.replace(/^(Le |La |L')/, "").replace(/^./, c => c.toUpperCase())} (${o.fournisseur.nom})`; };
+/** Ce que l'entreprise possède, dans l'ordre du bilan : le matériel (immobilisations) d'abord, l'argent (liquidités) en dernier. */
 function possessions(){
-  return [{ libelle:"Argent en banque", montant:enBanque(), icone:"💶" }]
-    .concat(achatsPayes().map(a => { const o = offreDe(a), b = bien(a.bien); return { libelle:`${b.nom.replace(/^(Le |La |L')/, "").replace(/^./, c => c.toUpperCase())} (${o.fournisseur.nom})`, montant:o.total, icone:b.icone }; }));
+  const materiel = achatsPayes().slice().sort((x, y) => ORDRE_BIENS.indexOf(x.bien) - ORDRE_BIENS.indexOf(y.bien))
+    .map(a => ({ libelle:libelleAchat(a), montant:offreDe(a).total, icone:bien(a.bien).icone, type:"materiel" }));
+  return materiel.concat([{ libelle:"Argent en banque", montant:enBanque(), icone:"💶", type:"argent" }]);
 }
 
 /** Les 3 offres de prix pour un bien (mêmes fournisseurs pour toute la classe). */
@@ -880,14 +940,21 @@ function idcard(){ const t = typeM1(), st = strat();
         <div class="k">N° de TVA</div><div><span class="num">BE ${esc(M1.bce)}</span></div>
         <div class="k">Compte (IBAN)</div><div><span class="num">${esc(M1.iban)}</span></div>
       </div><div class="fict">Entreprise et numéros fictifs – projet scolaire, Institut Saint-Luc de Frameries.</div></div>`; }
-/** Le patrimoine, avec les lignes nouvelles ou modifiées mises en évidence. */
+/** Le patrimoine présenté comme un bilan : totaux des deux colonnes, matériel en haut, argent en bas. */
 function patrimoineHTML(titre, poss, marque){
-  const total = poss.reduce((s,p) => s + p.montant, 0);
+  const total = poss.reduce((s,p) => s + p.montant, 0), mat = poss.filter(p => p.type === "materiel"), cash = poss.filter(p => p.type === "argent");
+  const ligne = (p) => `<div class="pl ${marque && marque.nouveau === p.libelle ? "new" : ""} ${marque && marque.change === p.libelle ? "chg" : ""}"><span>${p.icone} ${esc(p.libelle)}</span><span>${eur(p.montant)}</span></div>`;
   return `<div class="patri" style="margin:0"><h4>${titre}</h4><div class="pcols">
-      <div class="pcol"><h5>Ce que ton entreprise possède</h5>${poss.map(p => `<div class="pl ${marque && marque.nouveau === p.libelle ? "new" : ""} ${marque && marque.change === p.libelle ? "chg" : ""}"><span>${p.icone} ${esc(p.libelle)}</span><span>${eur(p.montant)}</span></div>`).join("")}</div>
-      <div class="pcol"><h5>D'où vient l'argent</h5><div class="pl"><span>Argent de départ (apport)</span><span>${eur(M1.apport)}</span></div>
-        <div class="pl neg"><span>Déjà dépensé : frais de création</span><span>− ${eur(M1.frais)}</span></div></div></div>
-    <div class="ptot"><span>Valeur de ton entreprise</span><span>${eur(total)}</span></div></div>`;
+      <div class="pcol"><h5>Ce que ton entreprise possède</h5>
+        <div class="psub">Le matériel (il reste dans l'entreprise)</div>${mat.length ? mat.map(ligne).join("") : `<div class="pl vide"><span>Pas encore de matériel</span><span>0 €</span></div>`}
+        <div class="psub">L'argent disponible</div>${cash.map(ligne).join("")}
+        <div class="ptot2"><span>Total</span><span>${eur(total)}</span></div></div>
+      <div class="pcol"><h5>D'où vient l'argent</h5>
+        <div class="psub">Ce que les créateurs ont apporté</div>
+        <div class="pl"><span>Argent de départ (apport)</span><span>${eur(M1.apport)}</span></div>
+        <div class="pl neg"><span>Déjà dépensé : frais de création</span><span>− ${eur(M1.frais)}</span></div>
+        <div class="ptot2"><span>Total</span><span>${eur(M1.apport - M1.frais)}</span></div></div></div>
+    <div class="ptot"><span>✔ Les deux totaux sont égaux : c'est la valeur de ton entreprise</span><span>${eur(total)}</span></div></div>`;
 }
 
 // ======================================================================
@@ -1082,8 +1149,9 @@ R.methode = () => { const a = A(), b = bien(a.bien);
     + boutons("Lancer ma recherche 🔎", "chercher", !!a.methode, true, "Choisis une méthode.");
 };
 
-function offreHTML(o, k, choisi){
-  return `<button class="offre ${choisi ? "on" : ""}" data-offre="${k}">
+function offreHTML(o, k, choisi, imprimable){
+  const tag = imprimable ? "div" : "button";
+  return `<${tag} class="offre ${choisi ? "on" : ""}" ${imprimable ? "" : `data-offre="${k}"`}>
     <div class="oh"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><small>${esc(o.fournisseur.rue)}, ${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br>Tél. ${esc(o.fournisseur.tel)} · ${esc(o.fournisseur.web)}<br>TVA BE ${esc(o.fournisseur.bce)}</small></div>
     <div class="ot">Offre de prix n° ${esc(o.numero)}</div>
     <span class="atout">${esc(o.fournisseur.atout)}</span>
@@ -1093,7 +1161,7 @@ function offreHTML(o, k, choisi){
       <div class="ln"><span>Livraison</span><span>${o.livraison ? eur(o.livraison) : "gratuite"}</span></div></div>
     <div class="tot"><span>Total à payer</span><span>${eur(o.total)}</span></div>
     <div class="cond"><span><b>Délai :</b> livré en ${o.delai} jours</span><span><b>Garantie :</b> ${o.garantie} an${o.garantie > 1 ? "s" : ""}</span><span><b>Paiement :</b> ${esc(o.paiement)}</span></div>
-    <div class="valid">Prix TVA comprise · offre valable ${esc(o.validite)}</div></button>`;
+    <div class="valid">Prix TVA comprise · offre valable ${esc(o.validite)}</div></${tag}>`;
 }
 R.offres = () => { const a = A(), m = METHODES.find(x => x.id === a.methode), o = offreDe(a), st = strat();
   const best = (f, min) => { const v = a.offres.map(f); return v.indexOf(min ? Math.min(...v) : Math.max(...v)); };
@@ -1187,11 +1255,37 @@ R.livraison = () => { const a = A();
     + boutons("Je signe et j'accepte la livraison ✍️", "accepter", ok, false, "Fais les 3 vérifications et signe le bon de livraison.");
 };
 
+function recuHTML(a){ const o = offreDe(a);
+  return `<div class="receipt"><div class="c"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.ville)}</div><hr>
+    <div class="r"><span>Date</span><span>${esc(a.recu.date)}</span></div><div class="r"><span>Commande</span><span>${esc(a.bc.numero)}</span></div><div class="r"><span>Livraison</span><span>${esc(a.bl.numero)}</span></div><hr>
+    <div class="r"><b>MONTANT PAYÉ</b><b>${eur(o.total)}</b></div><div class="r"><span>Payé par</span><span>carte bancaire</span></div><hr><div class="c">✔ PAYÉ – Merci et à bientôt !</div></div>`;
+}
+
+/** Le dossier imprimable du dernier achat : 2 pages, aucun document coupé en deux. */
+function dossierImpression(){
+  const faits = S.achats.filter(x => x.paye), a = faits[faits.length - 1]; if (!a) return "";
+  const o = offreDe(a), b = bien(a.bien), m = METHODES.find(x => x.id === a.methode);
+  const tete = (n) => `<div class="dz-head"><b>${esc(deno())}</b> · Dossier d'achat : ${b.icone} ${esc(b.nom.toLowerCase())} · ${esc(S.eleve.prenom)} ${esc(S.eleve.nom)} · ${esc(S.eleve.classe)}<span>Page ${n}/2</span></div>`;
+  const coche = (t) => `<div>☑ ${esc(t)}</div>`;
+  return `<div class="dossier">
+    <div class="pg">${tete(1)}
+      <div class="blk"><h3 class="dz-t">1. Les 3 offres de prix reçues <small>(méthode : ${esc(m.nom.toLowerCase())})</small></h3>
+        <div class="dz-offres">${a.offres.map((x,k) => offreHTML(x, k, a.choix === k, true)).join("")}</div>
+        <p class="dz-n"><b>Offre choisie :</b> ${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)} – <b>raisons :</b> ${esc(a.raisons.join(", "))}</p></div>
+      <div class="blk"><h3 class="dz-t">2. Le bon de commande, vérifié et signé</h3>${bonCommande(a, true)}
+        <div class="dz-checks">${coche("Vérifié : le bon fournisseur, le bon article, le bon prix et les bonnes conditions.")}${coche("Envoyé par e-mail au fournisseur le " + a.bc.date + ".")}</div></div>
+    </div>
+    <div class="pg">${tete(2)}
+      <div class="blk"><h3 class="dz-t">3. Le bon de livraison, vérifié et signé</h3>${bonLivraison(a, true)}
+        <div class="dz-checks">${coche("C'est bien l'article commandé (même référence que sur le bon de commande).")}${coche("La quantité est correcte : 1.")}${coche("Le colis est en bon état.")}</div></div>
+      <div class="blk dz-duo"><div><h3 class="dz-t">4. Le paiement à la livraison</h3>${recuHTML(a)}</div>
+        <div><h3 class="dz-t">5. Le patrimoine après ${faits.length} achat${faits.length > 1 ? "s" : ""}</h3>${patrimoineHTML("Le patrimoine de " + esc(deno()), possessions())}</div></div>
+    </div></div>`;
+}
+
 R.paiement = () => { const a = A(), o = offreDe(a);
   if (a.paye) return enteteAchat("Paiement <span class='grad'>accepté</span> ✔", "Voici ton reçu. Garde-le bien : c'est la preuve que tu as payé.")
-    + `<div class="duo2"><div class="receipt"><div class="c"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.ville)}</div><hr>
-        <div class="r"><span>Date</span><span>${esc(a.recu.date)}</span></div><div class="r"><span>Commande</span><span>${esc(a.bc.numero)}</span></div><div class="r"><span>Livraison</span><span>${esc(a.bl.numero)}</span></div><hr>
-        <div class="r"><b>MONTANT PAYÉ</b><b>${eur(o.total)}</b></div><div class="r"><span>Payé par</span><span>carte bancaire</span></div><hr><div class="c">✔ PAYÉ – Merci et à bientôt !</div></div>
+    + `<div class="duo2">${recuHTML(a)}
       <div>${coach("Ton entreprise a payé avec sa carte bancaire : l'argent est sorti de son compte en banque. Allons voir ce que ça change !")}</div></div>`
     + boutons("Voir mon patrimoine →", "next", true, false);
   return enteteAchat("Le <span class='grad'>paiement</span>", "Les conditions de vente prévoient un paiement à la livraison : le livreur te demande de payer maintenant.")
@@ -1203,8 +1297,9 @@ R.paiement = () => { const a = A(), o = offreDe(a);
 };
 
 R.patrimoine = () => { const a = A(), o = offreDe(a), b = bien(a.bien);
-  const apres = possessions(), avant = [{ libelle:"Argent en banque", montant:enBanque() + o.total, icone:"💶" }].concat(apres.slice(1).filter(p => p.libelle !== apres[apres.length - 1].libelle));
-  const nouveau = apres[apres.length - 1].libelle, dernier = S.achats.filter(x => x.paye).length >= CONFIG.NB_ACHATS;
+  const apres = possessions(), nouveau = libelleAchat(a);
+  const avant = apres.filter(p => p.libelle !== nouveau).map(p => p.type === "argent" ? Object.assign({}, p, { montant:p.montant + o.total }) : p);
+  const dernier = S.achats.filter(x => x.paye).length >= CONFIG.NB_ACHATS;
   return enteteAchat("Ton patrimoine <span class='grad'>a changé</span>", "Compare ton entreprise avant et après cet achat.")
     + `<div class="ba"><div>${patrimoineHTML("Avant l'achat", avant)}</div><div class="arrow">→</div><div>${patrimoineHTML("Après l'achat", apres, {nouveau, change:"Argent en banque"})}</div></div>
     <div class="explain">💡 <b>Qu'est-ce qui a changé ?</b> Ton entreprise a <b>moins d'argent en banque</b> (− ${eur(o.total)}), mais elle <b>possède maintenant ${b.id === "mobilier" ? "du mobilier" : b.id === "caisse" ? "une caisse enregistreuse" : "un ordinateur"}</b> qui vaut ${eur(o.total)}.
@@ -1232,7 +1327,7 @@ R.fin = () => {
       <table class="cmp"><thead><tr><th>Bien</th><th>Fournisseur</th><th>Pourquoi</th><th>Documents</th><th>Prix payé</th></tr></thead><tbody>
       ${faits.map(x => { const o = offreDe(x), b = bien(x.bien); return `<tr><td>${b.icone} ${esc(b.nom)}</td><td>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</td><td>${esc(x.raisons.join(", "))}</td>
         <td style="font-family:var(--mono);font-size:13px">${esc(o.numero)}<br>${esc(x.bc.numero)}<br>${esc(x.bl.numero)}</td><td style="font-family:var(--mono)">${eur(o.total)}</td></tr>`; }).join("")}</tbody></table>
-      <div class="nav" style="margin-top:16px"><button class="btn btn-ghost" data-act="print">Imprimer mes bons de commande et de livraison</button></div></div>
+      <div class="nav" style="margin-top:16px"><span class="hint">Garde une trace de ton travail : le dossier de ton dernier achat tient sur une feuille recto verso.</span><button class="btn btn-main" data-act="print">🖨️ Imprimer mon dossier d'achat</button></div></div>
     <div class="card glass" style="margin-top:22px"><h3 class="sub" style="margin-top:0">Tes badges</h3>
       <div class="badges">${badges.map(([b,on]) => `<div class="badge glass ${on ? "" : "lockd"}"><div class="i">${on ? b[1] : "🔒"}</div><b>${esc(b[2])}</b></div>`).join("")}</div>
       <h3 class="sub">Ton carnet de mots de pro</h3>
@@ -1436,9 +1531,7 @@ document.addEventListener("click", (e) => {
   if (b.dataset.act === "logout"){ save(); MODE = "login"; LOGIN = {email:"", busy:false, err:""}; S = fresh(); M1 = null; render(true); return; }
   if (b.dataset.act === "close"){ $("#modal").hidden = true; return; }
   if (b.dataset.act === "resend"){ S.envoi = {mode:"wait"}; render(); envoyer("termine").then(confirmerEnvoi); return; }
-  if (b.dataset.act === "print"){
-    $("#print-area").innerHTML = S.achats.filter(x => x.paye).map(x => bonCommande(x, true) + bonLivraison(x, true)).join("");
-    window.print(); return; }
+  if (b.dataset.act === "print"){ $("#print-area").innerHTML = dossierImpression(); window.print(); return; }
   if (b.dataset.act === "brief"){ MODE = "briefing"; S.phase = "briefing"; save(); render(true); return; }
   if (b.dataset.act === "start"){ if (!S.achats.length){ S.achats.push(nouvelAchat()); S.i = 0; } MODE = "achat"; S.phase = "achat"; save(); render(true); envoyer("en_cours"); controlerEnFond(); return; }
   if (MODE !== "achat") return;
