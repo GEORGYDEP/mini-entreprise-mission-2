@@ -1007,7 +1007,11 @@ R.login = () => `<div class="hero">${CONFETTI_LAYER}
 R.ferme = () => `<div class="hero"><div style="font-size:64px;margin-bottom:10px">🔒</div>
     <h2>La mission est <span class="grad">fermée</span></h2>
     <p class="sub">${esc(S.eleve.prenom)}, ton professeur n'a pas encore ouvert l'accès (ou la séance est terminée). Ton travail est bien sauvegardé.</p>
-    <div class="nav" style="justify-content:center"><button class="btn btn-main" data-act="retry">Réessayer</button></div></div>`;
+    <div class="nav" style="justify-content:center"><button class="btn btn-main" data-act="retry">Réessayer</button></div>
+    <div class="card glass" style="max-width:720px;margin:28px auto 0;text-align:left;font-size:15px">
+      <b style="color:var(--yellow)">🔧 Pour le professeur</b><br>
+      ${SESSION.diag ? `${esc(SESSION.diag.raison)}<br><span class="help">Script Google version ${esc(SESSION.diag.versionScript)} · mission ${esc(SESSION.diag.mission)} · VERROU_ACTIF = ${esc(SESSION.diag.verrouActif)} · MISSIONS_OUVERTES lues : ${esc((SESSION.diag.missionsOuvertesLues || []).join(", ") || "aucune")}</span>`
+        : `Le script Google ne renvoie pas de diagnostic : c'est probablement une ancienne version. Dans Apps Script : Déployer > Gérer les déploiements > Modifier > Nouvelle version.`}</div></div>`;
 
 R.bloque = () => `<div class="hero"><div style="font-size:64px;margin-bottom:10px">🏗️</div>
     <h2>Ton entreprise n'est pas <span class="grad">encore créée</span></h2>
@@ -1263,6 +1267,7 @@ function identite(email, ...sources){
   return id;
 }
 function appliquerConnexion(r, email){
+  SESSION.diag = r.diagnostic || null;
   const d = r.dossier, m1 = d && d.missions ? d.missions["1"] : null;
   S.eleve = identite(email, d && d.eleve, r.eleve);
   if (!m1 || m1.statut !== "termine"){ MODE = "bloque"; render(true); return; }
@@ -1279,7 +1284,8 @@ function appliquerConnexion(r, email){
   save(); render(true);
 }
 async function verifierOuvert(){
-  try { const r = await jsonp({action:"ping"}, 10000); return !!(r && r.acces && (r.missionsOuvertes || []).indexOf(CONFIG.MISSION) >= 0); }
+  try { const r = await jsonp({action:"ping", mission:CONFIG.MISSION}, 10000); if (r && r.diagnostic) SESSION.diag = r.diagnostic;
+    return !!(r && r.acces && (r.missionsOuvertes || []).indexOf(CONFIG.MISSION) >= 0); }
   catch(e) { return true; }
 }
 async function controlerEnFond(){ if (!(await verifierOuvert()) && ["achat","accueil","briefing"].includes(MODE)){ MODE = "ferme"; save(); render(true); } }
