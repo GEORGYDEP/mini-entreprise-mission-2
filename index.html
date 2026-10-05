@@ -1014,6 +1014,33 @@ function payload(statut){
     etatApp: Object.assign({}, S, { lastPayload:undefined, envoi:undefined })
   };
 }
+
+// ======================================================================
+//  SAUVEGARDES ESPACÉES : une classe entière ne doit pas saturer Google
+//  (au plus un envoi « en_cours » toutes les 30 s par élève, sauf étape importante ;
+//   l'état le plus récent part toujours, avec un petit décalage aléatoire)
+// ======================================================================
+let DERNIERE_SAUVEGARDE = 0, SAUVEGARDE_PREVUE = null, DERNIER_PING = 0;
+const PAUSE_SAUVEGARDE = 30000, PAUSE_PING = 60000;
+function sauvegarder(force){
+  const ecoule = Date.now() - DERNIERE_SAUVEGARDE;
+  if (force || ecoule >= PAUSE_SAUVEGARDE){
+    annulerSauvegardePrevue(); DERNIERE_SAUVEGARDE = Date.now(); envoyer("en_cours"); return;
+  }
+  if (!SAUVEGARDE_PREVUE) SAUVEGARDE_PREVUE = setTimeout(() => {
+    SAUVEGARDE_PREVUE = null;
+    if (["achat","briefing","accueil"].includes(MODE)){ DERNIERE_SAUVEGARDE = Date.now(); envoyer("en_cours"); }
+  }, PAUSE_SAUVEGARDE - ecoule + Math.random() * 8000);
+}
+function annulerSauvegardePrevue(){ clearTimeout(SAUVEGARDE_PREVUE); SAUVEGARDE_PREVUE = null; }
+const pingAutorise = () => { if (Date.now() - DERNIER_PING < PAUSE_PING) return false; DERNIER_PING = Date.now(); return true; };
+// Si l'élève ferme la page avec une sauvegarde en attente, on l'envoie quand même.
+window.addEventListener("pagehide", () => {
+  if (SAUVEGARDE_PREVUE && ["achat","briefing","accueil"].includes(MODE) && navigator.sendBeacon){
+    try { navigator.sendBeacon(CONFIG.ENDPOINT_URL, new Blob([JSON.stringify(payload("en_cours"))], {type:"text/plain;charset=utf-8"})); } catch(e) {}
+  }
+});
+
 function restaurer(etat){
   const s = fresh();
   if (etat && etat.v === "m2-1") Object.keys(s).forEach(k => { if (etat[k] !== undefined && etat[k] !== null) s[k] = etat[k]; });
@@ -1383,18 +1410,18 @@ async function verifierOuvert(){
     return !!(r && r.acces && (r.missionsOuvertes || []).indexOf(CONFIG.MISSION) >= 0); }
   catch(e) { return true; }
 }
-async function controlerEnFond(){ if (!(await verifierOuvert()) && ["achat","accueil","briefing"].includes(MODE)){ MODE = "ferme"; save(); render(true); } }
+async function controlerEnFond(){ if (!pingAutorise()) return; if (!(await verifierOuvert()) && ["achat","accueil","briefing"].includes(MODE)){ annulerSauvegardePrevue(); MODE = "ferme"; save(); render(true); } }
 
 // ======================================================================
 //  NAVIGATION DANS UN ACHAT
 // ======================================================================
 const etapeKey = () => ETAPES_ACHAT[A().etape][0];
-function avancer(pts){
+function avancer(pts, important){
   const a = A(), cle = `a${S.i}_${etapeKey()}`;
   gagner(cle, pts || (express() ? 25 : 40));
   a.etape = Math.min(a.etape + 1, 7);
   S.phase = "achat"; save(); render(true);
-  envoyer("en_cours"); controlerEnFond();
+  sauvegarder(!!important); controlerEnFond();
 }
 function overlay(emojis, texte, ms){
   return new Promise(res => {
@@ -1418,7 +1445,7 @@ async function envoyerBC(){
   a.envoyeBC = true;
   a.notif = { date:dateFr(today()), livraison:jourFr(plusJours(today(), o.delai)) };
   badge("bc"); unlockMot("bc");
-  avancer();
+  avancer(0, true);                       // bon de commande envoyé : sauvegarde immédiate
 }
 function accepterLivraison(){
   const a = A(), o = offreDe(a);
@@ -1432,19 +1459,20 @@ async function payer(){
   badge("paye"); badge(a.bien); unlockMot("remb");
   gagner(`a${S.i}_paiement`, express() ? 25 : 40);
   save(); render(true); confetti();
-  envoyer("en_cours");
+  sauvegarder(true);                      // paiement : sauvegarde immédiate
 }
 function suivantAchat(){
   const a = A(); a.fini = true; unlockMot("invest");
   gagner(`a${S.i}_patrimoine`, express() ? 25 : 40);
   S.achats.push(nouvelAchat()); S.i = S.achats.length - 1;
-  save(); render(true); envoyer("en_cours"); controlerEnFond();
+  save(); render(true); sauvegarder(true); controlerEnFond();
 }
 async function terminer(){
   const a = A(); a.fini = true; unlockMot("invest");
   gagner(`a${S.i}_patrimoine`, express() ? 25 : 40);
   if (BIENS.every(b => S.achats.some(x => x.bien === b.id && x.paye))) badge("equipe");
   gagner("fin", 100);
+  annulerSauvegardePrevue();
   S.phase = "fin"; MODE = "fin"; S.finishedAt = Date.now(); S.envoi = {mode:"wait"};
   save(); render(true); confetti();
   await envoyer("termine");
@@ -1533,7 +1561,7 @@ document.addEventListener("click", (e) => {
   if (b.dataset.act === "resend"){ S.envoi = {mode:"wait"}; render(); envoyer("termine").then(confirmerEnvoi); return; }
   if (b.dataset.act === "print"){ $("#print-area").innerHTML = dossierImpression(); window.print(); return; }
   if (b.dataset.act === "brief"){ MODE = "briefing"; S.phase = "briefing"; save(); render(true); return; }
-  if (b.dataset.act === "start"){ if (!S.achats.length){ S.achats.push(nouvelAchat()); S.i = 0; } MODE = "achat"; S.phase = "achat"; save(); render(true); envoyer("en_cours"); controlerEnFond(); return; }
+  if (b.dataset.act === "start"){ if (!S.achats.length){ S.achats.push(nouvelAchat()); S.i = 0; } MODE = "achat"; S.phase = "achat"; save(); render(true); sauvegarder(false); controlerEnFond(); return; }
   if (MODE !== "achat") return;
   const a = A();
   if (b.dataset.set === "bien"){ if (a.bien !== b.dataset.val){ a.bien = b.dataset.val; a.offres = null; a.choix = null; a.raisons = []; } save(); render(); return; }
