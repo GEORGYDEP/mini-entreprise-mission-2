@@ -514,6 +514,87 @@ table.cmp td.best{color:var(--emerald); font-weight:700}
 .patri .ptot{font-size:15px; gap:12px}
 .patri .ptot span:last-child{white-space:nowrap}
 
+/* ═══ Mission 2 v1.1 : le modèle de documents de l'entreprise (choisi au premier bon de commande) ═══ */
+.studio{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:24px; align-items:start}
+.studio-opts{padding:22px 24px 26px}
+.studio-opts h3.sub{display:flex; align-items:center; gap:10px; font-size:20px; margin:26px 0 10px}
+.studio-opts h3.sub:first-child{margin-top:0}
+.studio-opts .sn{flex:none; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-family:var(--mono); font-size:14px; font-weight:700; background:linear-gradient(135deg,var(--yellow),var(--orange)); color:#1a1033}
+.studio-opts .help.aide{margin:-4px 0 12px}
+.studio-opts .coach{margin:14px 0 0; max-width:none}
+.img-desc{margin-top:10px; font-size:16px; color:var(--text); font-style:italic}
+.studio-prev{position:sticky; top:110px}
+.pv-lbl{display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--soft); margin-bottom:10px}
+.studio-prev .paper{zoom:.72; max-width:none}
+.tpls{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px}
+.tplbtn,.fontbtn{background:var(--glass); border:2px solid var(--border); border-radius:16px; color:var(--text); cursor:pointer; transition:transform .2s, background .2s}
+.tplbtn:hover,.fontbtn:hover{transform:translateY(-3px); background:var(--glass-hover)}
+.tplbtn.on,.fontbtn.on{border-color:#fff; background:rgba(255,255,255,.15); box-shadow:0 0 22px rgba(255,255,255,.22)}
+.tplbtn{padding:10px 8px 8px; text-align:center}
+.tplbtn b{display:block; font-size:14px; margin-top:7px}
+.mini{display:flex; flex-direction:column; gap:5px; aspect-ratio:3/4; background:#fff; border-radius:6px; padding:9px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.mini span{display:block; flex:none}
+.mini .l{height:4px; border-radius:2px; background:#D5D8E6}
+.mini .hd{display:flex; align-items:center; gap:5px}
+.mini .mk{width:13px; height:13px; border-radius:50%; background:var(--m)}
+.mini .nm{height:6px; width:50%; border-radius:2px; background:var(--m)}
+.mini .rl{height:2px; background:var(--m)}
+.mini .tt{height:5px; width:40%; border-radius:2px; background:var(--m); opacity:.85}
+.mini .tb{height:16px; border-radius:2px; margin-top:auto; background:color-mix(in srgb,var(--m) 20%,#fff)}
+.mini-bandeau .bd{display:flex; align-items:center; gap:5px; margin:-9px -9px 3px; padding:8px 9px; background:var(--m)}
+.mini-bandeau .bd .mk{background:#fff} .mini-bandeau .bd .nm{background:rgba(255,255,255,.85)}
+.mini-colonne{border-left:8px solid var(--m)}
+.mini-colonne .tt{height:8px; border-radius:3px; opacity:1}
+.mini-colonne .tb{background:var(--m)}
+.mini-centre{align-items:center}
+.mini-centre .nm{width:62%}
+.mini-centre .dbl{align-self:stretch; height:5px; border-top:1.5px solid var(--m); border-bottom:1.5px solid var(--m)}
+.mini-centre .tb{align-self:stretch; background:none; border-top:2px solid var(--m)}
+.doc-sw{gap:20px 16px}
+.doc-sw .sw span{font-size:11.5px}
+.fonts{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px}
+.fontbtn{padding:12px 12px 10px; text-align:left; min-width:0}
+.fontbtn .fx{display:block; font-size:21px; line-height:1.2; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.fontbtn small{display:block; font-size:13px; color:var(--soft); margin-top:3px}
+.mylogo{display:inline-block; font-size:11px; font-weight:700; padding:1px 8px; border-radius:999px; background:var(--yellow); color:#1a1033; margin-left:4px; font-style:normal}
+.modele-line{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:12px 16px; border-radius:var(--r); margin-bottom:14px; max-width:840px; font-size:15px}
+.modele-line .btn{padding:8px 16px; font-size:15px}
+/* Le document dessiné selon le modèle choisi */
+.paper.doc-perso{position:relative; isolation:isolate; overflow:hidden}
+.doc-perso .co,.doc-perso h3.doc,.doc-perso .slg{font-family:var(--doc-font); font-weight:var(--doc-weight); font-style:var(--doc-style); letter-spacing:var(--doc-ls)}
+.doc-perso .co,.doc-perso h3.doc{color:var(--doc-ink)}
+.doc-perso .emb{width:54px; height:54px; border-radius:12px; background:var(--brand); color:var(--on-brand); display:grid; place-items:center; font-size:26px; flex:none}
+.doc-perso th{background:color-mix(in srgb,var(--doc) 12%,#fff); border-bottom-color:var(--doc-ink)}
+.doc-perso .sig{justify-content:space-between; align-items:center; gap:24px}
+.doc-perso .sig > div{margin-left:auto}
+.doc-perso .phrase{font-style:italic; color:#3A3E58; max-width:46%; margin:0}
+.doc-perso .foot .slg{display:block; font-size:16px; color:var(--doc-ink); margin-bottom:4px}
+.doc-perso .fili{position:absolute; z-index:-1; top:52%; left:56%; transform:translate(-50%,-50%) rotate(-14deg); font-size:330px; line-height:1; opacity:.07; pointer-events:none}
+.doc-perso .pv-sig{color:#9A9DB4}
+.doc-perso .place2{font-size:15px; margin-bottom:10px}
+.doc-perso .tbloc{align-self:flex-end}
+.doc-perso .tbloc .ref{margin-bottom:0}
+.tpl-classique .dh{border-bottom:3px solid var(--doc); padding-bottom:16px}
+.tpl-bandeau .band{display:flex; justify-content:space-between; align-items:center; gap:20px; margin:-40px -44px 22px; padding:22px 44px; background:var(--doc); color:var(--on-doc)}
+.tpl-bandeau .band .co{color:var(--on-doc); font-size:26px}
+.tpl-bandeau .band .emb{box-shadow:0 0 0 3px rgba(255,255,255,.85)}
+.tpl-bandeau .band .bco{display:flex; gap:20px; font-size:13px; line-height:1.4; opacity:.94}
+.tpl-bandeau .band .bco p{margin:0}
+.tpl-bandeau .band .ids{font-family:var(--mono); font-size:12px; white-space:nowrap}
+.tpl-bandeau .dh,.tpl-centre .dh{margin-bottom:6px}
+.tpl-colonne{border-left:16px solid var(--doc)}
+.tpl-colonne h3.doc{display:inline-block; background:var(--doc); color:var(--on-doc); padding:3px 14px; border-radius:8px}
+.tpl-colonne th{background:var(--doc); color:var(--on-doc); border-bottom-color:var(--doc)}
+.tpl-centre .ctr{text-align:center; border-bottom:5px double var(--doc); padding-bottom:12px; margin-bottom:16px}
+.tpl-centre .ctr .ctr-n{display:flex; flex-direction:column; align-items:center; gap:8px}
+.tpl-centre .ctr .co{font-size:28px; line-height:1.15}
+.tpl-centre .ctr p{font-size:13.5px; color:#4A4E68; margin:4px 0 0}
+.tpl-centre .ctr .ids{font-family:var(--mono); font-size:12px}
+.tpl-centre h3.doc{letter-spacing:.08em}
+.tpl-centre th{background:none; border-bottom:2px solid var(--doc)}
+@media (max-width:1000px){ .studio{grid-template-columns:1fr} .studio-prev{position:static} .tpls,.fonts{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:640px){ .tpl-bandeau .band{margin:-24px -18px 18px; padding:16px 18px; flex-direction:column; align-items:flex-start} .tpl-bandeau .band .bco{flex-direction:column; gap:6px} .doc-perso .sig{flex-direction:column; align-items:flex-end} .doc-perso .phrase{max-width:none} .doc-perso .tbloc{align-self:stretch} }
+
 #print-area{display:none}
 @media print{
   body{background:#fff}
@@ -585,6 +666,28 @@ table.cmp td.best{color:var(--emerald); font-weight:700}
   #print-area .patri .pl{padding:1mm 0; font-size:8pt}
   #print-area .patri .ptot2,#print-area .patri .ptot{font-size:9pt}
   #print-area .patri .pl.new{animation:none}
+  #print-area .doc-perso .emb{width:34px; height:34px; font-size:17px; border-radius:8px}
+  #print-area .doc-perso .fili{font-size:170pt}
+  #print-area .doc-perso .foot .slg{display:inline; font-size:8pt; margin:0 2mm 0 0}
+  #print-area .doc-perso .place2{font-size:8pt; margin-bottom:1mm}
+  #print-area .doc-perso .to{padding:1.5mm 3mm; min-width:0}
+  #print-area .doc-perso .phrase{font-size:8pt}
+  #print-area .doc-perso .sig{margin-top:1mm}
+  #print-area .doc-perso .foot{margin-top:1.5mm}
+  #print-area .dz-checks{display:flex; flex-wrap:wrap; gap:.5mm 5mm}
+  #print-area .tpl-classique .dh{padding-bottom:1.5mm; border-bottom-width:2px}
+  #print-area .tpl-bandeau .band{margin:-4mm -6mm 2.5mm; padding:2.5mm 6mm}
+  #print-area .tpl-bandeau .band .co{font-size:13pt}
+  #print-area .tpl-bandeau .band .bco{font-size:7.5pt; gap:4mm}
+  #print-area .tpl-bandeau .band .ids{font-size:7pt}
+  #print-area .tpl-bandeau .dh,#print-area .tpl-centre .dh{margin-bottom:1mm}
+  #print-area .tpl-colonne{border-left-width:3mm}
+  #print-area .tpl-colonne h3.doc{padding:.5mm 3mm}
+  #print-area .tpl-centre .ctr{padding-bottom:1.5mm; margin-bottom:2mm; border-bottom-width:3px}
+  #print-area .tpl-centre .ctr .ctr-n{flex-direction:row; justify-content:center; gap:2.5mm}
+  #print-area .tpl-centre .ctr .co{font-size:13pt}
+  #print-area .tpl-centre .ctr p{font-size:7.5pt; margin-top:.5mm}
+  #print-area .tpl-centre .ctr .ids{font-size:7pt}
 }
 
 </style>
@@ -616,7 +719,7 @@ const CONFIG = {
   ENDPOINT_URL: "https://script.google.com/macros/s/AKfycbwkApoh4ASdA7c9OOUMZTRjPFXZ-7jWGQ_VUsdJaVwIzYxLxoQw5dJjyjCcmHX_6KATGA/exec",
   APP_ID: "mini-entreprise-3p",
   MISSION: "2",
-  VERSION: "1.0",
+  VERSION: "1.1",       // 1.1 : l'élève personnalise et mémorise le modèle de ses documents (premier bon de commande)
   DOMAINE: "istlm.org",
   CLASSE_DEFAUT: "3P Vente",
   STORAGE_PREFIX: "mini-entreprise-3p-m2-",
@@ -776,6 +879,38 @@ const METHODES = [
 const RAISONS_OFFRE = ["Le prix le plus bas","La meilleure qualité","La livraison la plus rapide","La garantie la plus longue","La livraison gratuite","Ça colle à ma stratégie"];
 const ETAPES_ACHAT = [["bien","Choisir le bien"],["methode","Chercher"],["offres","Comparer"],["commande","Commander"],["notif","Commande prête"],["livraison","Livraison"],["paiement","Paiement"],["patrimoine","Patrimoine"]];
 
+// ======================================================================
+//  LE MODÈLE DE DOCUMENTS DE L'ENTREPRISE (v1.1)
+//  Choisi par l'élève avant son premier bon de commande, mémorisé dans
+//  entreprise.modeleDocuments (Google Sheet) et réutilisé sur tous ses documents.
+// ======================================================================
+const IMAGES_DOC = [
+  { id:"serieuse", icone:"🤝", nom:"Sérieuse", texte:"Ton fournisseur doit se dire : « Voilà une entreprise de confiance. »",
+    preset:{ modele:"classique", couleurId:"bleunuit", police:"classique", filigrane:false, phrase:"formelle" } },
+  { id:"moderne", icone:"⚡", nom:"Moderne", texte:"Ton fournisseur doit se dire : « Cette entreprise est de son temps. »",
+    preset:{ modele:"bandeau", couleurId:"marque", police:"moderne", filigrane:false, phrase:"simple" } },
+  { id:"chaleureuse", icone:"😊", nom:"Chaleureuse", texte:"Ton fournisseur doit se dire : « Ici, on est accueillant et souriant. »",
+    preset:{ modele:"classique", couleurId:"orange", police:"fun", filigrane:true, phrase:"amicale" } },
+  { id:"prestige", icone:"💎", nom:"Prestige", texte:"Ton fournisseur doit se dire : « C'est une maison chic, qui soigne chaque détail. »",
+    preset:{ modele:"centre", couleurId:"dore", police:"elegant", filigrane:true, phrase:"formelle" } },
+  { id:"dynamique", icone:"🔥", nom:"Dynamique", texte:"Ton fournisseur doit se dire : « Une jeune entreprise pleine d'énergie ! »",
+    preset:{ modele:"colonne", couleurId:"marque", police:"street", filigrane:false, phrase:"amicale" } }
+];
+const MODELES_DOC = [["classique","Classique"],["bandeau","Bandeau"],["colonne","Colonne"],["centre","Centré"]];
+const COULEURS_DOC = [["marque","Mon logo",null],["noir","Noir","#1F2937"],["bleunuit","Bleu nuit","#1E2A5A"],["bleu","Bleu roi","#1D4ED8"],["turquoise","Turquoise","#0F766E"],
+  ["vert","Vert sapin","#166534"],["dore","Doré","#9A7412"],["orange","Orange","#C2410C"],["rouge","Rouge","#B91C1C"],["bordeaux","Bordeaux","#831843"],["violet","Violet","#6D28D9"]];
+const POLICES_DOC = {
+  moderne:{ nom:"Moderne", famille:"Outfit, Arial, sans-serif", poids:800, style:"normal", espace:"0" },
+  elegant:{ nom:"Élégant", famille:"'Playfair Display', Georgia, serif", poids:700, style:"italic", espace:"0" },
+  fun:{ nom:"Fun", famille:"Fredoka, 'Comic Sans MS', sans-serif", poids:600, style:"normal", espace:"0" },
+  street:{ nom:"Street", famille:"'Bebas Neue', Impact, sans-serif", poids:400, style:"normal", espace:".05em" },
+  classique:{ nom:"Classique", famille:"Fraunces, Georgia, serif", poids:600, style:"normal", espace:"0" },
+  machine:{ nom:"Machine à écrire", famille:"'Space Mono', Consolas, monospace", poids:700, style:"normal", espace:"0" }
+};
+const PHRASES_DOC = [["formelle","Polie","Nous vous remercions pour votre offre et vous confirmons notre commande."],
+  ["simple","Pratique","Merci de nous livrer dans le délai prévu dans votre offre."],
+  ["amicale","Amicale","Merci pour votre offre : au plaisir de travailler avec vous !"],["aucune","Pas de phrase",""]];
+
 const SECTEURS = { primaire:"Secteur primaire", secondaire:"Secteur secondaire", tertiaire:"Secteur tertiaire" };
 const STYLES = [["moderne","Moderne"],["elegant","Élégant"],["fun","Fun"],["street","Street"]];
 const POLICES = { moderne:"Outfit, Arial, sans-serif", elegant:"'Playfair Display', Georgia, serif", fun:"Fredoka, 'Comic Sans MS', sans-serif", street:"'Bebas Neue', Impact, sans-serif" };
@@ -784,12 +919,13 @@ const MOTS = {
   offre:{mot:"Offre de prix", def:"La réponse écrite du fournisseur : son prix et ses conditions."},
   conditions:{mot:"Conditions de vente", def:"Tout ce qui est prévu en plus du prix : délai, livraison, garantie, paiement."},
   bc:{mot:"Bon de commande", def:"Le document que l'acheteur envoie au fournisseur pour confirmer ce qu'il achète."},
+  entete:{mot:"Papier à en-tête", def:"Le modèle des documents d'une entreprise, avec son nom et son logo en haut : tous ses documents se ressemblent."},
   bl:{mot:"Bon de livraison", def:"Le document qui accompagne la marchandise. On le vérifie, puis on le signe à la réception."},
   remb:{mot:"Paiement à la livraison", def:"On paie au moment où l'on reçoit la marchandise. On dit aussi « contre remboursement »."},
   invest:{mot:"Investissement", def:"Un achat qui reste dans l'entreprise et sert longtemps : des meubles, une caisse, un ordinateur…"}
 };
 const NIVEAUX = [[0,"Premiers achats"],[300,"Œil de lynx"],[600,"Pro des achats"],[850,"Entreprise équipée"]];
-const BADGES = [["compare","🔎","Comparateur"],["bc","📝","Premier bon de commande"],["bl","📦","Réception validée"],["paye","💳","Premier paiement"],
+const BADGES = [["compare","🔎","Comparateur"],["image","🎨","Image de marque"],["bc","📝","Premier bon de commande"],["bl","📦","Réception validée"],["paye","💳","Premier paiement"],
   ["mobilier","🪑","Bien installé"],["caisse","🧾","Caisse prête"],["ordinateur","💻","Connecté"],["equipe","🏆","Entreprise équipée"]];
 
 // ======================================================================
@@ -801,7 +937,7 @@ let M1 = null;               // l'entreprise créée en mission 1 (lecture seule
 const nouvelAchat = () => ({ bien:null, etape:0, methode:null, offres:null, choix:null, raisons:[], bc:null, verifBC:false, signBC:"", envoyeBC:false,
   notif:null, checks:[false,false,false], signBL:"", accepte:false, paye:false, recu:null, fini:false });
 const fresh = () => ({ v:"m2-1", phase:"accueil", eleve:{email:"", prenom:"", nom:"", classe:CONFIG.CLASSE_DEFAUT},
-  achats:[], i:0, xp:0, done:{}, mots:[], envoi:null, startedAt:null, finishedAt:null, majLocale:0 });
+  achats:[], i:0, xp:0, done:{}, mots:[], modele:null, envoi:null, startedAt:null, finishedAt:null, majLocale:0 });
 let S = fresh();
 const cleLocale = () => CONFIG.STORAGE_PREFIX + (S.eleve.email || SESSION.email);
 const save = () => { if (["login","bloque"].includes(MODE)) return; S.majLocale = Date.now(); try { localStorage.setItem(cleLocale(), JSON.stringify(S)); } catch(e) {} };
@@ -857,6 +993,7 @@ function lireM1(dossier){
     facade: bq.facade || et.facade || "", auvent: bq.auvent || et.auvent || "", ambiance: bq.ambiance || et.ambiance || "", accueil: bq.phraseAccueil || et.accueil || "",
     rue: ad.rue || et.rue || "", numero: ad.numero || et.numero || "", cp: ad.cp || "", commune: ad.commune || et.commune || "",
     bce: e.numeroEntreprise || (et.ids || {}).bce || "", iban: e.iban || (et.ids || {}).iban || "", email: e.email || "", dateCreation: e.dateCreation || et.dateCreation || "",
+    modeleDocs: e.modeleDocuments || null,
     apport: ar.argentDeDepart || APPORT, frais: ar.fraisDeCreation != null ? ar.fraisDeCreation : FRAIS[e.direction || "seul"], banqueDepart: ar.argentEnBanque != null ? ar.argentEnBanque : APPORT - FRAIS[e.direction || "seul"]
   };
 }
@@ -958,6 +1095,60 @@ function patrimoineHTML(titre, poss, marque){
 }
 
 // ======================================================================
+//  LE MODÈLE DE DOCUMENTS : outils (v1.1)
+// ======================================================================
+const couleurDoc = (id) => { const c = COULEURS_DOC.find(x => x[0] === id); return c && c[2] ? c[2] : M1.couleur; };
+const imageDoc = (id) => IMAGES_DOC.find(x => x.id === id) || null;
+const nomModeleDoc = (id) => (MODELES_DOC.find(x => x[0] === id) || [, "Classique"])[1];
+const nomCouleurDoc = (id) => id === "marque" ? "couleur du logo" : ((COULEURS_DOC.find(x => x[0] === id) || [, ""])[1]).toLowerCase();
+function modeleParDefaut(){
+  return { image:null, modele:"classique", couleurId:"marque", police:POLICES_DOC[M1.style] ? M1.style : "moderne",
+    slogan:true, filigrane:false, phrase:"aucune", valide:false, verrouille:false, choisiLe:null, retrouve:false };
+}
+/** Le modèle qui sert à dessiner les documents (pour une mission faite avant la v1.1 : l'ancien rendu, sans slogan). */
+const modeleActuel = () => S.modele || Object.assign(modeleParDefaut(), { slogan:false });
+/** Prépare le brouillon du modèle ; reprend celui du Google Sheet s'il existe déjà (mission réinitialisée par le professeur). */
+function preparerModele(){
+  if (S.modele) return;
+  S.modele = modeleParDefaut();
+  const d = M1.modeleDocs;
+  if (d && d.modele && MODELES_DOC.some(x => x[0] === d.modele)) Object.assign(S.modele, {
+    image: imageDoc(d.imageId) ? d.imageId : null, modele:d.modele, couleurId: COULEURS_DOC.some(x => x[0] === d.couleurId) ? d.couleurId : "marque",
+    police: POLICES_DOC[d.police] ? d.police : S.modele.police, slogan:d.slogan !== false, filigrane:!!d.filigrane,
+    phrase: PHRASES_DOC.some(x => x[0] === d.phraseId) ? d.phraseId : "aucune", retrouve:true });
+}
+/** Variables CSS du document : couleur, encre lisible sur fond blanc, texte sur la couleur, police des titres. */
+function styleDoc(m){
+  const c = couleurDoc(m.couleurId), p = POLICES_DOC[m.police] || POLICES_DOC.moderne;
+  return `--doc:${c};--doc-ink:${lum(c) <= .62 ? c : "#1D1F33"};--on-doc:${lum(c) > .62 ? "#1D1F33" : "#FFFFFF"};--doc-font:${p.famille};--doc-weight:${p.poids};--doc-style:${p.style};--doc-ls:${p.espace}`;
+}
+const resumeModele = (m) => `${nomModeleDoc(m.modele)} · ${nomCouleurDoc(m.couleurId)} · police ${(POLICES_DOC[m.police] || POLICES_DOC.moderne).nom.toLowerCase()}`;
+/** Ce qui part dans le Google Sheet (entreprise.modeleDocuments) : fusionné dans le dossier, il suit l'élève dans les missions suivantes. */
+function modeleExport(){
+  const m = S.modele, im = imageDoc(m.image), ph = PHRASES_DOC.find(x => x[0] === m.phrase);
+  return { imageId:m.image, image:im ? im.nom : "", modele:m.modele, modeleNom:nomModeleDoc(m.modele),
+    couleurId:m.couleurId, couleurNom: m.couleurId === "marque" ? "Couleur du logo" : (COULEURS_DOC.find(x => x[0] === m.couleurId) || [, ""])[1], couleur:couleurDoc(m.couleurId),
+    police:m.police, policeNom:(POLICES_DOC[m.police] || POLICES_DOC.moderne).nom, slogan:!!m.slogan, filigrane:!!m.filigrane,
+    phraseId:m.phrase, phrase: ph ? ph[2] : "", verrouille:!!m.verrouille, choisiLe:m.choisiLe, choisiEnMission:2 };
+}
+/** Le coach réagit si l'image ne colle pas à la stratégie, sans jamais bloquer. */
+function reactionModele(){
+  const m = S.modele, st = strat(), im = imageDoc(m.image); if (!im || !st) return "";
+  if (st.id === "haut" && m.image === "dynamique") return "Ton entreprise est <b>haut de gamme</b>. Une image dynamique peut surprendre tes clients… mais c'est toi qui décides.";
+  if (st.id === "petit" && m.image === "prestige") return "Tu as choisi les <b>petits prix</b>. Une image prestige peut faire croire que tu es cher… mais c'est toi qui décides.";
+  const accord = { petit:["moderne","dynamique","chaleureuse"], milieu:["serieuse","moderne","chaleureuse"], haut:["prestige","serieuse"] }[st.id] || [];
+  return accord.includes(m.image) ? `Bonne idée : une image ${esc(im.nom.toLowerCase())} colle bien à ta stratégie « ${esc(st.nom)} ».` : "";
+}
+/** Miniature d'un modèle (dans la couleur choisie). */
+function miniModele(id){
+  const l = (w) => `<span class="l" style="width:${w}%"></span>`;
+  if (id === "bandeau") return `<span class="mini mini-bandeau"><span class="bd"><span class="mk"></span><span class="nm"></span></span>${l(45)}${l(80)}<span class="tt"></span>${l(92)}${l(70)}<span class="tb"></span></span>`;
+  if (id === "colonne") return `<span class="mini mini-colonne"><span class="hd"><span class="mk"></span><span class="nm"></span></span>${l(60)}${l(45)}<span class="tt"></span>${l(92)}${l(70)}<span class="tb"></span></span>`;
+  if (id === "centre") return `<span class="mini mini-centre"><span class="mk"></span><span class="nm"></span>${l(70)}<span class="dbl"></span><span class="tt"></span>${l(92)}${l(70)}<span class="tb"></span></span>`;
+  return `<span class="mini mini-classique"><span class="hd"><span class="mk"></span><span class="nm"></span></span>${l(60)}<span class="rl"></span>${l(45)}<span class="tt"></span>${l(92)}${l(70)}<span class="tb"></span></span>`;
+}
+
+// ======================================================================
 //  COMMUNICATION AVEC LE GOOGLE SHEET
 // ======================================================================
 function jsonp(params, timeout = 40000){
@@ -995,9 +1186,11 @@ function payload(statut){
     app:CONFIG.APP_ID, version:CONFIG.VERSION, mission:+CONFIG.MISSION, statut, envoyeLe:new Date().toISOString(),
     eleve:{ email:S.eleve.email, prenom:S.eleve.prenom, nom:S.eleve.nom, classe:S.eleve.classe },
     etape:{ phase:S.phase, achat:S.i + 1, etape: a ? ETAPES_ACHAT[Math.min(a.etape, 7)][0] : "", achatsTermines:S.achats.filter(x => x.fini).length, achatsRequis:CONFIG.NB_ACHATS },
-    entreprise:{ typeId:M1.typeId,
+    entreprise: Object.assign({ typeId:M1.typeId,
       equipements: achatsPayes().map(x => { const o = offreDe(x); return { bien:bien(x.bien).nom, fournisseur:`${o.fournisseur.nom} ${o.fournisseur.forme}`, article:o.article, valeur:o.total }; }),
       patrimoine },
+      // le modèle n'est envoyé qu'une fois adopté : on n'écrase jamais un modèle déjà enregistré avec un brouillon
+      S.modele && S.modele.valide ? { modeleDocuments:modeleExport() } : {}),
     achats: S.achats.map((x, k) => { const o = offreDe(x);
       return { numero:k + 1, bien: x.bien ? { id:x.bien, nom:bien(x.bien).nom } : null,
         methode: x.methode ? { id:x.methode, nom:METHODES.find(m => m.id === x.methode).nom } : null,
@@ -1213,9 +1406,14 @@ R.offres = () => { const a = A(), m = METHODES.find(x => x.id === a.methode), o 
     + boutons("Je choisis cette offre", "next", o && a.raisons.length >= 1 && !tropCher, true, o ? "Choisis au moins une raison." : "Clique sur l'offre que tu choisis.");
 };
 
-function enteteEntreprise(){
-  return `<div class="from"><div class="emb">${M1.symbole || typeM1().emoji}</div><div><div class="co f-${M1.style}">${esc(deno())}</div>
-    <p>${esc(adresse1())}<br>${esc(adresse2())}<br>${esc(M1.email)}</p><p class="ids">N° d'entreprise ${esc(M1.bce)}<br>TVA BE ${esc(M1.bce)}<br>IBAN ${esc(M1.iban)}</p></div></div>`;
+/** En-tête de l'entreprise de l'élève, dessiné selon son modèle de documents (+ lieu-date, titre et destinataire). */
+function papierEntete(m, droite, place, titre){
+  const emb = `<div class="emb">${M1.symbole || typeM1().emoji}</div>`, co = `<div class="co">${esc(deno())}</div>`;
+  const coords = `${esc(adresse1())}<br>${esc(adresse2())}<br>${esc(M1.email)}`, ids = `N° d'entreprise ${esc(M1.bce)}<br>TVA BE ${esc(M1.bce)}<br>IBAN ${esc(M1.iban)}`;
+  const ligneTitre = `<div class="dh"><div class="tbloc"><div class="place2">${place}</div>${titre}</div>${droite}</div>`;
+  if (m.modele === "bandeau") return `<div class="band"><div class="from">${emb}<div>${co}</div></div><div class="bco"><p>${coords}</p><p class="ids">${ids}</p></div></div>${ligneTitre}`;
+  if (m.modele === "centre") return `<div class="ctr"><div class="ctr-n">${emb}${co}</div><p>${coords.replace(/<br>/g, " · ")}</p><p class="ids">${ids.replace(/<br>/g, " · ")}</p></div>${ligneTitre}`;
+  return `<div class="dh"><div class="from">${emb}<div>${co}<p>${coords}</p><p class="ids">${ids}</p></div></div>${droite}</div><div class="place">${place}</div>${titre}`;
 }
 const blocFournisseur = (o, lbl) => `<div class="to"><div class="lbl">${lbl}</div><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.rue)}<br>${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br><span style="font-family:var(--mono);font-size:12.5px">TVA BE ${esc(o.fournisseur.bce)}</span></div>`;
 function lignesDoc(o){
@@ -1225,23 +1423,59 @@ function lignesDoc(o){
     <tr><td></td><td>Livraison</td><td></td><td></td><td>${o.livraison ? eur(o.livraison) : "gratuite"}</td></tr>
     <tr><td></td><td><b>Total à payer (TVA comprise)</b></td><td></td><td></td><td><b>${eur(o.total)}</b></td></tr></tbody></table>`;
 }
-function bonCommande(a, lecture){ const o = offreDe(a);
-  return `<div class="paper bc">
-    <div class="dh">${enteteEntreprise()}${blocFournisseur(o, "Fournisseur")}</div>
-    <div class="place">${esc(M1.commune)}, le ${esc(a.bc.date)}</div>
-    <h3 class="doc">BON DE COMMANDE</h3><div class="ref">N° ${esc(a.bc.numero)} · Votre offre n° ${esc(o.numero)}</div>
+function bonCommande(a, lecture, apercu){ const o = offreDe(a), m = modeleActuel(), ph = PHRASES_DOC.find(x => x[0] === m.phrase);
+  const signature = apercu ? `<div class="signed pv-sig">ta signature</div>` : lecture ? `<div class="signed">${esc(a.signBC)}</div>`
+    : `<input data-bind="signBC" value="${esc(a.signBC)}" placeholder="Signe ici (prénom et nom)" maxlength="40" aria-label="Signature du bon de commande">`;
+  return `<div class="paper bc doc-perso tpl-${esc(m.modele)}" style="${styleDoc(m)}">
+    ${m.filigrane ? `<div class="fili" aria-hidden="true">${M1.symbole || typeM1().emoji}</div>` : ""}
+    ${papierEntete(m, blocFournisseur(o, "Fournisseur"), `${esc(M1.commune)}, le ${esc(a.bc.date)}`,
+      `<h3 class="doc">BON DE COMMANDE</h3><div class="ref">N° ${esc(a.bc.numero)} · Votre offre n° ${esc(o.numero)}</div>`)}
     ${lignesDoc(o)}
     <p><b>Conditions :</b> livraison sous ${o.delai} jours · livraison ${o.livraison ? "payante (" + eur(o.livraison) + ")" : "gratuite"} · garantie ${o.garantie} an${o.garantie > 1 ? "s" : ""} · paiement ${esc(o.paiement)}.</p>
-    <div class="sig"><div>${lecture ? `<div class="signed">${esc(a.signBC)}</div>` : `<input data-bind="signBC" value="${esc(a.signBC)}" placeholder="Signe ici (prénom et nom)" maxlength="40" aria-label="Signature du bon de commande">`}
+    <div class="sig">${ph && ph[2] ? `<p class="phrase">${esc(ph[2])}</p>` : ""}<div>${signature}
       <small>Bon pour commande – ${esc(S.eleve.prenom)} ${esc(S.eleve.nom)}, ${esc(fonction().toLowerCase())}</small></div></div>
-    <div class="foot">Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
+    <div class="foot">${m.slogan && M1.slogan ? `<span class="slg">« ${esc(M1.slogan)} »</span>` : ""}Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
 }
+/** Avant le premier bon de commande : l'élève choisit le modèle des documents de son entreprise (aperçu en direct). */
+R.studio = () => { const a = A(), m = S.modele, im = imageDoc(m.image), reaction = reactionModele();
+  const sec = (n, titre, aide) => `<h3 class="sub"><span class="sn">${n}</span>${titre}</h3>${aide ? `<p class="help aide">${aide}</p>` : ""}`;
+  return enteteAchat("Personnalise ton <span class='grad'>bon de commande</span>", "Ce bon de commande va partir chez ton fournisseur : il va découvrir ton entreprise à travers lui. C'est toi le patron, alors c'est toi qui choisis à quoi ressemblent tes documents.")
+    + coach(m.retrouve ? "J'ai retrouvé le modèle que tu avais choisi la dernière fois. Tu peux le garder ou le changer." : "Commence par choisir <b>l'image</b> que tu veux donner : je te prépare un modèle. Ensuite, change ce que tu veux. L'aperçu à droite bouge en direct.")
+    + `<div class="studio"><div class="studio-opts glass">
+        ${sec(1, "Quelle image veux-tu donner ?")}
+        <div class="chips">${IMAGES_DOC.map(x => `<button class="chip ${m.image === x.id ? "on" : ""}" data-mod="image" data-val="${x.id}">${x.icone} ${esc(x.nom)}</button>`).join("")}</div>
+        ${im ? `<p class="img-desc">${esc(im.texte)}</p>` : ""}${reaction ? coach(reaction) : ""}
+        ${sec(2, "Le modèle")}
+        <div class="tpls">${MODELES_DOC.map(t => `<button class="tplbtn ${m.modele === t[0] ? "on" : ""}" data-mod="modele" data-val="${t[0]}" style="--m:${couleurDoc(m.couleurId)}">${miniModele(t[0])}<b>${esc(t[1])}</b></button>`).join("")}</div>
+        ${sec(3, "La couleur", "Astuce : la couleur de ton logo aide à reconnaître ton entreprise.")}
+        <div class="swatches doc-sw">${COULEURS_DOC.map(c => `<button class="sw small ${m.couleurId === c[0] ? "on" : ""}" data-mod="couleurId" data-val="${c[0]}" style="background:${c[2] || M1.couleur}" aria-label="${esc(c[1])}"><span>${esc(c[1])}</span></button>`).join("")}</div>
+        ${sec(4, "La police des titres", "Pour le nom de ton entreprise et le titre du document. Le texte, lui, reste facile à lire.")}
+        <div class="fonts">${Object.entries(POLICES_DOC).map(([id, p]) => `<button class="fontbtn ${m.police === id ? "on" : ""}" data-mod="police" data-val="${id}">
+          <span class="fx" style="font-family:${p.famille};font-weight:${p.poids};font-style:${p.style};letter-spacing:${p.espace}">${esc(M1.nom || "Mon entreprise")}</span>
+          <small>${esc(p.nom)}${id === M1.style ? `<span class="mylogo">mon logo</span>` : ""}</small></button>`).join("")}</div>
+        ${sec(5, "Les petits plus")}
+        <div class="verif" style="margin-top:0">
+          <label><input type="checkbox" data-modchk="slogan" ${m.slogan ? "checked" : ""}>Mon slogan en bas du document</label>
+          <label><input type="checkbox" data-modchk="filigrane" ${m.filigrane ? "checked" : ""}>Mon symbole en grand, en fond de page</label></div>
+        <label class="f" style="margin-top:16px">Une phrase pour mon fournisseur</label>
+        <div class="chips" style="margin-top:4px">${PHRASES_DOC.map(p => `<button class="chip ${m.phrase === p[0] ? "on" : ""}" data-mod="phrase" data-val="${p[0]}" title="${esc(p[2])}">${esc(p[1])}</button>`).join("")}</div>
+      </div>
+      <div class="studio-prev"><div class="pv-lbl"><span class="led"></span>Aperçu en direct</div>${bonCommande(a, true, true)}</div></div>
+    <div class="warn" style="margin-top:22px"><div class="wi">🔒</div><div><b>Choisis bien :</b> ce modèle sera celui de tous les documents de ton entreprise. Une fois ce bon de commande envoyé, tu ne pourras plus le changer.</div></div>`
+    + boutons("J'adopte ce modèle ✓", "adopter", !!m.image, true, "Choisis d'abord l'image que tu veux donner.");
+};
 R.commande = () => { const a = A();
   if (!a.bc) a.bc = { numero:`BC-${new Date().getFullYear()}-${String(S.i + 1).padStart(3,"0")}`, date:dateFr(today()) };
-  const ok = a.verifBC && a.signBC.trim().length >= 3;
+  preparerModele();
+  if (!S.modele.valide) return R.studio();
+  const ok = a.verifBC && a.signBC.trim().length >= 3, m = S.modele;
+  const ligneModele = m.verrouille
+    ? `<div class="modele-line glass">🎨 Le modèle de ton entreprise est mémorisé : ${esc(resumeModele(m))}.</div>`
+    : `<div class="modele-line glass"><span>🎨 Ton modèle : ${esc(resumeModele(m))}</span><button class="btn btn-ghost" data-act="retoucher">Modifier mon modèle</button></div>`;
   return enteteAchat("Le <span class='grad'>bon de commande</span>", express() ? "Ton bon de commande est prêt. Vérifie-le, signe-le et envoie-le." : "En entreprise, on ne dit pas simplement « je prends » : on envoie un bon de commande. C'est une preuve écrite de ce que tu achètes.")
-    + coach(express() ? "Vérifie bien : le bon fournisseur, le bon article, le bon prix." : "Comme tu débutes, je l'ai rempli pour toi à partir de l'offre que tu as choisie. Ton travail : <b>le vérifier</b> avec l'offre, puis <b>le signer</b>.")
-    + bonCommande(a, false)
+    + coach(m.verrouille ? "Ton bon de commande a déjà le style de ton entreprise : ton modèle est mémorisé, plus besoin de le refaire ! Vérifie bien : le bon fournisseur, le bon article, le bon prix."
+      : express() ? "Vérifie bien : le bon fournisseur, le bon article, le bon prix." : "Comme tu débutes, je l'ai rempli pour toi à partir de l'offre que tu as choisie. Ton travail : <b>le vérifier</b> avec l'offre, puis <b>le signer</b>.")
+    + ligneModele + bonCommande(a, false)
     + `<div class="verif"><label><input type="checkbox" id="vbc" ${a.verifBC ? "checked" : ""}>J'ai vérifié : le bon fournisseur, le bon article, le bon prix et les bonnes conditions.</label></div>`
     + boutons("Envoyer par e-mail au fournisseur ✉️", "envoyerBC", ok, true, "Coche la vérification et signe le bon de commande.");
 };
@@ -1354,6 +1588,7 @@ R.fin = () => {
       <table class="cmp"><thead><tr><th>Bien</th><th>Fournisseur</th><th>Pourquoi</th><th>Documents</th><th>Prix payé</th></tr></thead><tbody>
       ${faits.map(x => { const o = offreDe(x), b = bien(x.bien); return `<tr><td>${b.icone} ${esc(b.nom)}</td><td>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</td><td>${esc(x.raisons.join(", "))}</td>
         <td style="font-family:var(--mono);font-size:13px">${esc(o.numero)}<br>${esc(x.bc.numero)}<br>${esc(x.bl.numero)}</td><td style="font-family:var(--mono)">${eur(o.total)}</td></tr>`; }).join("")}</tbody></table>
+      ${S.modele && S.modele.valide ? `<p class="help" style="margin-top:12px">🎨 Le modèle de tes documents : ${esc(resumeModele(S.modele))}. Il est mémorisé pour les prochaines missions.</p>` : ""}
       <div class="nav" style="margin-top:16px"><span class="hint">Garde une trace de ton travail : le dossier de ton dernier achat tient sur une feuille recto verso.</span><button class="btn btn-main" data-act="print">🖨️ Imprimer mon dossier d'achat</button></div></div>
     <div class="card glass" style="margin-top:22px"><h3 class="sub" style="margin-top:0">Tes badges</h3>
       <div class="badges">${badges.map(([b,on]) => `<div class="badge glass ${on ? "" : "lockd"}"><div class="i">${on ? b[1] : "🔒"}</div><b>${esc(b[2])}</b></div>`).join("")}</div>
@@ -1439,10 +1674,24 @@ async function chercher(){
   badge("compare"); unlockMot("offre"); unlockMot("conditions");
   avancer();
 }
+function choisirModele(cle, val){
+  const m = S.modele; if (!m || m.verrouille) return;
+  if (cle === "image"){ const im = imageDoc(val); if (!im) return; m.image = val; Object.assign(m, im.preset); }
+  else if (["modele","couleurId","police","phrase"].includes(cle)) m[cle] = val;
+  save(); render();
+}
+function adopterModele(){
+  const m = S.modele; if (!m || !m.image) return;
+  m.valide = true; m.choisiLe = new Date().toISOString();
+  gagner("modele", 40); badge("image"); unlockMot("entete");
+  toast("<div>🎨 Modèle mémorisé : il apparaîtra sur tous les documents de ton entreprise.</div>");
+  save(); render(true); sauvegarder(false); controlerEnFond();
+}
 async function envoyerBC(){
   const a = A(), o = offreDe(a);
   await overlay(["✉️","📨","📬"], `Envoi du bon de commande à ${esc(o.fournisseur.nom)}…`, 1800);
   a.envoyeBC = true;
+  if (S.modele && S.modele.valide) S.modele.verrouille = true;     // une fois envoyé, le modèle de l'entreprise ne change plus
   a.notif = { date:dateFr(today()), livraison:jourFr(plusJours(today(), o.delai)) };
   badge("bc"); unlockMot("bc");
   avancer(0, true);                       // bon de commande envoyé : sauvegarde immédiate
@@ -1545,6 +1794,7 @@ document.addEventListener("change", (e) => {
   if (MODE !== "achat") return;
   if (e.target.id === "vbc"){ A().verifBC = e.target.checked; save(); refreshLive(); }
   if (e.target.dataset.check !== undefined){ A().checks[+e.target.dataset.check] = e.target.checked; save(); refreshLive(); }
+  if (e.target.dataset.modchk && S.modele && !S.modele.verrouille){ S.modele[e.target.dataset.modchk] = e.target.checked; save(); render(); }
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") $("#modal").hidden = true;
@@ -1567,6 +1817,7 @@ document.addEventListener("click", (e) => {
   if (b.dataset.set === "bien"){ if (a.bien !== b.dataset.val){ a.bien = b.dataset.val; a.offres = null; a.choix = null; a.raisons = []; } save(); render(); return; }
   if (b.dataset.set === "methode"){ a.methode = b.dataset.val; save(); render(); return; }
   if (b.dataset.offre !== undefined){ a.choix = +b.dataset.offre; save(); render(); return; }
+  if (b.dataset.mod){ choisirModele(b.dataset.mod, b.dataset.val); return; }
   if (b.dataset.raison){ const r = b.dataset.raison, i = a.raisons.indexOf(r);
     if (i >= 0) a.raisons.splice(i,1); else if (a.raisons.length < 2) a.raisons.push(r); else { toast("<div>Deux raisons maximum.</div>"); return; }
     save(); render(); return; }
@@ -1575,6 +1826,8 @@ document.addEventListener("click", (e) => {
     case "back": if (a.etape > 0 && !a.envoyeBC){ a.etape--; save(); render(true); } break;
     case "chercher": chercher(); break;
     case "envoyerBC": envoyerBC(); break;
+    case "adopter": adopterModele(); break;
+    case "retoucher": if (S.modele && !S.modele.verrouille){ S.modele.valide = false; save(); render(true); } break;
     case "accepter": accepterLivraison(); break;
     case "payer": payer(); break;
     case "suivantAchat": suivantAchat(); break;
