@@ -1070,6 +1070,15 @@ table.tableur-t td.best{background:#c6efce; color:#006100; font-weight:800}
 table.tableur-t tr.choisi td:first-of-type{font-weight:800; box-shadow:inset 3px 0 0 #16a34a}
 table.tableur-t tr.choisi th.tb-num{background:#16a34a; color:#fff}
 .tableur .help{margin:0; padding:9px 14px 11px; color:#3f4560; background:#f7f8fa; border-top:1px solid #e3e5ee}
+/* Le tableau de comparaison : une colonne par fournisseur, les lignes regroupées sous les cinq conditions de vente */
+table.tableur-t tr.tb-groupe th:not(.tb-num){background:#e6f3ea; color:#14532d; font-weight:800; text-align:left; font-size:13px; letter-spacing:.06em; text-transform:uppercase}
+table.tableur-t td.tb-txt{white-space:normal; min-width:170px}
+table.tableur-t td.col-choisi:not(.best){background:#eefbf1}
+table.tableur-t thead th.col-choisi{background:#16a34a !important; color:#fff !important}
+table.tableur-t tr.tb-total td{font-weight:800; border-top:2px solid #1f2433}
+/* L'offre de prix est adressée à l'entreprise de l'élève */
+.offre .of-pour{font-size:13px; color:#3f4560; padding:6px 10px; border:1px dashed #c9cede; border-radius:6px; background:rgba(255,255,255,.6)}
+.offre .of-pour .lbl{color:#6b7080; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-right:4px}
 .fiche-raisons{margin-top:18px; padding:18px 20px 20px; border-radius:4px; color:var(--encre); font-family:var(--doc); background:var(--papier) var(--grain); box-shadow:var(--ombre-papier)}
 .fiche-raisons label.f{font-size:17px; color:var(--encre)}
 .fiche-raisons .chip{position:relative; padding:9px 16px 9px 40px; border-radius:10px; background:#fff; color:var(--encre); border:2px solid #c6cbdb; font-size:16px}
@@ -1144,6 +1153,10 @@ table.tableur-t tr.choisi th.tb-num{background:#16a34a; color:#fff}
 .ticket-zone .receipt{position:relative; z-index:1}
 .recu-plus .c{font-size:12px; letter-spacing:.05em; color:#555}
 .recu-plus svg{display:block; width:72%; height:34px; margin:8px auto 2px}
+/* La facture du fournisseur, tamponnée « PAYÉE » (même présentation que dans la mission 3) */
+.fa-paye{text-align:right; margin:6px 0 0}
+.fa-paye .stamp-paid{margin:4px 6px 6px 0; font-size:26px; padding:6px 18px 5px; border-width:5px}
+.fa-paye small{display:block; color:#4a5068; font-size:13px}
 
 /* ─── Patrimoine : les feuilles « avant / après » sur le bureau ─── */
 .bureau-bilan{padding:26px 22px}
@@ -1335,6 +1348,7 @@ table.tableur-t tr.choisi th.tb-num{background:#16a34a; color:#fff}
   #print-area .paper .sig .signed{font-size:15pt !important}
   #print-area .receipt{box-shadow:none !important; background:#fff !important}
   #print-area .of-logo{display:none}
+  #print-area .offre .of-pour{font-size:7.5pt; padding:1mm 2mm}
 }
 /* Sur ordinateur : la référence et le montant d'une ligne de document ne sont jamais coupés */
 @media (min-width:760px){ .paper td:first-child, .paper td:last-child{white-space:nowrap} }
@@ -1921,7 +1935,7 @@ TYPES.forEach(t => Object.assign(t, EXTRAS[t.id]));
 
 const STRATEGIES = [
   { id:"petit", nom:"Petits prix", icone:"💰", cls:"st-petit", atout:"Prix bas",
-    texte:"Tu vends pas cher. Beaucoup de clients viennent chez toi, mais tu gagnes peu d'argent sur chaque vente : il faudra vendre beaucoup !",
+    texte:"Tu vends à petits prix. Beaucoup de clients viennent chez toi, mais tu gagnes peu d'argent sur chaque vente : il faudra vendre beaucoup !",
     jauge:{prix:1, qualite:1, clients:3} },
   { id:"milieu", nom:"Bon rapport qualité-prix", icone:"⚖️", cls:"st-milieu", atout:"Grand choix",
     texte:"Des produits de bonne qualité à des prix raisonnables. C'est l'équilibre : ni les moins chers, ni les plus chers.",
@@ -1950,62 +1964,62 @@ const BIENS = [
     // article, détail et référence dépendent de l'activité : voir MOBILIER et fournPour()
     fournisseurs:[
       { code:"MBP", nom:"MeubloPrix", forme:"SRL", rue:"Route de Mons 154", cp:"7301", ville:"Hornu", tel:"065 71 22 40", web:"www.meubloprix.be", atout:"Prix bas",
-        article:"", detail:"", ref:"01", qualite:"Simple et pratique", prix:690, remise:0, livraison:35, delai:10, garantie:1 },
+        article:"", detail:"", ref:"01", qualite:"Simple et pratique", prix:690, remise:0, livraison:35, delai:10, garantie:1, franco:"Franco de port à partir de 1 000 € (sinon port dû : 35 €)" },
       { code:"AGP", nom:"Agencement Pro", forme:"SA", rue:"Avenue Wilson 410", cp:"7012", ville:"Jemappes", tel:"065 82 15 90", web:"www.agencementpro.be", atout:"Bon rapport qualité-prix",
-        article:"", detail:"", ref:"24", qualite:"Solide et chaleureux", prix:1180, remise:5, livraison:0, delai:5, garantie:2 },
+        article:"", detail:"", ref:"24", qualite:"Solide et chaleureux", prix:1180, remise:5, remiseLibelle:"Remise de bienvenue", livraison:0, delai:5, garantie:2, franco:"Franco de port" },
       { code:"DSG", nom:"Design Intérieur", forme:"SRL", rue:"Boulevard d'Avroy 77", cp:"4000", ville:"Liège", tel:"04 221 33 08", web:"www.design-interieur.be", atout:"Qualité premium",
-        article:"", detail:"", ref:"PRO", qualite:"Haut de gamme, fait pour durer", prix:1890, remise:0, livraison:0, delai:3, garantie:3 } ] },
-  { id:"caisse", nom:"La caisse enregistreuse", court:"caisse enregistreuse", icone:"🧾", pourquoi:"Pour encaisser tes clients, imprimer les tickets de caisse et garder une trace de chaque vente.",
+        article:"", detail:"", ref:"PRO", qualite:"Haut de gamme, fait pour durer", prix:1890, remise:0, livraison:0, delai:3, garantie:3, franco:"Franco de port" } ] },
+  { id:"caisse", nom:"La caisse enregistreuse", court:"caisse enregistreuse", icone:"🧾", fem:true, pourquoi:"Pour encaisser tes clients, imprimer les tickets de caisse et garder une trace de chaque vente.",
     fournisseurs:[
       { code:"CPL", nom:"CaissePlus", forme:"SRL", rue:"Rue de la Station 12", cp:"7080", ville:"Frameries", tel:"065 67 40 11", web:"www.caisseplus.be", atout:"Prix bas",
-        article:"Caisse enregistreuse simple", detail:"Clavier, tiroir-caisse et imprimante de tickets", ref:"CR-100", qualite:"Simple et efficace", prix:290, remise:0, livraison:25, delai:8, garantie:1 },
+        article:"Caisse enregistreuse simple", detail:"Clavier, tiroir-caisse et imprimante de tickets", ref:"CR-100", qualite:"Simple et efficace", prix:290, remise:0, livraison:25, delai:8, garantie:1, franco:"Franco de port à partir de 500 € (sinon port dû : 25 €)" },
       { code:"ENC", nom:"Encaiss'Tech", forme:"SA", rue:"Chaussée de Bruxelles 200", cp:"7000", ville:"Mons", tel:"065 31 77 52", web:"www.encaisstech.be", atout:"Bon rapport qualité-prix",
-        article:"Caisse tactile avec lecteur de codes-barres", detail:"Écran tactile, tiroir-caisse, imprimante et lecteur de codes-barres", ref:"CT-SCAN-2", qualite:"Moderne et rapide", prix:690, remise:5, livraison:0, delai:5, garantie:2 },
+        article:"Caisse tactile avec lecteur de codes-barres", detail:"Écran tactile, tiroir-caisse, imprimante et lecteur de codes-barres", ref:"CT-SCAN-2", qualite:"Moderne et rapide", prix:690, remise:5, remiseLibelle:"Remise de bienvenue", livraison:0, delai:5, garantie:2, franco:"Franco de port" },
       { code:"BLG", nom:"Belgo Caisse Premium", forme:"SRL", rue:"Avenue Louise 320", cp:"1050", ville:"Bruxelles", tel:"02 640 18 25", web:"www.belgocaisse.be", atout:"Qualité premium",
-        article:"Caisse tactile tout-en-un avec terminal de paiement", detail:"Grand écran tactile, terminal pour cartes bancaires, logiciel de gestion du stock, installation comprise", ref:"PRO-ALL-IN", qualite:"Complète et professionnelle", prix:1290, remise:0, livraison:0, delai:3, garantie:3 } ] },
+        article:"Caisse tactile tout-en-un avec terminal de paiement", detail:"Grand écran tactile, terminal pour cartes bancaires, logiciel de gestion du stock, installation comprise", ref:"PRO-ALL-IN", qualite:"Complète et professionnelle", prix:1290, remise:0, livraison:0, delai:3, garantie:3, franco:"Franco de port" } ] },
   { id:"ordinateur", nom:"L'ordinateur", court:"ordinateur", icone:"💻", pourquoi:"Pour écrire tes documents (bons de commande, factures), envoyer des e-mails et suivre ton argent.",
     fournisseurs:[
       { code:"PCD", nom:"PC Discount", forme:"SA", rue:"Rue du Grand Quiévroy 8", cp:"7000", ville:"Mons", tel:"065 33 90 14", web:"www.pcdiscount.be", atout:"Prix bas",
-        article:"Ordinateur portable 15 pouces", detail:"Pour le traitement de texte, les e-mails et internet", ref:"NB-15-ESS", qualite:"Basique mais suffisant", prix:499, remise:0, livraison:20, delai:7, garantie:1 },
+        article:"Ordinateur portable 15 pouces", detail:"Pour le traitement de texte, les e-mails et internet", ref:"NB-15-ESS", qualite:"Basique mais suffisant", prix:499, remise:0, livraison:20, delai:7, garantie:1, franco:"Franco de port à partir de 600 € (sinon port dû : 20 €)" },
       { code:"INF", nom:"InfoMons", forme:"SRL", rue:"Rue de Nimy 54", cp:"7000", ville:"Mons", tel:"065 35 26 61", web:"www.infomons.be", atout:"Bon rapport qualité-prix",
-        article:"Ordinateur portable performant + logiciel de gestion", detail:"Rapide et léger, avec un logiciel pour faire tes factures", ref:"NB-PRO-GEST", qualite:"Rapide et complet", prix:899, remise:5, livraison:0, delai:4, garantie:2 },
+        article:"Ordinateur portable performant + logiciel de gestion", detail:"Rapide et léger, avec un logiciel pour faire tes factures", ref:"NB-PRO-GEST", qualite:"Rapide et complet", prix:899, remise:5, remiseLibelle:"Remise de bienvenue", livraison:0, delai:4, garantie:2, franco:"Franco de port" },
       { code:"DGX", nom:"Digital Expert", forme:"SRL", rue:"Grand-Place 3", cp:"7500", ville:"Tournai", tel:"069 22 48 70", web:"www.digitalexpert.be", atout:"Qualité premium",
-        article:"Ordinateur tout-en-un 27 pouces + imprimante", detail:"Grand écran, imprimante couleur, installation et formation d'une heure comprises", ref:"AIO-27-PRINT", qualite:"Très haut de gamme", prix:1490, remise:0, livraison:0, delai:3, garantie:3 } ] }
+        article:"Ordinateur tout-en-un 27 pouces + imprimante", detail:"Grand écran, imprimante couleur, installation et formation d'une heure comprises", ref:"AIO-27-PRINT", qualite:"Très haut de gamme", prix:1490, remise:0, livraison:0, delai:3, garantie:3, franco:"Franco de port" } ] }
 ];
 /** Le mobilier dépend de l'activité (mêmes fournisseurs, mêmes prix pour toute la classe) : [article, détail] pour chaque niveau. */
 const MOBILIER = {
   ferme:{ code:"FRM", pourquoi:"Pour présenter tes légumes, tes œufs et tes fromages, et encaisser tes clients au comptoir.",
     offres:[["Étagères métalliques et étal pliant", "3 étagères métalliques, 1 étal pliant pour les légumes, 1 comptoir en mélaminé blanc"],
       ["Étals en bois et comptoir en hêtre", "4 étals inclinés en bois pour les légumes, 1 présentoir à œufs, 1 comptoir en hêtre avec rangements"],
-      ["Agencement en chêne massif", "Étals en chêne massif, présentoir à œufs et à confitures, comptoir éclairé avec balance électronique, montage compris"]] },
+      ["Agencement en chêne massif", "Étals en chêne massif, présentoir à œufs et à confitures, comptoir éclairé avec balance électronique, livraison et montage sur rendez-vous compris"]] },
   pepiniere:{ code:"PEP", pourquoi:"Pour exposer tes plantes, les rempoter et encaisser tes clients au comptoir.",
     offres:[["Tables d'exposition en métal", "4 tables métalliques pour les plantes en pot, 1 comptoir en mélaminé blanc"],
       ["Gradins en bois et table de rempotage", "3 gradins en bois pour exposer les plantes, 1 table de rempotage, 1 comptoir en hêtre"],
-      ["Agencement de jardinerie en chêne", "Gradins et chariots d'exposition en chêne, table de rempotage en inox, comptoir éclairé, montage compris"]] },
+      ["Agencement de jardinerie en chêne", "Gradins et chariots d'exposition en chêne, table de rempotage en inox, comptoir éclairé, livraison et montage sur rendez-vous compris"]] },
   chocolaterie:{ code:"CHO", pourquoi:"Pour travailler le chocolat, présenter tes pralines et encaisser tes clients au comptoir.",
     offres:[["Table en inox et étagères simples", "1 table de travail en inox, 2 étagères murales, 1 comptoir en mélaminé blanc"],
       ["Comptoir vitré et table en inox", "1 comptoir vitré pour les pralines, 1 table de travail en inox, 2 étagères en bois clair"],
-      ["Comptoir-vitrine éclairé et table en marbre", "1 comptoir-vitrine éclairé pour les pralines, 1 table en marbre pour travailler le chocolat, étagères en chêne massif, montage compris"]] },
+      ["Comptoir-vitrine éclairé et table en marbre", "1 comptoir-vitrine éclairé pour les pralines, 1 table en marbre pour travailler le chocolat, étagères en chêne massif, livraison et montage sur rendez-vous compris"]] },
   textile:{ code:"TEX", pourquoi:"Pour imprimer tes vêtements, les présenter et encaisser tes clients au comptoir.",
     offres:[["Table de travail et portants", "1 grande table de travail, 2 portants à vêtements, 1 comptoir en mélaminé blanc"],
       ["Atelier en bois et cabine d'essayage", "1 table de découpe en hêtre, 3 portants, 1 cabine d'essayage, 1 comptoir en hêtre"],
-      ["Agencement de boutique design", "Table de travail éclairée, murs de présentation en chêne, cabine d'essayage avec grand miroir, comptoir design, montage compris"]] },
+      ["Agencement de boutique design", "Table de travail éclairée, murs de présentation en chêne, cabine d'essayage avec grand miroir, comptoir design, livraison et montage sur rendez-vous compris"]] },
   baskets:{ code:"BSK", pourquoi:"Pour présenter tes baskets, faire essayer tes clients et les encaisser au comptoir.",
     offres:[["Étagères à chaussures et banc d'essayage", "4 étagères à chaussures en métal, 1 banc d'essayage, 1 comptoir en mélaminé blanc"],
       ["Murs de présentation et poufs d'essayage", "2 murs de présentation en bois clair, 3 poufs d'essayage, 1 miroir, 1 comptoir en hêtre"],
-      ["Agencement de boutique design", "Murs lumineux pour les baskets, banc d'essayage en chêne, grand miroir, comptoir éclairé, montage compris"]] },
+      ["Agencement de boutique design", "Murs lumineux pour les baskets, banc d'essayage en chêne, grand miroir, comptoir éclairé, livraison et montage sur rendez-vous compris"]] },
   gaming:{ code:"GAM", pourquoi:"Pour présenter tes jeux et ton matériel, faire essayer tes clients et les encaisser au comptoir.",
     offres:[["Étagères métalliques et comptoir", "4 étagères métalliques pour les jeux, 1 comptoir en mélaminé blanc, 1 tabouret"],
       ["Présentoirs et coin démo", "3 présentoirs en bois, 1 meuble TV pour un coin démo, 1 comptoir en hêtre"],
-      ["Agencement gaming lumineux", "Présentoirs avec éclairage LED, coin démo avec 2 fauteuils, comptoir lumineux, montage compris"]] },
+      ["Agencement gaming lumineux", "Présentoirs avec éclairage LED, coin démo avec 2 fauteuils, comptoir lumineux, livraison et montage sur rendez-vous compris"]] },
   velos:{ code:"VEL", pourquoi:"Pour exposer tes vélos, réparer ceux de tes clients et encaisser au comptoir.",
     offres:[["Râtelier et établi simples", "1 râtelier pour 8 vélos, 1 établi en métal, 1 comptoir en mélaminé blanc"],
       ["Présentoirs muraux et établi de réparation", "2 présentoirs muraux à vélos, 1 établi avec pied de réparation, 1 comptoir en hêtre"],
-      ["Agencement de magasin et atelier complet", "Présentoirs muraux en chêne, établi professionnel avec pied de réparation et outils, comptoir éclairé, montage compris"]] },
+      ["Agencement de magasin et atelier complet", "Présentoirs muraux en chêne, établi professionnel avec pied de réparation et outils, comptoir éclairé, livraison et montage sur rendez-vous compris"]] },
   animalerie:{ code:"ANI", pourquoi:"Pour ranger tes produits pour animaux, présenter tes aquariums et encaisser au comptoir.",
     offres:[["Rayonnages métalliques et comptoir", "5 rayonnages métalliques, 1 comptoir en mélaminé blanc"],
       ["Rayonnages en bois et meuble à aquariums", "4 rayonnages en bois, 1 meuble pour 3 aquariums, 1 comptoir en hêtre"],
-      ["Agencement complet en chêne", "Rayonnages en chêne éclairés, meuble à aquariums intégré, comptoir avec balance, montage compris"]] }
+      ["Agencement complet en chêne", "Rayonnages en chêne éclairés, meuble à aquariums intégré, comptoir avec balance, livraison et montage sur rendez-vous compris"]] }
 };
 /** Le fournisseur k d'un bien, avec l'article adapté à l'activité de l'élève (pour le mobilier). */
 function fournPour(b, k){
@@ -2030,7 +2044,7 @@ const METHODES = [
     pro:"C'est rapide et tu vois beaucoup de produits", con:"Tu ne vois pas le produit en vrai, attention aux frais de livraison", duree:"environ 30 minutes", jours:0,
     anim:["💻","🔎","🛒"], recit:"Tu as comparé 3 sites internet. Tu as enregistré l'offre de prix de chacun." }
 ];
-const RAISONS_OFFRE = ["Le prix le plus bas","La meilleure qualité","La livraison la plus rapide","La garantie la plus longue","La livraison gratuite","Ça colle à ma stratégie"];
+const RAISONS_OFFRE = ["Le prix le plus bas","La meilleure qualité","La livraison la plus rapide","La garantie la plus longue","Le franco de port (livraison gratuite)","Ça colle à ma stratégie"];
 const ETAPES_ACHAT = [["bien","Choisir le bien"],["methode","Chercher"],["offres","Comparer"],["commande","Commander"],["notif","Commande prête"],["livraison","Livraison"],["paiement","Paiement"],["patrimoine","Patrimoine"]];
 
 // ======================================================================
@@ -2071,7 +2085,9 @@ const POLICES = { moderne:"Outfit, Arial, sans-serif", elegant:"'Playfair Displa
 const MOTS = {
   fournisseur:{mot:"Fournisseur", def:"L'entreprise qui te vend ce dont tu as besoin pour travailler."},
   offre:{mot:"Offre de prix", def:"La réponse écrite du fournisseur : son prix et ses conditions."},
-  conditions:{mot:"Conditions de vente", def:"Tout ce qui est prévu en plus du prix : délai, livraison, garantie, paiement."},
+  conditions:{mot:"Conditions de vente", def:"Les cinq points sur lesquels l'acheteur et le vendeur se mettent d'accord : la qualité, la quantité, le prix, le paiement et la livraison."},
+  franco:{mot:"Franco de port", def:"Livraison gratuite : les frais de transport sont à charge du vendeur, souvent à partir d'un montant minimum. Sinon, c'est « port dû » : c'est l'acheteur qui paie le transport."},
+  prixNet:{mot:"Prix brut, prix net", def:"Prix brut − remise = prix net. Le prix net, c'est ce que tu paies vraiment pour l'article (frais de port en plus s'il y en a)."},
   bc:{mot:"Bon de commande", def:"Le document que l'acheteur envoie au fournisseur pour confirmer ce qu'il achète."},
   entete:{mot:"Papier à en-tête", def:"Le modèle des documents d'une entreprise, avec son nom et son logo en haut : tous ses documents se ressemblent."},
   bl:{mot:"Bon de livraison", def:"Le document qui accompagne la marchandise. On le vérifie, puis on le signe à la réception."},
@@ -2129,7 +2145,7 @@ const deno = () => M1.denomination || (M1.nom + (M1.direction === "plusieurs" ? 
 const forme = () => M1.direction === "plusieurs" ? "Société (SRL)" : "Entreprise individuelle";
 const adresse1 = () => `${M1.rue} ${M1.numero}`;
 const adresse2 = () => `${M1.cp} ${M1.commune}`;
-const fonction = () => M1.direction === "plusieurs" ? (M1.nbAssocies > 1 ? "Gérant(e) et associé(e)" : "Gérant(e)") : "Indépendant(e)";
+const fonction = () => M1.direction === "plusieurs" ? (M1.nbAssocies > 1 ? "Administrateur(-trice) et associé(e)" : "Administrateur(-trice)") : "Indépendant(e)";
 function nomDepuisEmail(email){
   const cap = s => s.split("-").map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join("-");
   const p = email.split("@")[0].split(".");
@@ -2180,7 +2196,7 @@ const majuscule = (t) => String(t || "").replace(/^./, c => c.toUpperCase());
 /** Les mouvements du compte en banque depuis la création de l'entreprise (mission 1), puis chaque paiement. */
 function mouvementsBanque(){
   const d0 = CAL.lireFr(M1.dateCreation) || CAL.lire(S.calDebut) || auj(), srl = M1.direction === "plusieurs";
-  const l = [{ date:d0, libelle:srl ? "Apport des associés (capital de départ)" : "Apport de départ", detail:`${S.eleve.prenom} ${S.eleve.nom}`.trim(), credit:M1.apport, court:"Apport de départ" },
+  const l = [{ date:d0, libelle:srl ? "Apport de départ des associés" : "Apport de départ", detail:`${S.eleve.prenom} ${S.eleve.nom}`.trim(), credit:M1.apport, court:"Apport de départ" },
     { date:d0, libelle:srl ? "Frais de création de la société" : "Frais d'inscription de l'entreprise", detail:srl ? "Notaire, Moniteur belge, guichet d'entreprises" : "Guichet d'entreprises", debit:M1.frais, court:"Frais de création" }];
   achatsPayes().forEach(a => { const o = offreDe(a);
     l.push({ date:CAL.lire(a.cal && a.cal.livraison) || CAL.lireFr(a.recu && a.recu.date) || auj(), libelle:`Paiement par carte – ${o.fournisseur.nom} ${o.fournisseur.forme}`,
@@ -2191,7 +2207,7 @@ const releveEntreprise = () => releveHTML({ lignes:mouvementsBanque(), titulaire
 /** Le mur de photos : le matériel installé dans le magasin, avec la date de livraison. */
 function itemsPolaroids(){
   return achatsPayes().slice().sort((x, y) => ORDRE_BIENS.indexOf(x.bien) - ORDRE_BIENS.indexOf(y.bien)).map(a => { const o = offreDe(a), b = bien(a.bien);
-    return { photo:idPhoto(a.bien, o.niveau), alt:o.article, secours:b.icone, legende:`${majuscule(b.court)} · livré le ${a.bl ? a.bl.date.replace(/ \d{4}$/, "") : "?"}` }; });
+    return { photo:idPhoto(a.bien, o.niveau), alt:o.article, secours:b.icone, legende:`${majuscule(b.court)} · ${b.fem ? "livrée" : "livré"} le ${a.bl ? a.bl.date.replace(/ \d{4}$/, "") : "?"}` }; });
 }
 
 /** Les 3 offres de prix pour un bien (mêmes fournisseurs pour toute la classe). */
@@ -2203,7 +2219,9 @@ function genererOffres(bienId, dateOffres){
     return { numero:`OP-${f.code}-${String(hash(S.eleve.email + bienId) % 9000 + 1000)}`, date:dateFr(d),
       fournisseur:{ code:f.code, nom:f.nom, forme:f.forme, rue:f.rue, cp:f.cp, ville:f.ville, tel:f.tel, web:f.web, atout:f.atout, bce:bceFixe(hash(f.code)) },
       bien:bienId, ref:f.ref, article:f.article, detail:f.detail, qualite:f.qualite, quantite:1, prix:f.prix, remisePct:f.remise, remise, livraison:f.livraison, total,
-      delai:f.delai, garantie:f.garantie, paiement:"à la livraison", validite:"30 jours", niveau:["petit","milieu","haut"][k] };
+      delai:f.delai, garantie:f.garantie, paiement:"à la livraison", validite:"30 jours", niveau:["petit","milieu","haut"][k],
+      // les mots du cours (fiche 5) : le motif de la remise et les conditions de livraison du fournisseur (franco de port / port dû)
+      remiseLibelle:f.remiseLibelle || "", franco:f.franco || (f.livraison ? "Port dû : " + fmtEur(f.livraison) : "Franco de port") };
   });
 }
 
@@ -2747,7 +2765,7 @@ function payload(statut){
   const fourn = (o) => ({ nom:o.fournisseur.nom, forme:o.fournisseur.forme, denomination:`${o.fournisseur.nom} ${o.fournisseur.forme}`, adresse:`${o.fournisseur.rue}, ${o.fournisseur.cp} ${o.fournisseur.ville}`,
     numeroEntreprise:o.fournisseur.bce, numeroTVA:"BE " + o.fournisseur.bce, telephone:o.fournisseur.tel, site:o.fournisseur.web, atout:o.fournisseur.atout });
   const offreD = (o) => ({ numero:o.numero, fournisseur:fourn(o), reference:o.ref, article:o.article, detail:o.detail, niveau:o.niveau, prix:o.prix, remisePourcent:o.remisePct, remise:o.remise,
-    fraisLivraison:o.livraison, totalAPayer:o.total, delaiJours:o.delai, garantieAns:o.garantie, paiement:o.paiement });
+    fraisLivraison:o.livraison, totalAPayer:o.total, delaiJours:o.delai, garantieAns:o.garantie, paiement:o.paiement, franco:francoDe(o) });
   const patrimoine = { possede: poss.map(p => ({ libelle:p.libelle, montant:p.montant })),
     origine:[{ libelle:"Argent de départ (apport)", montant:M1.apport }, { libelle:"Déjà dépensé : frais de création", montant:-M1.frais }],
     valeur: poss.reduce((s,p) => s + p.montant, 0), argentEnBanque: enBanque() };
@@ -2767,7 +2785,9 @@ function payload(statut){
         bonDeCommande: x.bc ? { numero:x.bc.numero, date:x.bc.date, dateISO:x.bc.iso || null, montant:o.total, verifie:x.verifBC, signature:x.signBC, envoyeParEmail:x.envoyeBC } : null,
         notification: x.notif ? { canal:"SMS et e-mail", recuLe:x.notif.date, livraisonPrevue:x.notif.livraison, livraisonISO:x.notif.iso || null } : null,
         bonDeLivraison: x.bl ? { numero:x.bl.numero, date:x.bl.date, dateISO:x.bl.iso || null, verifications:{ bonArticle:x.checks[0], bonneQuantite:x.checks[1], colisBonEtat:x.checks[2] }, signature:x.signBL, accepte:x.accepte } : null,
-        paiement: x.paye ? { montant:o.total, mode:"carte bancaire, à la livraison", date:x.recu.date, dateISO:x.recu.iso || null, accepte:true } : null,
+        paiement: x.paye ? { montant:o.total, mode:"carte bancaire, à la livraison", date:x.recu.date, dateISO:x.recu.iso || null, accepte:true, numeroRecu:x.recu.numero || null } : null,
+        // la facture du fournisseur (tamponnée « payée ») : la mission 3 la lit quand elle existe ; achats payés avant cette version : recalculée de la même façon
+        facture: x.facture || (x.paye ? calculerFacture(x) : null),
         calendrier: x.cal || null, garantieJusquau: x.paye && finGarantie(x) ? CAL.iso(finGarantie(x)) : null,
         termine:x.fini };
     }),
@@ -3124,19 +3144,23 @@ R.methode = () => { const a = A(), b = bien(a.bien);
     + boutons("Lancer ma recherche 🔎", "chercher", !!a.methode, true, "Choisis une méthode.");
 };
 
+/** Les mots du cours (fiche 5) sur les documents : le libellé de la remise et les conditions de livraison (franco de port / port dû). */
+const libelleRemise = (o) => `${o.remiseLibelle || "Remise de bienvenue"} ${o.remisePct} %`;
+const francoDe = (o) => o.franco || (o.livraison ? "Port dû : " + fmtEur(o.livraison) : "Franco de port");
 function offreHTML(o, k, choisi, imprimable){
   const tag = imprimable ? "div" : "button", mq = marqueFourn(o.fournisseur);
   return `<${tag} class="offre niv-${esc(o.niveau)} ${choisi ? "on" : ""}" ${imprimable ? "" : `data-offre="${k}" aria-pressed="${!!choisi}"`} style="--f:${mq.c};--t:${mq.t}">
     <div class="oh"><span class="of-logo">${logoFourn(o.fournisseur)}</span><div class="of-id"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><small>${esc(o.fournisseur.rue)}, ${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br>Tél. ${esc(o.fournisseur.tel)} · ${esc(o.fournisseur.web)}<br>TVA BE ${esc(o.fournisseur.bce)}</small></div></div>
     <div class="ot">Offre de prix n° ${esc(o.numero)}${o.date ? `<small> · ${esc(o.fournisseur.ville)}, le ${esc(o.date)}</small>` : ""}</div>
+    <div class="of-pour"><span class="lbl">Pour :</span><b>${esc(deno())}</b>, ${esc(adresse1())}, ${esc(adresse2())}</div>
     <span class="atout">${esc(o.fournisseur.atout)}</span>
     <div class="of-photo">${(() => { const bid = o.bien || (A() && A().bien) || "mobilier"; return photo(idPhoto(bid, o.niveau), o.article, "", (bien(bid) || {}).icone); })()}</div>
     <div class="art">${esc(o.article)}</div><div class="det">${esc(o.detail)}</div>
-    <div class="lines"><div class="ln"><span>Prix</span><span>${eur(o.prix)}</span></div>
-      ${o.remise ? `<div class="ln neg"><span>Remise de ${o.remisePct} %</span><span>− ${eur(o.remise)}</span></div>` : ""}
-      <div class="ln"><span>Livraison</span><span>${o.livraison ? eur(o.livraison) : "gratuite"}</span></div></div>
-    <div class="tot"><span>Total à payer</span><span>${eur(o.total)}</span></div>
-    <div class="cond"><span><b>Délai :</b> livré en ${o.delai} jours ouvrables</span><span><b>Garantie :</b> ${o.garantie} an${o.garantie > 1 ? "s" : ""}</span><span><b>Paiement :</b> ${esc(o.paiement)}</span></div>
+    <div class="lines"><div class="ln"><span>Prix brut (TVA comprise)</span><span>${fmtEur(o.prix)}</span></div>
+      ${o.remise ? `<div class="ln neg"><span>${esc(libelleRemise(o))}</span><span>− ${fmtEur(o.remise)}</span></div><div class="ln"><span>Prix net</span><span>${fmtEur(o.prix - o.remise)}</span></div>` : ""}
+      <div class="ln"><span>${o.livraison ? "Port dû" : "Franco de port (livraison gratuite)"}</span><span>${fmtEur(o.livraison || 0)}</span></div></div>
+    <div class="tot"><span>Total à payer</span><span>${fmtEur(o.total)}</span></div>
+    <div class="cond"><span><b>Livraison :</b> ${esc(francoDe(o))}</span><span><b>Délai :</b> livré en ${o.delai} jours ouvrables</span><span><b>Garantie :</b> ${o.garantie} an${o.garantie > 1 ? "s" : ""}</span><span><b>Paiement :</b> ${esc(o.paiement)}</span></div>
     <div class="valid">Prix TVA comprise · offre valable ${CAL.lireFr(o.date) ? "jusqu'au " + esc(CAL.date(CAL.plus(CAL.lireFr(o.date), 30))) : esc(o.validite)}</div>
     ${VENDEURS[o.fournisseur.code] ? `<div class="of-sign"><span class="of-sig">${esc(VENDEURS[o.fournisseur.code][0])}</span><small>${esc(VENDEURS[o.fournisseur.code][0])}, ${esc(VENDEURS[o.fournisseur.code][1])}</small></div>` : ""}</${tag}>`;
 }
@@ -3148,15 +3172,38 @@ R.offres = () => { const a = A(), m = METHODES.find(x => x.id === a.methode), o 
     else if (st && st.id === "petit" && o.niveau === "haut") conseil = "Ta stratégie, ce sont les petits prix : ce matériel est cher. En as-tu vraiment besoin ? C'est toi qui décides.";
     else if (st && st.id === o.niveau) conseil = "Bon choix : cette offre colle bien à ta stratégie !"; }
   const reste = o ? enBanque() - o.total : null, tropCher = o && reste < 0;
+  // Le tableau : une colonne par fournisseur (B, C, D) et une ligne par critère, regroupées sous les cinq conditions de vente du cours
+  let n = 1, corps = "";
+  const groupe = (titre) => { n++; corps += `<tr class="tb-groupe"><th class="tb-num" aria-hidden="true">${n}</th><th colspan="${a.offres.length + 1}">${titre}</th></tr>`; };
+  const ligne = (lib, f, opt) => { opt = opt || {}; n++;
+    corps += `<tr class="${opt.total ? "tb-total" : ""}"><th class="tb-num" aria-hidden="true">${n}</th><td>${lib}</td>${a.offres.map((x, k) => `<td class="${[opt.texte ? "tb-txt" : "", opt.meilleur === k ? "best" : "", a.choix === k ? "col-choisi" : ""].filter(Boolean).join(" ")}">${f(x)}</td>`).join("")}</tr>`; };
+  groupe("1. Qualité");
+  ligne("Article", x => esc(x.article), { texte:true });
+  ligne("Qualité annoncée", x => esc(x.qualite || "–"), { texte:true });
+  ligne("Garantie", x => `${x.garantie} an${x.garantie > 1 ? "s" : ""}`, { meilleur:bG });
+  groupe("2. Quantité");
+  ligne("Quantité", () => "1 lot complet");
+  groupe("3. Prix");
+  ligne("Prix brut (TVA comprise)", x => fmtEur(x.prix));
+  ligne("Remise de bienvenue", x => x.remise ? `${x.remisePct} % : − ${fmtEur(x.remise)}` : "aucune");
+  ligne("Prix net", x => fmtEur(x.prix - x.remise));
+  groupe("4. Paiement");
+  ligne("Quand et comment", x => `${esc(x.paiement)}, par carte bancaire`);
+  groupe("5. Livraison");
+  ligne("Frais de port", x => x.livraison ? `Port dû : ${fmtEur(x.livraison)}` : "Franco de port (livraison gratuite)");
+  ligne("Délai", x => `${x.delai} jours ouvrables`, { meilleur:bD });
+  ligne("Total à payer (TVA comprise)", x => fmtEur(x.total), { meilleur:bT, total:true });
+  const nTotal = n, colFin = String.fromCharCode(65 + a.offres.length), colFormule = String.fromCharCode(66 + a.offres.length);   // 3 fournisseurs : B à D, la formule en E
   return enteteAchat("Compare les <span class='grad'>3 offres de prix</span>", esc(m.recit))
-    + coach(express() ? "Compare le total, le délai et la garantie avant de choisir." : "Voici les 3 offres de prix. Ne regarde pas seulement le prix : compare aussi le <b>délai</b>, la <b>livraison</b> et la <b>garantie</b>. Ce sont les conditions de vente.")
+    + coach((express() ? "Compare les cinq conditions de vente : qualité, quantité, prix, paiement, livraison." : "Voici les 3 offres de prix. Compare les cinq conditions de vente : <b>qualité</b>, <b>quantité</b>, <b>prix</b>, <b>paiement</b>, <b>livraison</b>.")
+      + " Entre entreprises, la garantie légale de 2 ans des particuliers ne s'applique pas : chaque fournisseur fixe la sienne. Compare-les !")
     + `<div class="bureau bureau-offres"><div class="offres">${a.offres.map((x,k) => `<div class="offre-cell"><div class="offre-pose kit-anim d${k + 1}" data-anim="offre-${S.i}-${k}">${offreHTML(x, k, a.choix === k)}</div>${a.choix === k ? `<span class="pince" data-anim="pince-${S.i}-${k}" aria-hidden="true">${PINCE}</span>` : ""}</div>`).join("")}</div></div>
     <div class="tableur kit-anim" data-anim="tableur-${S.i}"><div class="tb-barre"><span class="tb-ico" aria-hidden="true"></span><h3 class="sub">Le tableau pour comparer</h3><span class="tb-app" aria-hidden="true">Tableur</span></div>
-      <div class="tb-formule" aria-hidden="true"><span class="tb-cell">B2</span><span class="tb-fx">fx</span><span>=MIN(B2:B4)</span></div>
-      <div class="tb-zone"><table class="tableur-t"><thead><tr class="tb-lettres" aria-hidden="true"><th class="tb-num"></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
-        <tr><th class="tb-num" aria-hidden="true">1</th><th>Fournisseur</th><th>Total à payer</th><th>Délai</th><th>Livraison</th><th>Garantie</th></tr></thead><tbody>
-      ${a.offres.map((x,k) => `<tr class="${a.choix === k ? "choisi" : ""}"><th class="tb-num" aria-hidden="true">${k + 2}</th><td>${esc(x.fournisseur.nom)}</td><td class="${k === bT ? "best" : ""}">${eur(x.total)}</td><td class="${k === bD ? "best" : ""}">${x.delai} jours ouvrables</td><td>${x.livraison ? eur(x.livraison) : "gratuite"}</td><td class="${k === bG ? "best" : ""}">${x.garantie} an${x.garantie > 1 ? "s" : ""}</td></tr>`).join("")}
-      </tbody></table></div><p class="help">En vert : la meilleure valeur de chaque colonne.</p></div>
+      <div class="tb-formule" aria-hidden="true"><span class="tb-cell">${colFormule}${nTotal}</span><span class="tb-fx">fx</span><span>=MIN(B${nTotal}:${colFin}${nTotal})</span></div>
+      <div class="tb-zone"><table class="tableur-t"><thead><tr class="tb-lettres" aria-hidden="true"><th class="tb-num"></th>${["A","B","C","D","E","F"].slice(0, a.offres.length + 1).map(l => `<th>${l}</th>`).join("")}</tr>
+        <tr><th class="tb-num" aria-hidden="true">1</th><th>Conditions de vente</th>${a.offres.map((x, k) => `<th class="${a.choix === k ? "col-choisi" : ""}">${a.choix === k ? "✓ " : ""}${esc(x.fournisseur.nom)}</th>`).join("")}</tr></thead><tbody>
+      ${corps}
+      </tbody></table></div><p class="help">En vert : la meilleure valeur de la ligne (garantie, délai, total à payer).</p></div>
     ${o ? `<div class="fiche-raisons kit-anim" data-anim="raisons-${S.i}"><label class="f">Pourquoi choisis-tu ${esc(o.fournisseur.nom)} ? Une ou deux raisons :</label>
       <div class="chips">${RAISONS_OFFRE.map(r => `<button class="chip ${a.raisons.includes(r) ? "on" : ""}" data-raison="${esc(r)}">${esc(r)}</button>`).join("")}</div></div>
       ${conseil ? coach(conseil) : ""}
@@ -3176,11 +3223,11 @@ function papierEntete(m, droite, place, titre){
 }
 const blocFournisseur = (o, lbl) => `<div class="to"><div class="lbl">${lbl}</div><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.rue)}<br>${esc(o.fournisseur.cp)} ${esc(o.fournisseur.ville)}<br><span style="font-family:var(--mono);font-size:12.5px">TVA BE ${esc(o.fournisseur.bce)}</span></div>`;
 function lignesDoc(o){
-  return `<table><thead><tr><th>Référence</th><th>Désignation</th><th>Quantité</th><th>Prix unitaire</th><th>Total</th></tr></thead><tbody>
-    <tr><td style="font-family:var(--mono)">${esc(o.ref)}</td><td>${esc(o.article)}<br><small style="color:#6B6F88">${esc(o.detail)}</small></td><td>1</td><td>${eur(o.prix)}</td><td>${eur(o.prix)}</td></tr>
-    ${o.remise ? `<tr><td></td><td>Remise de ${o.remisePct} %</td><td></td><td></td><td>− ${eur(o.remise)}</td></tr>` : ""}
-    <tr><td></td><td>Livraison</td><td></td><td></td><td>${o.livraison ? eur(o.livraison) : "gratuite"}</td></tr>
-    <tr><td></td><td><b>Total à payer (TVA comprise)</b></td><td></td><td></td><td><b>${eur(o.total)}</b></td></tr></tbody></table>`;
+  return `<table><thead><tr><th>Référence</th><th>Désignation</th><th>Quantité</th><th>Prix brut (TVA comprise)</th><th>Total</th></tr></thead><tbody>
+    <tr><td style="font-family:var(--mono)">${esc(o.ref)}</td><td>${esc(o.article)}<br><small style="color:#6B6F88">${esc(o.detail)}</small></td><td>1</td><td>${fmtEur(o.prix)}</td><td>${fmtEur(o.prix)}</td></tr>
+    ${o.remise ? `<tr><td></td><td>${esc(libelleRemise(o))}</td><td></td><td></td><td>− ${fmtEur(o.remise)}</td></tr><tr><td></td><td>Prix net</td><td></td><td></td><td>${fmtEur(o.prix - o.remise)}</td></tr>` : ""}
+    <tr><td></td><td>${o.livraison ? "Port dû" : "Franco de port (livraison gratuite)"}</td><td></td><td></td><td>${fmtEur(o.livraison || 0)}</td></tr>
+    <tr><td></td><td><b>Total à payer (TVA comprise)</b></td><td></td><td></td><td><b>${fmtEur(o.total)}</b></td></tr></tbody></table>`;
 }
 function bonCommande(a, lecture, apercu, opts){ const o = offreDe(a), m = modeleActuel(), ph = PHRASES_DOC.find(x => x[0] === m.phrase);
   const signature = apercu ? `<div class="signed pv-sig">ta signature</div>` : lecture ? `<div class="signed">${esc(a.signBC)}</div>`
@@ -3192,7 +3239,7 @@ function bonCommande(a, lecture, apercu, opts){ const o = offreDe(a), m = modele
     ${papierEntete(m, blocFournisseur(o, "Fournisseur"), `${esc(M1.commune)}, le ${esc(a.bc.date)}`,
       `<h3 class="doc">BON DE COMMANDE</h3><div class="ref">N° ${esc(a.bc.numero)} · Votre offre n° ${esc(o.numero)}</div>`)}
     ${lignesDoc(o)}
-    <p><b>Conditions :</b> livraison sous ${o.delai} jours ouvrables · livraison ${o.livraison ? "payante (" + eur(o.livraison) + ")" : "gratuite"} · garantie ${o.garantie} an${o.garantie > 1 ? "s" : ""} · paiement ${esc(o.paiement)}.</p>
+    <p><b>Conditions :</b> livraison sous ${o.delai} jours ouvrables · ${o.livraison ? "port dû : " + fmtEur(o.livraison) : "franco de port (livraison gratuite)"} · garantie ${o.garantie} an${o.garantie > 1 ? "s" : ""} · paiement ${esc(o.paiement)}.</p>
     <div class="sig">${ph && ph[2] ? `<p class="phrase">${esc(ph[2])}</p>` : ""}<div>${cachet}${signature}
       <small>Bon pour commande – ${esc(S.eleve.prenom)} ${esc(S.eleve.nom)}, ${esc(fonction().toLowerCase())}</small></div></div>
     <div class="foot">${m.slogan && M1.slogan ? `<span class="slg">« ${esc(M1.slogan)} »</span>` : ""}Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
@@ -3250,7 +3297,7 @@ R.notif = () => { const a = A(), o = offreDe(a), h = heureCourte(), cal = /^(\S+
         <div class="notif" data-anim="notif1-${S.i}" data-son="notif:650"><div class="nh"><span class="app-ico" aria-hidden="true">✉️</span><span>E-mail</span><span>maintenant</span></div><b>${esc(o.fournisseur.nom)}</b>Nous avons bien reçu votre commande ${esc(a.bc.numero)}. Merci pour votre confiance !</div>
         <div class="notif" data-anim="notif2-${S.i}" data-son="notif:1850"><div class="nh"><span class="app-ico sms" aria-hidden="true">💬</span><span>SMS</span><span>plus tard</span></div><b>${esc(o.fournisseur.nom)}</b>Bonne nouvelle ! Votre commande ${esc(a.bc.numero)} est prête. Livraison prévue le ${esc(a.notif.livraison)}.</div>
         <div class="tel-bas" aria-hidden="true"><span>🔦</span><span>📷</span></div><span class="tel-home" aria-hidden="true"></span></div>
-      <div>${coach(express() ? "Le fournisseur confirme et annonce la date de livraison." : "Bien joué ! Le fournisseur t'a d'abord confirmé qu'il avait reçu ta commande. Puis il t'a prévenu par SMS : elle est prête et il t'annonce la date de livraison.")}
+      <div>${coach(express() ? "Le fournisseur confirme et annonce la date de livraison." : "Bien joué ! Le fournisseur t'a d'abord confirmé qu'il avait reçu ta commande. Puis il t'a prévenu(e) par SMS : elle est prête et il t'annonce la date de livraison.")}
         <div class="card glass livr-card kit-anim d2" data-anim="cal-${S.i}">${cal ? `<div class="calendrier" aria-hidden="true"><span class="cal-mois">${esc(cal[3])}</span><span class="cal-jour">${esc(cal[2])}</span><span class="cal-sem">${esc(cal[1])}</span></div>` : ""}
           <div><p>📅 Livraison prévue : <b>${esc(a.notif.livraison)}</b></p><p class="help">Délai prévu dans l'offre : ${o.delai} jours ouvrables (on ne compte ni les samedis, ni les dimanches, ni les jours fériés).</p>${noteFerie}</div></div></div></div>`
     + boutons("Avancer jusqu'au jour de la livraison →", "jourLivraison", true, false);
@@ -3267,7 +3314,7 @@ function bonLivraison(a, lecture, opts){ const o = offreDe(a);
     <h3 class="doc">BON DE LIVRAISON</h3><div class="ref">N° ${esc(a.bl.numero)} · Votre commande n° ${esc(a.bc.numero)} · Nombre de colis : ${a.bl.colis}</div>
     <table><thead><tr><th>Référence</th><th>Désignation</th><th>Quantité livrée</th></tr></thead><tbody>
       <tr><td style="font-family:var(--mono)">${esc(o.ref)}</td><td>${esc(o.article)}<br><small style="color:#6B6F88">${esc(o.detail)}</small></td><td>1</td></tr></tbody></table>
-    <p><b>Conditions :</b> paiement ${esc(o.paiement)} – montant à régler : <b>${eur(o.total)}</b>.</p>
+    <p><b>Conditions :</b> paiement ${esc(o.paiement)} – total à payer : <b>${fmtEur(o.total)}</b>.</p>
     <div class="sig"><div>${recu}${lecture ? `<div class="signed">${esc(a.signBL)}</div>` : `<input data-bind="signBL" value="${esc(a.signBL)}" placeholder="Signe ici (prénom et nom)" maxlength="40" aria-label="Signature du bon de livraison">`}
       <small>Réception – ${esc(S.eleve.prenom)} ${esc(S.eleve.nom)}</small></div></div>
     <div class="foot">Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
@@ -3277,7 +3324,7 @@ R.livraison = () => { const a = A(), o = offreDe(a), b = bien(a.bien);
   const items = ["C'est bien l'article que j'ai commandé (même référence que sur le bon de commande)", "La quantité est correcte : 1", "Le colis est en bon état (pas abîmé, pas ouvert)"];
   return enteteAchat("Ding dong ! <span class='grad'>Le livreur est là</span>", express() ? "Vérifie la livraison, puis signe le bon de livraison." : "Le livreur t'apporte ta commande avec un bon de livraison. Avant de signer, vérifie toujours ce que tu reçois !")
     + `<div class="route-zone" data-anim="route-${S.i}" data-son="camion:1500 porte:2700">${KIT.route({ nom:o.fournisseur.nom, couleur:marqueFourn(o.fournisseur).c, sousTitre:"LIVRAISON · " + o.fournisseur.ville.toUpperCase(), boutique:"🏪" })}</div>`
-    + coach(express() ? "Compare toujours le bon de livraison avec ton bon de commande." : "Quand tu signes le bon de livraison, tu dis au fournisseur : « J'ai bien tout reçu. » Après, il est trop tard pour se plaindre ! Compare-le avec ton bon de commande.")
+    + coach(express() ? "Compare toujours le bon de livraison avec ton bon de commande." : "Quand tu signes le bon de livraison, tu dis au fournisseur : « J'ai bien tout reçu. » Après, il est trop tard pour signaler un colis abîmé ou un article manquant ! Compare-le avec ton bon de commande.")
     + `<div class="duo2 duo-livraison" style="align-items:start"><div class="pochette kit-anim" data-anim="bl-${S.i}"><div class="pochette-titre" aria-hidden="true">Documents joints</div>${bonLivraison(a, false, { tampon:ok })}</div>
       <div><div class="colis-zone kit-anim d2" data-anim="colis-${S.i}" role="button" tabindex="0" aria-pressed="false" aria-label="Le colis livré par ${esc(o.fournisseur.nom)} : clique pour l'ouvrir">
           ${a.bl.colis > 1 ? `<span class="colis-pile" aria-hidden="true"><i></i><i></i></span>` : ""}
@@ -3289,11 +3336,48 @@ R.livraison = () => { const a = A(), o = offreDe(a), b = bien(a.bien);
     + boutons("Je signe et j'accepte la livraison ✍️", "accepter", ok, false, "Fais les 3 vérifications et signe le bon de livraison.");
 };
 
-function recuHTML(a, anime){ const o = offreDe(a);    // anime : le ticket s'imprime à l'écran (jamais dans le dossier imprimé)
+/** Le numéro du reçu : stable pour un élève et un achat (même chose pour les achats payés avant cette version). */
+const numeroRecu = (a) => { const o = offreDe(a); return `RC-${o.fournisseur.code}-${String(hash(S.eleve.email + o.ref + "recu") % 9000 + 1000)}`; };
+function recuHTML(a, anime){ const o = offreDe(a), numero = (a.recu && a.recu.numero) || numeroRecu(a);    // anime : le ticket s'imprime à l'écran (jamais dans le dossier imprimé)
   return `<div class="receipt${anime ? " imprime" : ""}"${anime ? ` data-anim="recu-${S.i}"` : ""}><div class="c"><b>${esc(o.fournisseur.nom)} ${esc(o.fournisseur.forme)}</b><br>${esc(o.fournisseur.ville)}</div><hr>
-    <div class="r"><span>Date</span><span>${esc(a.recu.date)}</span></div><div class="r"><span>Commande</span><span>${esc(a.bc.numero)}</span></div><div class="r"><span>Livraison</span><span>${esc(a.bl.numero)}</span></div><hr>
-    <div class="r"><b>MONTANT PAYÉ</b><b>${eur(o.total)}</b></div><div class="r"><span>Payé par</span><span>carte bancaire</span></div><hr><div class="c">✔ PAYÉ – Merci et à bientôt !</div>
-    ${anime ? `<div class="recu-plus"><hr><div class="c">TerrilPay · Banque des Terrils</div>${KIT.codeBarres(a.bl.numero, 34)}</div>` : ""}</div>`;
+    <div class="r"><span>Reçu n°</span><span>${esc(numero)}</span></div><div class="r"><span>Date</span><span>${esc(a.recu.date)}</span></div><div class="r"><span>Commande</span><span>${esc(a.bc.numero)}</span></div><div class="r"><span>Livraison</span><span>${esc(a.bl.numero)}</span></div><hr>
+    <div class="r"><b>MONTANT PAYÉ</b><b>${fmtEur(o.total)}</b></div><div class="r"><span>Payeur</span><span style="text-align:right">${esc(deno())}</span></div><div class="r"><span>Payé par</span><span>carte bancaire</span></div><hr><div class="c">✔ PAYÉ – Merci et à bientôt !</div>
+    ${anime ? `<div class="recu-plus"><hr><div class="c">Terminal de paiement · ${esc(o.fournisseur.nom)}</div>${KIT.codeBarres(a.bl.numero, 34)}</div>` : ""}</div>`;
+}
+
+// ─── La facture du fournisseur : remise à l'élève après le paiement, calculée à partir de l'offre comme la mission 3 le fait ───
+const r2 = (n) => Math.round(n * 100) / 100;
+/** Retrouve le hors TVA à partir du montant payé (le total TVA comprise tombe pile sur le montant de l'offre). */
+function calculerFacture(a){
+  const o = offreDe(a); if (!o) return null;
+  const total = o.total, taxable = r2(total / 1.21), tva = r2(total - taxable);
+  let pHT = r2(o.prix / 1.21), remHT = 0, portHT = 0;
+  if (o.livraison > 0){ remHT = o.remise ? r2(pHT * o.remisePct / 100) : 0; portHT = r2(taxable - (pHT - remHT)); }
+  else if (o.remise){ remHT = r2(pHT - taxable); }
+  else pHT = taxable;
+  const code = (o.numero || "OP-XXX").split("-")[1] || o.fournisseur.code || "FRN";     // « OP-MBP-1234 » → « MBP »
+  return { numero:`FA-${code}-${String(hash(S.eleve.email + o.ref) % 9000 + 1000)}`, date:a.recu ? a.recu.date : CAL.date(dateEtape(a)), dateISO:a.recu ? (a.recu.iso || null) : (a.cal.livraison || S.cal || null),
+    pHT, remPct:o.remisePct || 0, remHT, portHT, taxable, tauxTVA:21, tva, total };
+}
+/** La facture sur le papier du fournisseur, tamponnée « PAYÉE » : l'élève la regarde, rien à cocher ni à calculer. */
+function factureHTML(a){
+  const o = offreDe(a), x = a.facture || calculerFacture(a); if (!o || !x) return "";
+  const f = o.fournisseur, mq = marqueFourn(f);
+  return `<div class="paper facture agrafe">
+    <div class="dh"><div class="from"><div class="emb" style="background:${mq.c};color:${mq.t};font-family:var(--doc);font-weight:800;font-size:18px" aria-hidden="true">${esc(mq.mono)}</div><div><div class="co">${esc(f.nom)} ${esc(f.forme)}</div>
+      <p>${esc(f.rue)}<br>${esc(f.cp)} ${esc(f.ville)}<br>Tél. ${esc(f.tel)} · ${esc(f.web)}</p><p class="ids">TVA BE ${esc(f.bce)}</p></div></div>
+      <div class="to"><div class="lbl">Client</div><b>${esc(deno())}</b><br>${esc(adresse1())}<br>${esc(adresse2())}<br><span style="font-family:var(--mono);font-size:12.5px">TVA BE ${esc(M1.bce)}</span></div></div>
+    <div class="place">${esc(f.ville)}, le ${esc(x.date)}</div>
+    <h3 class="doc">FACTURE</h3><div class="ref">N° ${esc(x.numero)} – ${esc(x.date)}<br>Votre commande n° ${esc(a.bc.numero)} · Livraison n° ${esc(a.bl.numero)}</div>
+    <table><thead><tr><th>Référence</th><th>Désignation</th><th>Quantité</th><th>Prix brut HTVA</th><th>Total</th></tr></thead><tbody>
+      <tr><td style="font-family:var(--mono)">${esc(o.ref)}</td><td>${esc(o.article)}<br><small style="color:#6B6F88">${esc(o.detail)}</small></td><td>1</td><td>${fmtEur(x.pHT)}</td><td>${fmtEur(x.pHT)}</td></tr>
+      ${x.remHT ? `<tr><td></td><td>${esc(libelleRemise(o))}</td><td></td><td></td><td>− ${fmtEur(x.remHT)}</td></tr><tr><td></td><td>Prix net HTVA</td><td></td><td></td><td>${fmtEur(r2(x.pHT - x.remHT))}</td></tr>` : ""}
+      ${x.portHT > 0 ? `<tr><td></td><td>Frais de port (port dû)</td><td></td><td></td><td>${fmtEur(x.portHT)}</td></tr>` : ""}
+      <tr><td></td><td>Montant hors TVA</td><td></td><td></td><td>${fmtEur(x.taxable)}</td></tr>
+      <tr><td></td><td>TVA 21 %</td><td></td><td></td><td>${fmtEur(x.tva)}</td></tr>
+      <tr><td></td><td><b>Total TVA comprise</b></td><td></td><td></td><td><b>${fmtEur(x.total)}</b></td></tr></tbody></table>
+    <p class="fa-paye"><span class="stamp-paid tampon frappe" style="--delai:1s">PAYÉE</span><br><small>le ${esc(x.date)} par carte bancaire</small></p>
+    <div class="foot">Document fictif – projet pédagogique, Institut Saint-Luc de Frameries</div></div>`;
 }
 
 /** Le dossier imprimable du dernier achat : 2 pages, aucun document coupé en deux. */
@@ -3319,16 +3403,19 @@ function dossierImpression(){
 }
 
 R.paiement = () => { const a = A(), o = offreDe(a);
-  if (a.paye) return enteteAchat("Paiement <span class='grad'>accepté</span> ✔", "Voici ton reçu. Garde-le bien : c'est la preuve que tu as payé.")
+  if (a.paye) return enteteAchat("Paiement <span class='grad'>accepté</span> ✔", "Voici ton reçu et la facture du fournisseur. Garde-les bien : c'est la preuve que tu as payé.")
     + `<div class="duo2"><div class="ticket-zone"><div class="imprimante" aria-hidden="true"></div>${recuHTML(a, true)}</div>
       <div>${coach("Ton entreprise a payé avec sa carte bancaire : l'argent est sorti de son compte en banque. Regarde, l'application de la banque vient de te prévenir !")}
-        ${telBanqueHTML({ lignes:mouvementsBanque(), titulaire:deno(), iban:M1.iban, heure:heureCourte(), anim:`tel-banque-${S.i}` })}</div></div>`
+        ${telBanqueHTML({ lignes:mouvementsBanque(), titulaire:deno(), iban:M1.iban, heure:heureCourte(), anim:`tel-banque-${S.i}` })}</div></div>
+      <div style="margin-top:24px">${coach("Le fournisseur te remet sa <b>facture</b> : elle montre la TVA de 21 % comprise dans le prix. Une entreprise garde ses factures pendant 10 ans : tu la rangeras dans la mission 3.")}</div>
+      <div class="bureau" style="margin-top:0"><div class="doc-pose kit-anim d2" data-anim="facture-${S.i}" data-son="tampon:1250">${factureHTML(a)}</div></div>`
     + boutons("Voir mon patrimoine →", "next", true, false);
   return enteteAchat("Le <span class='grad'>paiement</span>", "Les conditions de vente prévoient un paiement à la livraison : le livreur te demande de payer maintenant.")
     + `<div class="duo2"><div class="paie-scene"><div class="terminal kit-anim" data-anim="term-${S.i}"><div class="scr"><span>${esc(o.fournisseur.nom)}</span><span class="amt">${eur(o.total)}</span><span><span class="sans-contact" aria-hidden="true"></span> Insérez ou approchez la carte</span></div>
         <div class="keys" aria-hidden="true">${["1","2","3","4","5","6","7","8","9","✖","0","✔"].map(k => `<span>${k}</span>`).join("")}</div></div>
         <div class="carte-approche" data-anim="carte-${S.i}">${carteEntreprise()}</div></div>
       <div>${coach(`Tu vas payer <b>${eur(o.total)}</b> avec la carte bancaire de ton entreprise. L'argent sortira de ton compte en banque : il te restera <b>${eur(enBanque() - o.total)}</b>. Es-tu d'accord ?`)}
+        ${coach("Tu paies par carte. En espèces, c'est limité à <b>3 000 €</b> en Belgique.")}
         <div class="card glass"><p>💳 Carte de l'entreprise : <b>${esc(deno())}</b></p><p class="help">Compte IBAN ${esc(M1.iban)}</p></div></div></div>`
     + boutons(`Oui, je paie ${eur(o.total)}`, "payer", true, false);
 };
@@ -3464,11 +3551,15 @@ async function chercher(){
   if (!a.cal.debut) a.cal.debut = S.cal || CAL.iso(new Date());
   // la méthode choisie fait avancer le calendrier : les offres arrivent après 0, 1 ou 2 jours ouvrables
   const debut = CAL.lire(a.cal.debut), quand = CAL.plusOuvrables(debut, m.jours || 0);
+  // en magasin, chaque vendeur remet son offre le jour même de la visite ; le bon de commande, lui, part le jour ouvrable suivant
+  const visite = m.id === "magasin" ? CAL.plusOuvrables(debut, 0) : null;
   await overlay(m.anim, "Recherche de 3 fournisseurs en cours…", 2200, sceneSure(() => sceneRecherche(a, m)));
   if (CAL.iso(quand) !== CAL.iso(debut)) await CAL.defiler(debut, quand,
     m.id === "email" ? "Tu attends la réponse des 3 fournisseurs…" : m.id === "magasin" ? "Une journée de visites : tu commanderas le lendemain." : "Les fournisseurs ne travaillent ni le week-end ni les jours fériés…");
-  a.cal.offres = CAL.iso(quand); a.cal.commande = null; a.cal.livraison = null; S.cal = a.cal.offres;
-  a.offres = genererOffres(a.bien, quand); a.choix = null; a.raisons = [];
+  a.cal.offres = CAL.iso(visite || quand); a.cal.commande = visite ? CAL.iso(quand) : null; a.cal.livraison = null; S.cal = CAL.iso(quand);
+  a.offres = genererOffres(a.bien, visite || quand); a.choix = null; a.raisons = [];
+  // nouvelle recherche : l'ancien bon de commande (et sa date) ne vaut plus rien tant qu'il n'a pas été envoyé
+  if (!a.envoyeBC){ a.bc = null; a.verifBC = false; a.signBC = ""; }
   badge("compare"); unlockMot("offre"); unlockMot("conditions");
   avancer();
 }
@@ -3491,7 +3582,7 @@ async function envoyerBC(){
   a.envoyeBC = true;
   if (S.modele && S.modele.valide) S.modele.verrouille = true;     // une fois envoyé, le modèle de l'entreprise ne change plus
   // la livraison arrive après le délai de l'offre, compté en jours ouvrables (ni week-end, ni jour férié)
-  const cmd = CAL.lire(a.cal.offres) || auj(), livr = CAL.plusOuvrables(cmd, o.delai);
+  const cmd = CAL.lire(a.cal.commande) || CAL.lire(a.cal.offres) || auj(), livr = CAL.plusOuvrables(cmd, o.delai);   // commande déjà datée (visites en magasin) ou jour des offres
   a.cal.commande = CAL.iso(cmd); a.cal.livraison = CAL.iso(livr);
   a.notif = { date:CAL.date(cmd), livraison:CAL.jour(livr), iso:a.cal.livraison };
   badge("bc"); unlockMot("bc");
@@ -3512,7 +3603,8 @@ function accepterLivraison(){
 async function payer(){
   const a = A();
   await overlay(["💳","⏳","✅"], "Paiement en cours…", 1800, sceneSure(() => scenePaiement(a, offreDe(a))));
-  a.paye = true; a.recu = { date:CAL.date(dateEtape(a)), iso:a.cal.livraison || S.cal };
+  a.paye = true; a.recu = { numero:numeroRecu(a), date:CAL.date(dateEtape(a)), iso:a.cal.livraison || S.cal };
+  a.facture = calculerFacture(a);           // la facture du fournisseur, calculée à partir de l'offre (même logique que la mission 3)
   badge("paye"); badge(a.bien); unlockMot("remb");
   gagner(`a${S.i}_paiement`, express() ? 25 : 40);
   save(); render(true); confetti();
@@ -3628,9 +3720,13 @@ document.addEventListener("click", (e) => {
     if (!S.achats.length){ S.achats.push(nouvelAchat()); S.i = 0; } MODE = "achat"; S.phase = "achat"; save(); render(true); sauvegarder(false); controlerEnFond(); return; }
   if (MODE !== "achat") return;
   const a = A();
-  if (b.dataset.set === "bien"){ if (a.bien !== b.dataset.val){ a.bien = b.dataset.val; a.offres = null; a.choix = null; a.raisons = []; } save(); render(); return; }
+  if (b.dataset.set === "bien"){ if (a.bien !== b.dataset.val){ a.bien = b.dataset.val; a.offres = null; a.choix = null; a.raisons = [];
+      if (!a.envoyeBC){ a.bc = null; a.verifBC = false; a.signBC = ""; } }      // autre bien : l'ancien bon de commande ne vaut plus rien
+    save(); render(); return; }
   if (b.dataset.set === "methode"){ a.methode = b.dataset.val; save(); render(); return; }
-  if (b.dataset.offre !== undefined){ a.choix = +b.dataset.offre; save(); render(); return; }
+  if (b.dataset.offre !== undefined){ if (a.choix !== +b.dataset.offre){ a.choix = +b.dataset.offre; a.verifBC = false; }   // autre offre : le bon de commande est à revérifier
+    unlockMot("franco"); unlockMot("prixNet");                                   // les mots du cours, au moment où l'élève compare les offres
+    save(); render(); return; }
   if (b.dataset.mod){ choisirModele(b.dataset.mod, b.dataset.val); return; }
   if (b.dataset.raison){ const r = b.dataset.raison, i = a.raisons.indexOf(r);
     if (i >= 0) a.raisons.splice(i,1); else if (a.raisons.length < 2) a.raisons.push(r); else { toast("<div>Deux raisons maximum.</div>"); return; }
